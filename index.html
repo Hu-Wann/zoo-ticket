@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kebun Binatang Indah</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8fff8;
+    }
+    .sidebar {
+      min-height: 100vh;
+      background-color: #d4f8d4;
+      padding-top: 20px;
+    }
+    .page {
+      display: none;
+    }
+    .page.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Judul -->
+  <div class="text-center py-3 bg-white shadow-sm">
+    <h1 class="text-success">🌿 Kebun Binatang Indah</h1>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container-fluid justify-content-end">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="#">Informasi Tiket</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-2 sidebar">
+        <ul class="nav flex-column">
+          <li class="nav-item"><a class="nav-link text-success fw-bold" href="#" onclick="showPage('beranda')">Beranda</a></li>
+          <li class="nav-item"><a class="nav-link text-success fw-bold" href="#" onclick="showPage('animal')">Animal</a></li>
+          <li class="nav-item"><a class="nav-link text-success fw-bold" href="#" onclick="showPage('booking')">Booking Tiket</a></li>
+        </ul>
+      </div>
+
+      <!-- Konten -->
+      <div class="col-md-10 p-4">
+        <!-- Search -->
+        <div class="mb-4">
+          <input type="text" class="form-control" placeholder="🔍 Cari informasi di sini...">
+        </div>
+
+        <!-- Halaman Beranda -->
+        <div id="beranda" class="page active">
+          <h2 class="text-success mb-4">Selamat Datang di Kebun Binatang Indah</h2>
+          <p class="lead">Kebun Binatang Indah adalah destinasi wisata keluarga dengan berbagai fasilitas menarik. Nikmati liburan edukatif bersama satwa, rekreasi keluarga, hingga pengalaman kuliner di alam terbuka.</p>
+          
+          <!-- Carousel -->
+          <div id="carouselZoo" class="carousel slide mb-4" data-bs-ride="carousel">
+            <div class="carousel-inner rounded shadow-sm">
+              <div class="carousel-item active">
+                <img src="https://source.unsplash.com/1200x400/?zoo" class="d-block w-100" alt="Kebun Binatang">
+              </div>
+              <div class="carousel-item">
+                <img src="https://source.unsplash.com/1200x400/?animals" class="d-block w-100" alt="Hewan">
+              </div>
+              <div class="carousel-item">
+                <img src="https://source.unsplash.com/1200x400/?family,park" class="d-block w-100" alt="Keluarga">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselZoo" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselZoo" data-bs-slide="next">
+              <span class="carousel-control-next-icon"></span>
+            </button>
+          </div>
+
+          <!-- Fasilitas -->
+          <h3 class="text-success mb-3">Fasilitas Kami</h3>
+          <div class="row g-4">
+            <div class="col-md-3">
+              <div class="card shadow-sm h-100">
+                <img src="https://source.unsplash.com/400x250/?playground" class="card-img-top" alt="Area Bermain Anak">
+                <div class="card-body">
+                  <h5 class="card-title text-success">Area Bermain Anak</h5>
+                  <p class="card-text">Tempat bermain aman & menyenangkan bagi anak-anak dengan wahana edukatif.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card shadow-sm h-100">
+                <img src="https://source.unsplash.com/400x250/?restaurant" class="card-img-top" alt="Restoran & Kafe">
+                <div class="card-body">
+                  <h5 class="card-title text-success">Restoran & Kafe</h5>
+                  <p class="card-text">Nikmati hidangan lezat dengan suasana alam terbuka.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card shadow-sm h-100">
+                <img src="https://source.unsplash.com/400x250/?education" class="card-img-top" alt="Pusat Edukasi Satwa">
+                <div class="card-body">
+                  <h5 class="card-title text-success">Pusat Edukasi Satwa</h5>
+                  <p class="card-text">Belajar tentang konservasi, habitat satwa, & keanekaragaman hayati.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card shadow-sm h-100">
+                <img src="https://source.unsplash.com/400x250/?picnic" class="card-img-top" alt="Area Piknik">
+                <div class="card-body">
+                  <h5 class="card-title text-success">Area Piknik</h5>
+                  <p class="card-text">Ruang terbuka hijau untuk bersantai bersama keluarga.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Event & Info -->
+          <h3 class="text-success mt-5 mb-3">Event & Informasi Menarik</h3>
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card shadow-sm h-100">
+                <div class="card-body">
+                  <h5 class="card-title text-success">🎤 Pertunjukan Satwa</h5>
+                  <p class="card-text">Setiap akhir pekan, nikmati atraksi singa laut, burung eksotis, hingga reptil yang menakjubkan!</p>
+                  <span class="badge bg-success">Setiap Sabtu & Minggu</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card shadow-sm h-100">
+                <div class="card-body">
+                  <h5 class="card-title text-success">📚 Program Edukasi</h5>
+                  <p class="card-text">Kegiatan edukasi khusus anak sekolah, mengenal satwa secara langsung bersama pemandu.</p>
+                  <span class="badge bg-success">Reservasi Group</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Halaman Animal -->
+        <div id="animal" class="page">
+          <h2 class="text-success mb-4">Daftar Hewan di Kebun Binatang</h2>
+          <div class="row g-4">
+            <!-- Hewan 1 -->
+            <div class="col-md-4">
+              <div class="card shadow-sm h-100">
+                <img src="https://source.unsplash.com/400x250/?lion" class="card-img-top" alt="Singa">
+                <div class="card-body">
+                  <h5 class="card-title text-success">Singa</h5>
+                  <p class="card-text">Singa adalah hewan buas yang dikenal sebagai "Raja Hutan". Hidup berkelompok, disebut pride, dan terkenal dengan auman yang kuat.</p>
+                </div>
+              </div>
+            </div>
+            <!-- Hewan 2 -->
+            <div class="col-md-4">
+              <div class="card shadow-sm h-100">
+                <img src="https://source.unsplash.com/400x250/?elephant" class="card-img-top" alt="Gajah">
+                <div class="card-body">
+                  <h5 class="card-title text-success">Gajah</h5>
+                  <p class="card-text">Gajah adalah mamalia darat terbesar, memiliki belalai yang serbaguna untuk makan, minum, dan komunikasi.</p>
+                </div>
+              </div>
+            </div>
+            <!-- Hewan 3 -->
+            <div class="col-md-4">
+              <div class="card shadow-sm h-100">
+                <img src="https://source.unsplash.com/400x250/?tiger" class="card-img-top" alt="Harimau">
+                <div class="card-body">
+                  <h5 class="card-title text-success">Harimau</h5>
+                  <p class="card-text">Harimau adalah kucing besar dengan corak loreng khas. Mereka adalah pemburu soliter dengan kekuatan luar biasa.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="text-success mt-5">Top 3 Hewan Favorit</h3>
+          <div class="row g-4">
+            <div class="col-md-4">
+              <div class="card border-success shadow-sm h-100">
+                <div class="card-body">
+                  <h5 class="card-title">1. Panda</h5>
+                  <p class="card-text">Panda dikenal lucu dan jinak. Mereka memakan bambu dan menjadi ikon konservasi satwa dunia.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card border-success shadow-sm h-100">
+                <div class="card-body">
+                  <h5 class="card-title">2. Penguin</h5>
+                  <p class="card-text">Penguin adalah burung yang tidak bisa terbang tetapi sangat ahli berenang di perairan dingin.</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card border-success shadow-sm h-100">
+                <div class="card-body">
+                  <h5 class="card-title">3. Jerapah</h5>
+                  <p class="card-text">Jerapah memiliki leher panjang untuk meraih daun di pepohonan tinggi. Mereka adalah hewan darat tertinggi di dunia.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Halaman Booking -->
+        <div id="booking" class="page">
+          <h2 class="text-success mb-4">Booking Tiket</h2>
+          <form class="w-50">
+            <!-- Anak-anak -->
+            <div class="mb-3 d-flex justify-content-between align-items-center">
+              <label class="form-label">Anak-anak</label>
+              <div class="input-group" style="width: 150px;">
+                <button type="button" class="btn btn-outline-success" onclick="changeQty('child', -1)">-</button>
+                <input type="text" id="child" class="form-control text-center" value="0" readonly>
+                <button type="button" class="btn btn-outline-success" onclick="changeQty('child', 1)">+</button>
+              </div>
+            </div>
+            <!-- Remaja -->
+            <div class="mb-3 d-flex justify-content-between align-items-center">
+              <label class="form-label">Remaja</label>
+              <div class="input-group" style="width: 150px;">
+                <button type="button" class="btn btn-outline-success" onclick="changeQty('teen', -1)">-</button>
+                <input type="text" id="teen" class="form-control text-center" value="0" readonly>
+                <button type="button" class="btn btn-outline-success" onclick="changeQty('teen', 1)">+</button>
+              </div>
+            </div>
+            <!-- Dewasa -->
+            <div class="mb-3 d-flex justify-content-between align-items-center">
+              <label class="form-label">Dewasa</label>
+              <div class="input-group" style="width: 150px;">
+                <button type="button" class="btn btn-outline-success" onclick="changeQty('adult', -1)">-</button>
+                <input type="text" id="adult" class="form-control text-center" value="0" readonly>
+                <button type="button" class="btn btn-outline-success" onclick="changeQty('adult', 1)">+</button>
+              </div>
+            </div>
+
+            <!-- Total Harga -->
+            <div class="mb-3">
+              <h5>Total: <span id="totalPrice" class="text-success">Rp 0</span></h5>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">Pesan Tiket</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+    }
+
+    // Harga tiket
+    const prices = { child: 20000, teen: 30000, adult: 40000 };
+
+    function changeQty(type, value) {
+      const input = document.getElementById(type);
+      let qty = parseInt(input.value) + value;
+      if (qty < 0) qty = 0;
+      input.value = qty;
+      updateTotal();
+    }
+
+    function updateTotal() {
+      let child = parseInt(document.getElementById('child').value) * prices.child;
+      let teen = parseInt(document.getElementById('teen').value) * prices.teen;
+      let adult = parseInt(document.getElementById('adult').value) * prices.adult;
+      let total = child + teen + adult;
+      document.getElementById('totalPrice').innerText = "Rp " + total.toLocaleString("id-ID");
+    }
+  </script>
+</body>
+</html>
