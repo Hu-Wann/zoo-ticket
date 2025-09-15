@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Tiket - Kebun Binatang Indah</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    body {
+      background-color: #f8fff8;
+    }
+    .sidebar {
+      min-height: 100vh;
+      background-color: #d4f8d4;
+      padding-top: 20px;
+      border-right: 2px solid #b2f7b2;
+    }
+    .sidebar-link {
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .sidebar-link:hover,
+    .sidebar-link.active {
+      background: linear-gradient(90deg, #e8fbe8 60%, #b2f7b2 100%);
+      color: #157347 !important;
+      text-decoration: none;
+    }
+    .booking-card {
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 1rem;
+      box-shadow: 0 8px 32px rgba(25,135,84,0.12);
+      background: #fff;
+    }
+    .footer {
+      background: #d4f8d4;
+      color: #198754;
+      padding: 24px 0 12px 0;
+      margin-top: 48px;
+      border-top: 2px solid #b2f7b2;
+    }
+  </style>
+</head>
+<body>
+  <!-- Judul -->
+  <div class="text-center py-3 bg-white shadow-sm">
+    <h1 class="text-success">🌿 Kebun Binatang Indah</h1>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container-fluid justify-content-end">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="tiket.html">Informasi Tiket</a></li>
+        <li class="nav-item"><a class="nav-link" href="./acount/login.html">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-2 sidebar position-sticky" style="top: 80px; height: calc(100vh - 80px); z-index: 2;">
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="index.html">
+              <i class="bi bi-house-door me-2"></i> Beranda
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="animal.html">
+              <i class="bi bi-paw me-2"></i> Animal
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link active" href="booking.html">
+              <i class="bi bi-ticket-perforated me-2"></i> Booking Tiket
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Konten Booking -->
+      <div class="col-md-10 p-4">
+        <h2 class="text-success mb-3 fs-2">Booking Tiket Kebun Binatang Indah</h2>
+        <p class="lead fs-4 mb-4">Pesan tiket kunjungan Anda secara online. Pilih jumlah tiket sesuai kategori pengunjung di bawah ini.</p>
+        <div class="booking-card p-4 mb-5">
+          <form id="formBooking">
+            <div class="mb-3">
+              <label for="nama" class="form-label fw-bold">Nama Lengkap</label>
+              <input type="text" class="form-control" id="nama" placeholder="Masukkan nama lengkap" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label fw-bold">Email</label>
+              <input type="email" class="form-control" id="email" placeholder="Masukkan email aktif" required>
+            </div>
+            <div class="mb-3">
+              <label for="tanggal" class="form-label fw-bold">Tanggal Kunjungan</label>
+              <input type="date" class="form-control" id="tanggal" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Jumlah Tiket per Kategori</label>
+              <div class="row g-2">
+                <div class="col-12 col-md-4">
+                  <div class="input-group">
+                    <span class="input-group-text bg-success text-white fw-bold"><i class="bi bi-person"></i> Dewasa (Rp 40.000)</span>
+                    <input type="number" class="form-control" min="0" max="20" value="0" id="dewasa" name="dewasa" required>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="input-group">
+                    <span class="input-group-text bg-success text-white fw-bold"><i class="bi bi-person-fill"></i> Anak-anak (Rp 25.000)</span>
+                    <input type="number" class="form-control" min="0" max="20" value="0" id="anak" name="anak" required>
+                  </div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <div class="input-group">
+                    <span class="input-group-text bg-success text-white fw-bold"><i class="bi bi-people"></i> Remaja (Rp 35.000)</span>
+                    <input type="number" class="form-control" min="0" max="10" value="0" id="remaja" name="remaja" required>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="catatan" class="form-label fw-bold">Catatan Tambahan</label>
+              <textarea class="form-control" id="catatan" rows="2" placeholder="(Opsional)"></textarea>
+            </div>
+            <div class="mb-4">
+              <div class="alert alert-success mb-2">
+                <strong>Harga Tiket:</strong><br>
+                Dewasa: <b>Rp 40.000</b> | Anak-anak: <b>Rp 25.000</b> | Remaja: <b>Rp 35.000</b>
+              </div>
+              <div class="alert alert-info mb-0">
+                <strong>Total Harga:</strong>
+                <span id="totalHarga" class="fw-bold text-success">Rp 0</span>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success w-100 fw-bold fs-5">
+              <i class="bi bi-cart-check me-2"></i> Pesan Tiket
+            </button>
+          </form>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer text-center">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-6 mb-2 mb-md-0">
+                <span class="fw-bold">Kebun Binatang Indah</span> &copy; 2025
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex flex-column flex-md-row justify-content-end">
+                  <div class="me-md-3">
+                    Jl. Satwa Raya No. 1, Kota Hijau | Telp: 0812-3456-7890 | Email: info@kebunbinatangindah.com
+                  </div>
+                  <div class="mt-2 mt-md-0 small">
+                    <span><i class="bi bi-facebook"></i> KebunBinatangIndah</span>
+                    <span><i class="bi bi-instagram"></i> @kebunbinatangindah</span> &nbsp;
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Hitung total harga otomatis
+    function hitungTotal() {
+      const hargaDewasa = 40000;
+      const hargaAnak = 25000;
+      const hargaRemaja = 35000;
+      const dewasa = parseInt(document.getElementById('dewasa').value) || 0;
+      const anak = parseInt(document.getElementById('anak').value) || 0;
+      const remaja = parseInt(document.getElementById('remaja').value) || 0;
+      const total = (dewasa * hargaDewasa) + (anak * hargaAnak) + (remaja * hargaRemaja);
+      document.getElementById('totalHarga').textContent = 'Rp ' + total.toLocaleString('id-ID');
+    }
+
+    document.getElementById('dewasa').addEventListener('input', hitungTotal);
+    document.getElementById('anak').addEventListener('input', hitungTotal);
+    document.getElementById('remaja').addEventListener('input', hitungTotal);
+
+    // Inisialisasi total harga saat halaman dibuka
+    window.addEventListener('DOMContentLoaded', hitungTotal);
+  </script>
+</body>
+</html>
