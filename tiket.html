@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Informasi Tiket yang Sudah Dipesan - Kebun Binatang Indah</title>
+  <title>Tiket Anda - Kebun Binatang Indah</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <style>
@@ -53,135 +53,85 @@
     }
   </style>
 </head>
-<body>
-  <!-- Judul -->
-  <div class="text-center py-3 bg-white shadow-sm">
-    <h1 class="text-success">🌿 Kebun Binatang Indah</h1>
+<!-- Konten Informasi Tiket yang Sudah Dipesan -->
+<div class="col-md-10 p-4">
+  <h2 class="text-success mb-3 fs-2"><i class="bi bi-info-circle info-icon"></i> Tiket Anda</h2>
+  <p class="lead fs-4 mb-4">
+    Berikut adalah tiket yang berhasil Anda pesan. Simpan dan tunjukkan <b>kode redeem</b> saat kunjungan.
+  </p>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <table class="table table-bordered ticket-table mb-0">
+        <thead class="table-success">
+          <tr>
+            <th>Nomor Pemesanan</th>
+            <th>Tanggal Kunjungan</th>
+            <th>Kategori</th>
+            <th>Jumlah Tiket</th>
+            <th>Kode Redeem</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>TKB20250915-001</td>
+            <td>16 September 2025</td>
+            <td>Dewasa</td>
+            <td>2</td>
+            <td><code>RDWJ-9271</code></td>
+            <td><span class="status-badge">Sudah Dibayar</span></td>
+          </tr>
+          <tr>
+            <td>TKB20250915-002</td>
+            <td>16 September 2025</td>
+            <td>Anak-anak</td>
+            <td>1</td>
+            <td><code>RANK-3412</code></td>
+            <td><span class="status-badge">Sudah Dibayar</span></td>
+          </tr>
+          <tr>
+            <td>TKB20250915-003</td>
+            <td>16 September 2025</td>
+            <td>Remaja</td>
+            <td>1</td>
+            <td><code>RRMJ-7729</code></td>
+            <td><span class="status-badge">Sudah Dibayar</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-    <div class="container-fluid justify-content-end">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="tiket.html">Informasi Tiket</a></li>
-        <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
-      </ul>
-    </div>
-  </nav>
+  <div class="alert alert-success">
+    <i class="bi bi-check-circle"></i>
+    <strong>Petunjuk Penggunaan:</strong>
+    <ul class="mb-0">
+      <li><b>Kode redeem</b> bersifat unik, satu kali pakai, dan wajib ditunjukkan di pintu masuk.</li>
+      <li>Pastikan membawa bukti email dan identitas saat kunjungan.</li>
+      <li>Jika ada masalah, hubungi <b>0812-3456-7890</b> atau email <b>info@kebunbinatangindah.com</b>.</li>
+    </ul>
+  </div>
 
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Sidebar -->
-      <div class="col-md-2 sidebar position-sticky" style="top: 80px; height: calc(100vh - 80px); z-index: 2;">
-        <ul class="nav flex-column">
-          <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="index.html">
-              <i class="bi bi-house-door me-2"></i> Beranda
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="animal.html">
-              <i class="bi bi-paw me-2"></i> Animal
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="booking.html">
-              <i class="bi bi-ticket-perforated me-2"></i> Booking Tiket
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link active" href="info-tiket.html">
-              <i class="bi bi-info-circle me-2"></i> Info Tiket Dipesan
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <!-- Konten Informasi Tiket yang Sudah Dipesan -->
-      <div class="col-md-10 p-4">
-        <h2 class="text-success mb-3 fs-2"><i class="bi bi-info-circle info-icon"></i>Informasi Tiket yang Sudah Dipesan</h2>
-        <p class="lead fs-4 mb-4">
-          Berikut adalah detail tiket yang sudah Anda pesan.  
-          Simpan informasi ini dan tunjukkan saat masuk ke Kebun Binatang Indah.
-        </p>
-
-        <div class="card shadow-sm mb-4">
-          <div class="card-body">
-            <table class="table table-bordered ticket-table mb-0">
-              <thead class="table-success">
-                <tr>
-                  <th>Nomor Pemesanan</th>
-                  <th>Nama Pemesan</th>
-                  <th>Tanggal Kunjungan</th>
-                  <th>Kategori</th>
-                  <th>Jumlah Tiket</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>TKB20250915-001</td>
-                  <td>Rina Wijaya</td>
-                  <td>16 September 2025</td>
-                  <td>Dewasa</td>
-                  <td>2</td>
-                  <td><span class="status-badge">Sudah Dibayar</span></td>
-                </tr>
-                <tr>
-                  <td>TKB20250915-002</td>
-                  <td>Rina Wijaya</td>
-                  <td>16 September 2025</td>
-                  <td>Anak-anak</td>
-                  <td>1</td>
-                  <td><span class="status-badge">Sudah Dibayar</span></td>
-                </tr>
-                <tr>
-                  <td>TKB20250915-003</td>
-                  <td>Rina Wijaya</td>
-                  <td>16 September 2025</td>
-                  <td>Keluarga</td>
-                  <td>1</td>
-                  <td><span class="status-badge">Sudah Dibayar</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+  <!-- Footer -->
+  <div class="footer text-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 mb-2 mb-md-0">
+          <span class="fw-bold">Kebun Binatang Indah</span> &copy; 2025
         </div>
-
-        <div class="alert alert-success">
-          <i class="bi bi-check-circle"></i>
-          <strong>Catatan:</strong>
-          <ul class="mb-0">
-            <li>Tiket yang sudah dipesan <b>tidak dapat dibatalkan atau dikembalikan</b>.</li>
-            <li>Tunjukkan bukti pemesanan (nomor pemesanan atau email) di pintu masuk.</li>
-            <li>Jika ada kendala, hubungi <b>0812-3456-7890</b> atau email <b>info@kebunbinatangindah.com</b>.</li>
-          </ul>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer text-center">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-6 mb-2 mb-md-0">
-                <span class="fw-bold">Kebun Binatang Indah</span> &copy; 2025
-              </div>
-              <div class="col-md-6">
-                <div class="d-flex flex-column flex-md-row justify-content-end">
-                  <div class="me-md-3">
-                    Jl. Satwa Raya No. 1, Kota Hijau | Telp: 0812-3456-7890 | Email: info@kebunbinatangindah.com
-                  </div>
-                  <div class="mt-2 mt-md-0 small">
-                    <span><i class="bi bi-facebook"></i> KebunBinatangIndah</span>
-                    <span><i class="bi bi-instagram"></i> @kebunbinatangindah</span> &nbsp;
-                  </div>
-                </div>
-              </div>
+        <div class="col-md-6">
+          <div class="d-flex flex-column flex-md-row justify-content-end">
+            <div class="me-md-3">
+              Jl. Satwa Raya No. 1, Kota Hijau | Telp: 0812-3456-7890 | Email: info@kebunbinatangindah.com
+            </div>
+            <div class="mt-2 mt-md-0 small">
+              <span><i class="bi bi-facebook"></i> KebunBinatangIndah</span>
+              <span><i class="bi bi-instagram"></i> @kebunbinatangindah</span> &nbsp;
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+</div>
