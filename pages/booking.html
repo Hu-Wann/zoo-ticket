@@ -70,7 +70,7 @@
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="animal.html">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="animal.php">
               <i class="bi bi-paw me-2"></i> Animal
             </a>
           </li>
@@ -102,23 +102,53 @@
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold">Jumlah Tiket per Kategori</label>
-              <div class="row g-2">
-                <div class="col-12 col-md-4">
-                  <div class="input-group">
-                    <span class="input-group-text bg-success text-white fw-bold"><i class="bi bi-person"></i> Dewasa (Rp 40.000)</span>
-                    <input type="number" class="form-control" min="0" max="20" value="0" id="dewasa" name="dewasa" required>
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="card mb-2">
+                    <div class="card-body py-2">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                          <i class="bi bi-person fs-4 text-success me-2"></i>
+                          <span class="fw-bold">Dewasa</span>
+                          <small class="text-muted d-block">Rp 40.000</small>
+                        </div>
+                        <div style="width: 100px;">
+                          <input type="number" class="form-control" min="0" max="20" value="0" id="dewasa" name="dewasa" required>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-12 col-md-4">
-                  <div class="input-group">
-                    <span class="input-group-text bg-success text-white fw-bold"><i class="bi bi-person-fill"></i> Anak-anak (Rp 25.000)</span>
-                    <input type="number" class="form-control" min="0" max="20" value="0" id="anak" name="anak" required>
+                <div class="col-12">
+                  <div class="card mb-2">
+                    <div class="card-body py-2">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                          <i class="bi bi-people fs-4 text-success me-2"></i>
+                          <span class="fw-bold">Remaja</span>
+                          <small class="text-muted d-block">Rp 35.000</small>
+                        </div>
+                        <div style="width: 100px;">
+                          <input type="number" class="form-control" min="0" max="20" value="0" id="remaja" name="remaja" required>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="col-12 col-md-4">
-                  <div class="input-group">
-                    <span class="input-group-text bg-success text-white fw-bold"><i class="bi bi-people"></i> Remaja (Rp 35.000)</span>
-                    <input type="number" class="form-control" min="0" max="10" value="0" id="remaja" name="remaja" required>
+                <div class="col-12">
+                  <div class="card mb-2">
+                    <div class="card-body py-2">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                          <i class="bi bi-person-fill fs-4 text-success me-2"></i>
+                          <span class="fw-bold">Anak-anak</span>
+                          <small class="text-muted d-block">Rp 25.000</small>
+                        </div>
+                        <div style="width: 100px;">
+                          <input type="number" class="form-control" min="0" max="20" value="0" id="anak" name="anak" required>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -129,8 +159,33 @@
             </div>
             <div class="mb-4">
               <div class="alert alert-success mb-2">
-                <strong>Harga Tiket:</strong><br>
-                Dewasa: <b>Rp 40.000</b> | Anak-anak: <b>Rp 25.000</b> | Remaja: <b>Rp 35.000</b>
+                <strong>Harga Tiket:</strong>
+                <div class="row mt-2">
+                  <div class="col-md-4 mb-2">
+                    <div class="card bg-light">
+                      <div class="card-body text-center py-2">
+                        <h6 class="mb-1">Dewasa</h6>
+                        <span class="fw-bold">Rp 40.000</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="card bg-light">
+                      <div class="card-body text-center py-2">
+                        <h6 class="mb-1">Remaja</h6>
+                        <span class="fw-bold">Rp 35.000</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="card bg-light">
+                      <div class="card-body text-center py-2">
+                        <h6 class="mb-1">Anak-anak</h6>
+                        <span class="fw-bold">Rp 25.000</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="alert alert-info mb-0">
                 <strong>Total Harga:</strong>
