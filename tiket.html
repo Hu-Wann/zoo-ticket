@@ -52,7 +52,46 @@
       font-weight: bold;
     }
   </style>
-</head>
+
+
+<!-- Judul -->
+  <div class="text-center py-3 bg-white shadow-sm">
+    <h1 class="text-success">🌿 Kebun Binatang Indah</h1>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <div class="container-fluid justify-content-end">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="tiket.html">Informasi Tiket</a></li>
+        <li class="nav-item"><a class="nav-link" href="./acount/login.html">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-2 sidebar position-sticky" style="top: 80px; height: calc(100vh - 80px); z-index: 2;">
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="index.html">
+              <i class="bi bi-house-door me-2"></i> Beranda
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="animal.html">
+              <i class="bi bi-paw me-2"></i> Animal
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="booking.html">
+              <i class="bi bi-ticket-perforated me-2"></i> Booking Tiket
+            </a>
+          </li>
+        </ul>
+      </div>
+
 <!-- Konten Informasi Tiket yang Sudah Dipesan -->
 <div class="col-md-10 p-4">
   <h2 class="text-success mb-3 fs-2"><i class="bi bi-info-circle info-icon"></i> Tiket Anda</h2>
@@ -135,3 +174,6 @@
     </div>
   </div>
 </div>
+</body>
+</head>
+</html>
