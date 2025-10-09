@@ -1,5 +1,39 @@
+<?php
+include "../database/conn.php";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $nama     = $_POST['nama'];
+  $email    = $_POST['email'];
+  $password = $_POST['password'];
+  $confirm  = $_POST['confirm'];
+  $role     = $_POST['role'];
+
+  if ($password !== $confirm) {
+    $pesan = "<div class='alert alert-danger text-center'>❌ Password tidak cocok!</div>";
+  } else {
+    // Hash password dengan md5 agar sama dengan proses login
+    $password_md5 = md5($password);
+
+    $sql = "INSERT INTO users (nama, email, password, role) 
+                VALUES ('$nama', '$email', '$password_md5', '$role')";
+
+    if ($koneksi->query($sql) === TRUE) {
+      // Arahkan otomatis sesuai role tanpa menampilkan pesan
+      if ($role === 'admin') {
+        header("Location: ../admin/index.php");
+      } else {
+        header("Location: ../pages/beranda.php");
+      }
+      exit;
+    } else {
+      $pesan = "<div class='alert alert-danger text-center'>❌ Error: " . $koneksi->error . "</div>";
+    }
+  }
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,123 +45,109 @@
       min-height: 100vh;
       background: linear-gradient(135deg, #e8fbe8 0%, #b2f7b2 100%);
     }
+
     .register-card {
       max-width: 420px;
       width: 100%;
       border-radius: 1rem;
-      box-shadow: 0 8px 32px rgba(25,135,84,0.12);
-      border: none;
+      box-shadow: 0 8px 32px rgba(25, 135, 84, 0.12);
       background: #fff;
-      animation: fadeIn 1s;
-      margin: 0 auto;
+      margin: 30px auto;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px);}
-      to { opacity: 1; transform: translateY(0);}
-    }
+
     .register-header {
       background: linear-gradient(90deg, #198754 60%, #43e97b 100%);
       color: white;
-      padding: 24px 0 16px 0;
       text-align: center;
+      padding: 20px 0;
       border-top-left-radius: 1rem;
       border-top-right-radius: 1rem;
-      box-shadow: 0 2px 8px rgba(25,135,84,0.08);
     }
-    .form-control:focus {
-      border-color: #198754;
-      box-shadow: 0 0 5px rgba(25, 135, 84, 0.5);
-    }
+
     .btn-register {
       background: linear-gradient(90deg, #198754 60%, #43e97b 100%);
-      color: #fff;
+      color: white;
       font-weight: bold;
       border: none;
-      transition: background 0.2s, box-shadow 0.2s;
-      box-shadow: 0 2px 8px rgba(25,135,84,0.08);
     }
+
     .btn-register:hover {
       background: linear-gradient(90deg, #157347 60%, #43e97b 100%);
-      box-shadow: 0 4px 16px rgba(25,135,84,0.15);
     }
+
     .input-group-text {
       background: #e8fbe8;
       border: none;
-      font-size: 1.2rem;
       color: #198754;
-    }
-    .register-icon {
-      font-size: 2.5rem;
-      color: #fff;
-      background: #43e97b;
-      border-radius: 50%;
-      padding: 0.7rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 8px rgba(25,135,84,0.08);
-      display: inline-block;
     }
   </style>
 </head>
+
 <body>
-  <!-- Register Form -->
-  <div class="register-card mt-4">
+
+  <div class="register-card">
     <div class="register-header">
-      <span class="register-icon">
-        <i class="bi bi-person-plus"></i>
-      </span>
-      <h4 class="mb-0">Daftar Akun Baru</h4>
+      <i class="bi bi-person-plus" style="font-size:2rem;"></i>
+      <h4 class="mb-0 mt-2">Daftar Akun Baru</h4>
     </div>
     <div class="card-body p-4">
-      <form>
-        <!-- Nama Lengkap -->
+      <?php if (!empty($pesan)) echo $pesan; ?>
+
+      <form action="" method="POST">
         <div class="mb-3">
-          <label for="fullname" class="form-label">Nama Lengkap</label>
+          <label for="fullname" class="form-label">username</label>
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-person"></i></span>
-            <input type="text" class="form-control" id="fullname" placeholder="Masukkan nama lengkap" required>
+            <input type="text" class="form-control" id="fullname" name="nama" required>
           </div>
         </div>
-        <!-- Email -->
+
+
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-            <input type="email" class="form-control" id="email" placeholder="Masukkan email aktif" required>
+            <input type="email" class="form-control" id="email" name="email" required>
           </div>
         </div>
-        <!-- Username -->
+
         <div class="mb-3">
-          <label for="username" class="form-label">Username</label>
+          <label for="role" class="form-label">Daftar Sebagai</label>
           <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
-            <input type="text" class="form-control" id="username" placeholder="Masukkan username" required>
+            <span class="input-group-text"><i class="bi bi-person-gear"></i></span>
+            <select class="form-select" id="role" name="role" required>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
           </div>
         </div>
-        <!-- Password -->
+
         <div class="mb-3">
           <label for="password" class="form-label">Kata Sandi</label>
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-lock"></i></span>
-            <input type="password" class="form-control" id="password" placeholder="Masukkan kata sandi" required>
+            <input type="password" class="form-control" id="password" name="password" required minlength="6">
           </div>
         </div>
-        <!-- Confirm Password -->
+
         <div class="mb-3">
           <label for="confirm" class="form-label">Konfirmasi Kata Sandi</label>
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-            <input type="password" class="form-control" id="confirm" placeholder="Ulangi kata sandi" required>
+            <input type="password" class="form-control" id="confirm" name="confirm" required minlength="6">
           </div>
         </div>
-        <!-- Button -->
+
         <button type="submit" class="btn btn-register w-100">Daftar</button>
       </form>
+
       <div class="text-center mt-3">
-        <p class="mb-1">Sudah punya akun? <a href="login.html" class="text-success fw-bold">Login</a></p>
+        <p class="mb-1">Sudah punya akun? <a href="login.php" class="text-success fw-bold">Login</a></p>
       </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

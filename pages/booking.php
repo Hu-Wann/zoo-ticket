@@ -1,5 +1,16 @@
+<?php
+session_start();
+
+// Logout jika tombol logout ditekan 
+if (isset($_GET['logout'])) {
+  session_destroy();
+  header("Location: beranda.php");
+  exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,98 +19,152 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <style>
     body {
-      background-color: #f8fff8;
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
-    .sidebar {
-      min-height: 100vh;
-      background-color: #d4f8d4;
-      padding-top: 20px;
-      border-right: 2px solid #b2f7b2;
-    }
-    .sidebar-link {
-      border-radius: 0.5rem;
-      padding: 0.5rem 1rem;
-      transition: background 0.2s, color 0.2s;
-    }
-    .sidebar-link:hover,
-    .sidebar-link.active {
-      background: linear-gradient(90deg, #e8fbe8 60%, #b2f7b2 100%);
-      color: #157347 !important;
-      text-decoration: none;
-    }
+
     .booking-card {
       max-width: 600px;
       margin: 0 auto;
       border-radius: 1rem;
-      box-shadow: 0 8px 32px rgba(25,135,84,0.12);
+      box-shadow: 0 8px 32px rgba(25, 135, 84, 0.12);
       background: #fff;
+      border: none;
     }
-    .footer {
-      background: #d4f8d4;
+
+    .ticket-header {
+      background-color: #198754;
+      color: white;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+      border-radius: 0 0 1rem 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar {
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      font-weight: bold;
       color: #198754;
+    }
+
+    .nav-link {
+      color: #333;
+      font-weight: 500;
+    }
+
+    .nav-link:hover {
+      color: #198754;
+    }
+
+    .footer {
+      background: #343a40;
+      color: white;
       padding: 24px 0 12px 0;
       margin-top: 48px;
-      border-top: 2px solid #b2f7b2;
     }
   </style>
 </head>
-<body>
-  <!-- Judul -->
-  <div class="text-center py-3 bg-white shadow-sm">
-    <h1 class="text-success">🌿 Kebun Binatang Indah</h1>
-  </div>
 
+<body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-    <div class="container-fluid justify-content-end">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="tiket.html">Informasi Tiket</a></li>
-        <li class="nav-item"><a class="nav-link" href="./acount/login.html">Login</a></li>
-      </ul>
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="beranda.php">
+        <i class="bi bi-tree-fill me-2"></i>Zoo Ticket
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="beranda.php">Beranda</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="animal.php">Hewan</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="booking.php">Booking</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="tiket.php">Tiket Saya</a>
+          </li>
+          <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+          <li class="nav-item">
+            <a class="nav-link text-primary fw-bold" href="../admin/dashboard.php">
+              <i class="bi bi-speedometer2"></i> Admin Panel
+            </a>
+          </li>
+          <?php endif; ?>
+          <?php if (isset($_SESSION['email'])): ?>
+          <li class="nav-item">
+            <span class="nav-link text-success">
+              👋 <?php echo htmlspecialchars($_SESSION['nama']); ?>
+            </span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-danger" href="?logout=1">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+          </li>
+          <?php else: ?>
+          <li class="nav-item">
+            <a class="nav-link text-success" href="../acount/login.php">
+              <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+          </li>
+          <?php endif; ?>
+        </ul>
+      </div>
     </div>
   </nav>
 
-  <div class="container-fluid">
-    <div class="row">
-      <!-- Sidebar -->
-      <div class="col-md-2 sidebar position-sticky" style="top: 80px; height: calc(100vh - 80px); z-index: 2;">
-        <ul class="nav flex-column">
-          <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="index.html">
-              <i class="bi bi-house-door me-2"></i> Beranda
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="animal.php">
-              <i class="bi bi-paw me-2"></i> Animal
-            </a>
-          </li>
-          <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link active" href="booking.html">
-              <i class="bi bi-ticket-perforated me-2"></i> Booking Tiket
-            </a>
-          </li>
-        </ul>
-      </div>
+  <div class="ticket-header">
+    <div class="container text-center">
+      <h1><i class="bi bi-calendar-check me-2"></i>Booking Tiket</h1>
+      <p class="lead">Pesan tiket kebun binatang dengan mudah dan cepat</p>
+    </div>
+  </div>
 
-      <!-- Konten Booking -->
-      <div class="col-md-10 p-4">
+  <div class="container">
+    <!-- Konten Booking -->
+    <div class="row">
+      <div class="col-12">
         <h2 class="text-success mb-3 fs-2">Booking Tiket Kebun Binatang Indah</h2>
         <p class="lead fs-4 mb-4">Pesan tiket kunjungan Anda secara online. Pilih jumlah tiket sesuai kategori pengunjung di bawah ini.</p>
         <div class="booking-card p-4 mb-5">
-          <form id="formBooking">
+          <form action="../admin/sys_booking.php" method="POST" id="formBooking">
+
             <div class="mb-3">
               <label for="nama" class="form-label fw-bold">Nama Lengkap</label>
-              <input type="text" class="form-control" id="nama" placeholder="Masukkan nama lengkap" required>
+              <input type="text" class="form-control" id="nama" name="nama_pengunjung" placeholder="Masukkan nama lengkap" required>
             </div>
             <div class="mb-3">
               <label for="email" class="form-label fw-bold">Email</label>
-              <input type="email" class="form-control" id="email" placeholder="Masukkan email aktif" required>
+              <input type="email" class="form-control" id="email" name="email"
+                value="<?php echo isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : ''; ?>"
+                <?php echo isset($_SESSION['email']) ? 'readonly' : ''; ?>>
             </div>
+
             <div class="mb-3">
-              <label for="tanggal" class="form-label fw-bold">Tanggal Kunjungan</label>
-              <input type="date" class="form-control" id="tanggal" required>
+              <?php
+              $today = date('Y-m-d');
+              $maxDate = date('Y-m-d', strtotime('+30 days'));
+              ?>
+              <label for="tanggal_kunjungan" class="form-label fw-bold">Tanggal Kunjungan</label>
+              <input type="date"
+                class="form-control"
+                id="tanggal_kunjungan"
+                name="tanggal_kunjungan"
+                min="<?php echo $today; ?>"
+                max="<?php echo $maxDate; ?>"
+                required>
             </div>
+
             <div class="mb-3">
               <label class="form-label fw-bold">Jumlah Tiket per Kategori</label>
               <div class="row g-3">
@@ -153,10 +218,12 @@
                 </div>
               </div>
             </div>
+
             <div class="mb-3">
               <label for="catatan" class="form-label fw-bold">Catatan Tambahan</label>
-              <textarea class="form-control" id="catatan" rows="2" placeholder="(Opsional)"></textarea>
+              <textarea class="form-control" id="catatan" name="catatan" rows="2" placeholder="(Opsional)"></textarea>
             </div>
+
             <div class="mb-4">
               <div class="alert alert-success mb-2">
                 <strong>Harga Tiket:</strong>
@@ -192,9 +259,17 @@
                 <span id="totalHarga" class="fw-bold text-success">Rp 0</span>
               </div>
             </div>
-            <button type="submit" class="btn btn-success w-100 fw-bold fs-5">
-              <i class="bi bi-cart-check me-2"></i> Pesan Tiket
-            </button>
+
+            <?php if (isset($_SESSION['email'])): ?>
+              <button type="submit" name="booking" class="btn btn-success w-100 fw-bold fs-5">
+                <i class="bi bi-cart-check me-2"></i> Pesan Tiket
+              </button>
+            <?php else: ?>
+              <button type="button" class="btn btn-success w-100 fw-bold fs-5" onclick="alert('Silakan login terlebih dahulu untuk memesan tiket')">
+                <i class="bi bi-cart-check me-2"></i> Pesan Tiket
+              </button>
+            <?php endif; ?>
+
           </form>
         </div>
 
@@ -222,6 +297,7 @@
       </div>
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // Hitung total harga otomatis
@@ -244,4 +320,5 @@
     window.addEventListener('DOMContentLoaded', hitungTotal);
   </script>
 </body>
+
 </html>

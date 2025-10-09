@@ -7,7 +7,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $makanan   = $_POST['makanan'];
     $deskripsi = $_POST['deskripsi'];
     $status    = $_POST['status'];
-    $emoji     = $_POST['emoji'];
     $gambar    = $_POST['gambar'];
 
     $sql = "INSERT INTO animals (nama, habitat, makanan, deskripsi, status_konservasi, emoji, gambar) 

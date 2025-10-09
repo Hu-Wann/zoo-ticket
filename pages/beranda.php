@@ -1,3 +1,15 @@
+<?php
+session_start();
+
+// Logout jika tombol logout ditekan
+if (isset($_GET['logout'])) {
+  session_destroy();
+  header("Location: beranda.php");
+  exit;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 
@@ -39,11 +51,11 @@
     }
 
     .footer {
-      background: #d4f8d4;
-      color: #198754;
+      background: #343a40;
+      color: white;
       padding: 24px 0 12px 0;
       margin-top: 48px;
-      border-top: 2px solid #b2f7b2;
+      width: 100%;
     }
 
     .sidebar-link {
@@ -62,20 +74,57 @@
 </head>
 
 <body>
-  <!-- Judul -->
-  <div class="text-center py-3 bg-white shadow-sm">
-    <h1 class="text-success">🌿 Kebun Binatang Indah</h1>
-  </div>
-
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-    <div class="container-fluid justify-content-end">
-      <ul class="navbar-nav">
-        <li class="nav-item"><a class="nav-link" href="tiket.html">Informasi Tiket</a></li>
-        <li class="nav-item"><a class="nav-link" href="../acount/login.html">Login</a></li>
-      </ul>
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top" style="background-color: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+    <div class="container">
+      <a class="navbar-brand" href="beranda.php" style="font-weight: bold; color: #198754;">
+        <i class="bi bi-tree-fill me-2"></i>Zoo Ticket
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="tiket.php">Tiket Saya</a>
+          </li>
+          <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+          <li class="nav-item">
+            <a class="nav-link text-primary fw-bold" href="../admin/dashboard.php">
+              <i class="bi bi-speedometer2"></i> Admin Panel
+            </a>
+          </li>
+          <?php endif; ?>
+          <?php if (isset($_SESSION['email'])): ?>
+          <li class="nav-item">
+            <span class="nav-link text-success">
+              👋 <?php echo htmlspecialchars($_SESSION['nama']); ?>
+            </span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-danger" href="?logout=1">
+              <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+          </li>
+          <?php else: ?>
+          <li class="nav-item">
+            <a class="nav-link text-success" href="../acount/login.php">
+              <i class="bi bi-box-arrow-in-right"></i> Login
+            </a>
+          </li>
+          <?php endif; ?>
+        </ul>
+      </div>
     </div>
   </nav>
+
+  <!-- Header -->
+  <div class="ticket-header" style="background-color: #198754; color: white; padding: 2rem 0; margin-bottom: 2rem; border-radius: 0 0 1rem 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    <div class="container text-center">
+      <h1><i class="bi bi-house-fill me-2"></i>Beranda</h1>
+      <p class="lead">Selamat datang di Kebun Binatang Indah</p>
+    </div>
+  </div>
 
   <div class="container-fluid">
     <div class="row">
@@ -83,7 +132,7 @@
       <div class="col-md-2 sidebar position-sticky" style="top: 80px; height: calc(100vh - 80px); z-index: 2;">
         <ul class="nav flex-column">
           <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="index.html">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="beranda.php">
               <i class="bi bi-house-door me-2"></i> Beranda
             </a>
           </li>
@@ -93,7 +142,7 @@
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="booking.html">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="booking.php">
               <i class="bi bi-ticket-perforated me-2"></i> Booking Tiket
             </a>
           </li>
@@ -107,7 +156,7 @@
           <div>
             <h2 class="text-success fw-bold mb-2">Selamat Datang di Kebun Binatang Indah</h2>
             <p class="lead mb-3">Wisata keluarga, edukasi satwa, dan rekreasi alam terbaik di kota Anda!</p>
-            <a href="booking.html" class="btn btn-success btn-lg fw-bold shadow-sm"><i
+            <a href="booking.php" class="btn btn-success btn-lg fw-bold shadow-sm"><i
                 class="bi bi-ticket-perforated me-2"></i>Pesan Tiket Sekarang</a>
           </div>
           <img

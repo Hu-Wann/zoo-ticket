@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -59,6 +61,7 @@
   </style>
 </head>
 <body>
+
   <div class="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
     <div class="card login-card p-4">
       <div class="text-center">
@@ -66,17 +69,18 @@
           <i class="bi bi-person-circle"></i>
         </span>
         <h3 class="fw-bold mb-2 text-success">Welcome back!</h3>
-        <p class="text-muted mb-4">Masukkan email & password untuk login</p>
+        <p class="text-muted mb-4">Masukkan nama atau email & password untuk login</p>
       </div>
-      <form action="#" method="post" novalidate>
+
+      <!-- FORM LOGIN -->
+      <form action="" method="post">
         <div class="mb-3">
-          <label for="email" class="form-label">Email address</label>
+          <label for="login_id" class="form-label">Nama atau Email</label>
           <div class="input-group">
             <span class="input-group-text">
-              <i class="bi bi-envelope"></i>
+              <i class="bi bi-person"></i>
             </span>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email" required>
-            <div class="invalid-feedback">Email wajib diisi dan valid.</div>
+            <input type="text" class="form-control" id="login_id" name="login_id" placeholder="Masukkan nama atau email" required>
           </div>
         </div>
         <div class="mb-3">
@@ -86,16 +90,45 @@
               <i class="bi bi-lock"></i>
             </span>
             <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan kata sandi" required minlength="6">
-            <div class="invalid-feedback">Kata sandi minimal 6 karakter.</div>
           </div>
         </div>
-        <button type="submit" class="btn btn-login w-100 mb-2">Login</button>
+        <button type="submit" name="login" class="btn btn-login w-100 mb-2">Login</button>
       </form>
+
       <div class="text-center mt-3">
-        <p class="mb-1">Belum punya akun? <a href="register.html" class="text-success fw-bold">Daftar</a></p>
+        <p class="mb-1">Belum punya akun? <a href="register.php" class="text-success fw-bold">Daftar</a></p>
         <a href="#" class="text-muted">Lupa kata sandi?</a>
       </div>
     </div>
   </div>
+
+  <?php
+  if (isset($_POST['login'])) {
+      include "../database/conn.php"; 
+
+      $login_id = $_POST['login_id'];
+      $password = md5($_POST['password']); 
+
+      $sql = "SELECT * FROM users WHERE (email='$login_id' OR nama='$login_id') AND password='$password'";
+      $result = $koneksi->query($sql);
+
+      if ($result->num_rows > 0) {
+          $user = $result->fetch_assoc();
+          $_SESSION['user_id'] = $user['id'];
+          $_SESSION['email'] = $user['email'];
+          $_SESSION['nama'] = $user['nama'];
+          $_SESSION['role'] = $user['role'];
+
+          if ($user['role'] === 'admin') {
+              header("Location: ../admin/dashboard.php");
+          } else {
+              header("Location: ../pages/beranda.php");
+          }
+          exit;
+      } else {
+          echo "<div class='alert alert-danger text-center mt-3'>Nama/Email atau password salah ❌</div>";
+      }
+  }
+  ?>
 </body>
 </html>
