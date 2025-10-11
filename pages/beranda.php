@@ -89,29 +89,29 @@ if (isset($_GET['logout'])) {
             <a class="nav-link" href="tiket.php">Tiket Saya</a>
           </li>
           <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-          <li class="nav-item">
-            <a class="nav-link text-primary fw-bold" href="../admin/dashboard.php">
-              <i class="bi bi-speedometer2"></i> Admin Panel
-            </a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link text-primary fw-bold" href="../admin/dashboard.php">
+                <i class="bi bi-speedometer2"></i> Admin Panel
+              </a>
+            </li>
           <?php endif; ?>
           <?php if (isset($_SESSION['email'])): ?>
-          <li class="nav-item">
-            <span class="nav-link text-success">
-              👋 <?php echo htmlspecialchars($_SESSION['nama']); ?>
-            </span>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-danger" href="?logout=1">
-              <i class="bi bi-box-arrow-right"></i> Logout
-            </a>
-          </li>
+            <li class="nav-item">
+              <span class="nav-link text-success">
+                👋 <?php echo htmlspecialchars($_SESSION['nama']); ?>
+              </span>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-danger" href="?logout=1">
+                <i class="bi bi-box-arrow-right"></i> Logout
+              </a>
+            </li>
           <?php else: ?>
-          <li class="nav-item">
-            <a class="nav-link text-success" href="../acount/login.php">
-              <i class="bi bi-box-arrow-in-right"></i> Login
-            </a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link text-success" href="../acount/login.php">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+              </a>
+            </li>
           <?php endif; ?>
         </ul>
       </div>
@@ -337,7 +337,7 @@ if (isset($_GET['logout'])) {
 
         <!-- Galeri Foto -->
         <h3 class="text-success mb-3">Galeri Foto</h3>
-        <div class="row g-3 mb-4">
+        <div class="row g-3">
           <div class="col-md-3 col-6">
             <div class="card shadow-sm h-100">
               <img src="https://wendytour.co.id/wp-content/uploads/2019/10/N454J_1decbeed-5a7d-472e-af89-c1e6d888cf8c.jpg" class="card-img-top rounded-top" alt="Gerbang Kebun Binatang">
@@ -375,23 +375,22 @@ if (isset($_GET['logout'])) {
             </div>
           </div>
         </div>
-
-        <!-- Footer -->
-        <div class="footer text-center">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-6 mb-2 mb-md-0">
-                <span class="fw-bold">Kebun Binatang Indah</span> &copy; 2025
-              </div>
-              <div class="col-md-6">
-                <div class="d-flex flex-column flex-md-row justify-content-end">
-                  <div class="me-md-3">
-                    Jl. Satwa Raya No. 1, Kota Hijau | Telp: 0812-3456-7890 | Email: info@kebunbinatangindah.com
-                  </div>
-                  <div class="mt-2 mt-md-0 small">
-                    <span><i class="bi bi-facebook"></i> KebunBinatangIndah</span>
-                    <span><i class="bi bi-instagram"></i> @kebunbinatangindah</span> &nbsp;
-                  </div>
+      </div>
+      <!-- Footer -->
+      <div class="footer text-center">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 mb-2 mb-md-0">
+              <span class="fw-bold">Kebun Binatang Indah</span> &copy; 2025
+            </div>
+            <div class="col-md-6">
+              <div class="d-flex flex-column flex-md-row justify-content-end">
+                <div class="me-md-3">
+                  Jl. Satwa Raya No. 1, Kota Hijau | Telp: 0812-3456-7890 | Email: info@kebunbinatangindah.com
+                </div>
+                <div class="mt-2 mt-md-0 small">
+                  <span><i class="bi bi-facebook"></i> KebunBinatangIndah</span>
+                  <span><i class="bi bi-instagram"></i> @kebunbinatangindah</span> &nbsp;
                 </div>
               </div>
             </div>
