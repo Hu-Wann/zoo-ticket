@@ -175,6 +175,7 @@
                                 } else {
                                     $error_message = "<div class='alert alert-danger'><i class='bi bi-exclamation-triangle-fill'></i> " . $upload_result["message"] . "</div>";
                                 }
+                                header("refresh:1;url=hewan.php");
                             } else {
                                 $error_message = "<div class='alert alert-danger'><i class='bi bi-exclamation-triangle-fill'></i> Silakan pilih file gambar!</div>";
                             }

@@ -158,7 +158,7 @@ $result = $conn->query($sql);
             <?php while ($row = $result->fetch_assoc()): ?>
               <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="card animal-card h-100 text-center">
-                  <img src="<?php echo $row['gambar']; ?>" class="animal-img" alt="<?php echo $row['nama']; ?>">
+                  <img src="../picture/<?php echo $row['gambar']; ?>" class="animal-img" alt="<?php echo $row['nama']; ?>">
                   <div class="card-body">
                     <div class="animal-info mb-2">
                       <span class="badge bg-light text-dark mb-1"><i class="bi bi-geo-alt me-1"></i>Habitat: <?php echo $row['habitat']; ?></span><br>

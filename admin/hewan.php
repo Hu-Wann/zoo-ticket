@@ -19,7 +19,7 @@ if (isset($_POST['tambah'])) {
     // Upload gambar
     $namaFile = $_FILES['gambar']['name'];
     $tmpName = $_FILES['gambar']['tmp_name'];
-    $folder = "../uploads/";
+    $folder = "../picture/";
 
     if (!is_dir($folder)) {
         mkdir($folder, 0777, true);
@@ -51,7 +51,7 @@ if (isset($_POST['edit'])) {
     // Upload gambar jika ada
     $namaFile = $_FILES['gambar']['name'];
     $tmpName = $_FILES['gambar']['tmp_name'];
-    $folder = "../uploads/";
+    $folder = "../picture/";
 
     if ($namaFile != '') {
         $pathFile = $folder . time() . "_" . basename($namaFile);
@@ -129,7 +129,7 @@ $hewan = $conn->query("SELECT * FROM animals");
         <td><?= htmlspecialchars($row['status_konservasi']) ?></td>
         <td>
           <?php if($row['gambar']): ?>
-            <img src="<?= $row['gambar'] ?>" width="70">
+            <img src="../picture/<?= $row['gambar'] ?>" width="70">
           <?php endif; ?>
         </td>
         <td>

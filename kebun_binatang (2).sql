@@ -35,7 +35,7 @@ CREATE TABLE `animals` (
   `deskripsi` text NOT NULL,
   `status_konservasi` varchar(100) NOT NULL,
   `gambar` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `animals`
@@ -63,7 +63,7 @@ CREATE TABLE `booking` (
   `catatan` text,
   `tanggal_booking` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(20) NOT NULL DEFAULT 'dibooking'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `booking`
@@ -85,7 +85,7 @@ CREATE TABLE `stok_tiket` (
   `id` int NOT NULL,
   `tanggal` date NOT NULL,
   `sisa_stok` int NOT NULL DEFAULT '500'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `stok_tiket`
@@ -112,7 +112,7 @@ CREATE TABLE `transaksi` (
   `catatan` text,
   `total_harga` int NOT NULL,
   `tanggal_transaksi` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -126,7 +126,7 @@ CREATE TABLE `users` (
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
   `role` enum('admin','user') DEFAULT 'user'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `users`
