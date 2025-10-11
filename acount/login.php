@@ -1,4 +1,33 @@
-<?php session_start(); ?>
+<?php 
+session_start(); 
+$alert_message = "";
+if (isset($_POST['login'])) {
+    include "../database/conn.php"; 
+
+    $login_id = $_POST['login_id'];
+    $password = md5($_POST['password']); 
+
+    $sql = "SELECT * FROM users WHERE (email='$login_id' OR nama='$login_id') AND password='$password'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['email'] = $user['email'];
+        $_SESSION['nama'] = $user['nama'];
+        $_SESSION['role'] = $user['role'];
+
+        if ($user['role'] === 'admin') {
+            header("Location: ../admin/dashboard.php");
+        } else {
+            header("Location: ../pages/beranda.php");
+        }
+        exit;
+    } else {
+        $alert_message = "<div class='alert alert-danger text-center'>Nama/Email atau password salah ❌</div>";
+    }
+}
+?>
 
 <!DOCTYPE html>
 <html lang="id">
@@ -65,6 +94,9 @@
   <div class="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
     <div class="card login-card p-4">
       <div class="text-center">
+        <a href="../pages/beranda.php" class="btn btn-sm btn-outline-success mb-3 position-absolute" style="top: 15px; left: 15px;">
+          <i class="bi bi-house-door"></i> Kembali ke Beranda
+        </a>
         <span class="login-icon">
           <i class="bi bi-person-circle"></i>
         </span>
@@ -74,6 +106,7 @@
 
       <!-- FORM LOGIN -->
       <form action="" method="post">
+        <?php if (!empty($alert_message)) echo $alert_message; ?>
         <div class="mb-3">
           <label for="login_id" class="form-label">Nama atau Email</label>
           <div class="input-group">
@@ -103,32 +136,7 @@
   </div>
 
   <?php
-  if (isset($_POST['login'])) {
-      include "../database/conn.php"; 
-
-      $login_id = $_POST['login_id'];
-      $password = md5($_POST['password']); 
-
-      $sql = "SELECT * FROM users WHERE (email='$login_id' OR nama='$login_id') AND password='$password'";
-      $result = $koneksi->query($sql);
-
-      if ($result->num_rows > 0) {
-          $user = $result->fetch_assoc();
-          $_SESSION['user_id'] = $user['id'];
-          $_SESSION['email'] = $user['email'];
-          $_SESSION['nama'] = $user['nama'];
-          $_SESSION['role'] = $user['role'];
-
-          if ($user['role'] === 'admin') {
-              header("Location: ../admin/dashboard.php");
-          } else {
-              header("Location: ../pages/beranda.php");
-          }
-          exit;
-      } else {
-          echo "<div class='alert alert-danger text-center mt-3'>Nama/Email atau password salah ❌</div>";
-      }
-  }
+  // Kode validasi login sudah dipindahkan ke bagian atas file
   ?>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "../database/conn.php"; // pastikan file ini mendefinisikan $koneksi (mysqli)
+include "../database/conn.php"; 
 ?>
 <!DOCTYPE html>
 <html lang="id">

@@ -1,32 +1,31 @@
 <?php
 include "../database/conn.php";
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $nama     = $_POST['nama'];
   $email    = $_POST['email'];
   $password = $_POST['password'];
   $confirm  = $_POST['confirm'];
-  $role     = $_POST['role'];
+
+  // Role ditetapkan otomatis sebagai 'user'
+  $role = 'user';
 
   if ($password !== $confirm) {
     $pesan = "<div class='alert alert-danger text-center'>❌ Password tidak cocok!</div>";
   } else {
-    // Hash password dengan md5 agar sama dengan proses login
+    // Hash password dengan md5 (agar sesuai proses login kamu)
     $password_md5 = md5($password);
 
     $sql = "INSERT INTO users (nama, email, password, role) 
-                VALUES ('$nama', '$email', '$password_md5', '$role')";
+            VALUES ('$nama', '$email', '$password_md5', '$role')";
 
-    if ($koneksi->query($sql) === TRUE) {
-      // Arahkan otomatis sesuai role tanpa menampilkan pesan
-      if ($role === 'admin') {
-        header("Location: ../admin/index.php");
-      } else {
-        header("Location: ../pages/beranda.php");
-      }
+    if ($conn->query($sql) === TRUE) {
+      // Setelah registrasi, arahkan ke beranda user
+      header("Location: ../pages/beranda.php");
       exit;
     } else {
-      $pesan = "<div class='alert alert-danger text-center'>❌ Error: " . $koneksi->error . "</div>";
+      $pesan = "<div class='alert alert-danger text-center'>❌ Error: " . $conn->error . "</div>";
     }
   }
 }
@@ -53,8 +52,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       box-shadow: 0 8px 32px rgba(25, 135, 84, 0.12);
       background: #fff;
       margin: 30px auto;
+      animation: fadeIn 1s;
     }
 
+ @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
     .register-header {
       background: linear-gradient(90deg, #198754 60%, #43e97b 100%);
       color: white;
@@ -86,7 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
   <div class="register-card">
-    <div class="register-header">
+    <div class="register-header position-relative">
+      <a href="../pages/beranda.php" class="btn btn-sm btn-light position-absolute" style="top: 10px; left: 10px;">
+        <i class="bi bi-house-door"></i> Kembali ke Beranda
+      </a>
       <i class="bi bi-person-plus" style="font-size:2rem;"></i>
       <h4 class="mb-0 mt-2">Daftar Akun Baru</h4>
     </div>
@@ -108,17 +115,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="input-group">
             <span class="input-group-text"><i class="bi bi-envelope"></i></span>
             <input type="email" class="form-control" id="email" name="email" required>
-          </div>
-        </div>
-
-        <div class="mb-3">
-          <label for="role" class="form-label">Daftar Sebagai</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-person-gear"></i></span>
-            <select class="form-select" id="role" name="role" required>
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
           </div>
         </div>
 

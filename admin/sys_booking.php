@@ -45,17 +45,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $query = "INSERT INTO booking 
-        (nama_pengunjung, email, tanggal_kunjungan, jumlah_dewasa, jumlah_remaja, jumlah_anak, total_harga, tanggal_booking, catatan) 
-        VALUES 
-        ('$nama_pengunjung', '$email', '$tanggal', $dewasa, $remaja, $anak, $total_harga, NOW(), '$catatan')";
-
-    if (mysqli_query($conn, $query)) {
-        $_SESSION['success'] = "Booking berhasil!";
+    // Cek stok tiket untuk tanggal yang dipilih
+    $total_tiket = $dewasa + $remaja + $anak;
+    $check_stok = $conn->query("SELECT sisa_stok FROM stok_tiket WHERE tanggal = '$tanggal'");
+    
+    // Jika belum ada stok untuk tanggal tersebut, buat baru dengan stok default 500
+    if ($check_stok->num_rows == 0) {
+        $conn->query("INSERT INTO stok_tiket (tanggal, sisa_stok) VALUES ('$tanggal', 500)");
+        $sisa_stok = 500;
+    } else {
+        $stok_data = $check_stok->fetch_assoc();
+        $sisa_stok = $stok_data['sisa_stok'];
+    }
+    
+    // Cek apakah stok mencukupi
+    if ($total_tiket > $sisa_stok) {
+        $_SESSION['error'] = "Maaf, stok tiket untuk tanggal " . date('d-m-Y', strtotime($tanggal)) . " tidak mencukupi. Sisa stok: $sisa_stok tiket.";
+        header("Location: ../pages/booking.php");
+        exit;
+    }
+    
+    // Mulai transaksi
+    $conn->begin_transaction();
+    
+    try {
+        // Insert data booking
+        $query = "INSERT INTO booking 
+            (nama_pengunjung, email, tanggal_kunjungan, jumlah_dewasa, jumlah_remaja, jumlah_anak, total_harga, tanggal_booking, catatan) 
+            VALUES 
+            ('$nama_pengunjung', '$email', '$tanggal', $dewasa, $remaja, $anak, $total_harga, NOW(), '$catatan')";
+        
+        $conn->query($query);
+        
+        // Update stok tiket (kurangi sesuai total tiket yang dipesan)
+        $update_stok = "UPDATE stok_tiket SET sisa_stok = sisa_stok - $total_tiket WHERE tanggal = '$tanggal'";
+        $conn->query($update_stok);
+        
+        // Commit transaksi
+        $conn->commit();
+        
+        $_SESSION['success'] = "Booking berhasil! Anda memesan $total_tiket tiket untuk tanggal " . date('d-m-Y', strtotime($tanggal));
         header("Location: ../pages/tiket.php");
         exit;
-    } else {
-        die("Gagal booking: " . mysqli_error($conn));
+    } catch (Exception $e) {
+        // Rollback jika terjadi error
+        $conn->rollback();
+        die("Gagal booking: " . $e->getMessage());
     }
 }
 ?>

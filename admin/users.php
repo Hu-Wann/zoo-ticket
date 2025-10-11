@@ -8,15 +8,23 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit;
 }
 
-// ambil jumlah data
-$totalHewan = $conn->query("SELECT COUNT(*) as jml FROM animals")->fetch_assoc()['jml'];
-$totalTiket = $conn->query("SELECT COUNT(*) as jml FROM booking")->fetch_assoc()['jml'];
-$totalUser  = $conn->query("SELECT COUNT(*) as jml FROM users")->fetch_assoc()['jml'];
+// Hapus pengguna jika ada request
+if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
+    $id = $_GET['delete'];
+    // Tidak menghapus admin yang sedang login
+    if ($id != $_SESSION['user_id']) {
+        $conn->query("DELETE FROM users WHERE id = $id");
+        header("Location: users.php?status=deleted");
+        exit;
+    } else {
+        header("Location: users.php?status=error");
+        exit;
+    }
+}
 
-// Ambil data stok tiket untuk hari ini
-$today = date('Y-m-d');
-$stokHariIni = $conn->query("SELECT sisa_stok FROM stok_tiket WHERE tanggal = '$today'")->fetch_assoc();
-$sisaStok = $stokHariIni ? $stokHariIni['sisa_stok'] : 0;
+// Ambil data pengguna
+$query = "SELECT * FROM users ORDER BY id DESC";
+$result = $conn->query($query);
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +32,7 @@ $sisaStok = $stokHariIni ? $stokHariIni['sisa_stok'] : 0;
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin</title>
+  <title>Kelola Pengguna - Admin</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -99,73 +107,71 @@ $sisaStok = $stokHariIni ? $stokHariIni['sisa_stok'] : 0;
       align-items: center;
     }
     
-    .stat-card {
+    .content-card {
       background: white;
       border-radius: 10px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
       padding: 25px;
-      transition: all 0.3s;
-      height: 100%;
-      border-left: 4px solid var(--primary-color);
+      margin-bottom: 25px;
     }
     
-    .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    .table-container {
+      border-radius: 10px;
+      overflow: hidden;
     }
     
-    .stat-card.animals {
-      border-left-color: var(--primary-color);
+    .table {
+      margin-bottom: 0;
     }
     
-    .stat-card.tickets {
-      border-left-color: var(--secondary-color);
+    .table thead {
+      background-color: #f8f9fa;
     }
     
-    .stat-card.users {
-      border-left-color: var(--accent-color);
-    }
-    
-    .stat-card .icon {
-      font-size: 40px;
-      margin-bottom: 15px;
-      color: var(--primary-color);
-    }
-    
-    .stat-card.animals .icon {
-      color: var(--primary-color);
-    }
-    
-    .stat-card.tickets .icon {
-      color: var(--secondary-color);
-    }
-    
-    .stat-card.users .icon {
-      color: var(--accent-color);
-    }
-    
-    .stat-card .count {
-      font-size: 32px;
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-    
-    .stat-card .title {
-      font-size: 18px;
+    .table thead th {
+      border-bottom: none;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.85rem;
       color: #6c757d;
-      margin-bottom: 15px;
+      padding: 15px;
     }
     
-    .btn-manage {
+    .table tbody td {
+      padding: 15px;
+      vertical-align: middle;
+    }
+    
+    .badge {
+      padding: 6px 12px;
+      font-weight: 500;
       border-radius: 50px;
-      padding: 8px 20px;
+    }
+    
+    .btn-action {
+      border-radius: 50px;
+      padding: 6px 15px;
       font-weight: 500;
       transition: all 0.3s;
     }
     
-    .btn-manage:hover {
+    .btn-action:hover {
       transform: translateY(-2px);
       box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+    
+    .alert {
+      border-radius: 10px;
+      border-left: 4px solid;
+      padding: 15px 20px;
+    }
+    
+    .alert-success {
+      border-left-color: #28a745;
+    }
+    
+    .alert-danger {
+      border-left-color: #dc3545;
     }
     
     .user-info {
@@ -221,7 +227,7 @@ $sisaStok = $stokHariIni ? $stokHariIni['sisa_stok'] : 0;
       </div>
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link active" href="dashboard.php">
+          <a class="nav-link" href="dashboard.php">
             <i class="fas fa-tachometer-alt"></i>
             <span>Dashboard</span>
           </a>
@@ -239,7 +245,7 @@ $sisaStok = $stokHariIni ? $stokHariIni['sisa_stok'] : 0;
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="users.php">
+          <a class="nav-link active" href="users.php">
             <i class="fas fa-users"></i>
             <span>Kelola Pengguna</span>
           </a>
@@ -262,7 +268,7 @@ $sisaStok = $stokHariIni ? $stokHariIni['sisa_stok'] : 0;
     <!-- Main Content -->
     <div class="main-content">
       <div class="header">
-        <h4 class="mb-0">Dashboard</h4>
+        <h4 class="mb-0">Kelola Pengguna</h4>
         <div class="user-info">
           <div class="avatar">
             <?= substr($_SESSION['nama'], 0, 1) ?>
@@ -274,57 +280,83 @@ $sisaStok = $stokHariIni ? $stokHariIni['sisa_stok'] : 0;
         </div>
       </div>
       
-      <div class="row g-4">
-        <div class="col-md-3">
-          <div class="stat-card animals">
-            <div class="icon">
-              <i class="fas fa-hippo"></i>
-            </div>
-            <div class="count"><?= $totalHewan ?></div>
-            <div class="title">Total Hewan</div>
-            <a href="hewan.php" class="btn btn-success btn-manage">
-              <i class="fas fa-cog me-1"></i> Kelola Hewan
+      <?php if (isset($_GET['status']) && $_GET['status'] == 'deleted'): ?>
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle me-2"></i> Pengguna berhasil dihapus!
+        </div>
+      <?php elseif (isset($_GET['status']) && $_GET['status'] == 'error'): ?>
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-circle me-2"></i> Tidak dapat menghapus akun admin yang sedang aktif!
+        </div>
+      <?php endif; ?>
+      
+      <div class="content-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h5 class="mb-0">
+            <i class="fas fa-users me-2 text-primary"></i> Daftar Pengguna
+          </h5>
+          <div>
+            <a href="dashboard.php" class="btn btn-outline-secondary btn-action">
+              <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
           </div>
         </div>
         
-        <div class="col-md-3">
-          <div class="stat-card tickets">
-            <div class="icon">
-              <i class="fas fa-ticket-alt"></i>
-            </div>
-            <div class="count"><?= $totalTiket ?></div>
-            <div class="title">Tiket Terjual</div>
-            <a href="laporan_tiket.php" class="btn btn-primary btn-manage">
-              <i class="fas fa-cog me-1"></i> Kelola Tiket
-            </a>
-          </div>
-        </div>
-        
-        <div class="col-md-3">
-          <div class="stat-card" style="border-left-color: #dc3545;">
-            <div class="icon" style="color: #dc3545;">
-              <i class="fas fa-calendar-day"></i>
-            </div>
-            <div class="count"><?= $sisaStok ?></div>
-            <div class="title">Stok Tiket Hari Ini</div>
-            <a href="stok.php" class="btn btn-danger btn-manage">
-              <i class="fas fa-cog me-1"></i> Kelola Stok
-            </a>
-          </div>
-        </div>
-        
-        <div class="col-md-3">
-          <div class="stat-card users">
-            <div class="icon">
-              <i class="fas fa-users"></i>
-            </div>
-            <div class="count"><?= $totalUser ?></div>
-            <div class="title">Total Pengguna</div>
-            <a href="users.php" class="btn btn-warning btn-manage">
-              <i class="fas fa-cog me-1"></i> Kelola Pengguna
-            </a>
-          </div>
+        <div class="table-container">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nama</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php if ($result->num_rows > 0): ?>
+                <?php while ($user = $result->fetch_assoc()): ?>
+                  <tr>
+                    <td><?= $user['id'] ?></td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <div class="avatar me-2" style="width: 30px; height: 30px; font-size: 12px;">
+                          <?= substr($user['nama'], 0, 1) ?>
+                        </div>
+                        <?= htmlspecialchars($user['nama']) ?>
+                      </div>
+                    </td>
+                    <td><?= htmlspecialchars($user['email']) ?></td>
+                    <td>
+                      <span class="badge <?= $user['role'] == 'admin' ? 'bg-danger' : 'bg-primary' ?>">
+                        <i class="fas <?= $user['role'] == 'admin' ? 'fa-user-shield' : 'fa-user' ?> me-1"></i>
+                        <?= $user['role'] ?>
+                      </span>
+                    </td>
+                    <td>
+                      <?php if ($user['id'] != $_SESSION['user_id']): ?>
+                        <a href="users.php?delete=<?= $user['id'] ?>" class="btn btn-danger btn-action" 
+                           onclick="return confirm('Yakin ingin menghapus pengguna ini?')">
+                          <i class="fas fa-trash-alt me-1"></i> Hapus
+                        </a>
+                      <?php else: ?>
+                        <span class="badge bg-secondary">
+                          <i class="fas fa-user-check me-1"></i> Akun Aktif
+                        </span>
+                      <?php endif; ?>
+                    </td>
+                  </tr>
+                <?php endwhile; ?>
+              <?php else: ?>
+                <tr>
+                  <td colspan="5" class="text-center py-4">
+                    <i class="fas fa-users fa-3x mb-3 text-muted"></i>
+                    <p>Tidak ada data pengguna</p>
+                  </td>
+                </tr>
+              <?php endif; ?>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

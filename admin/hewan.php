@@ -99,16 +99,13 @@ $hewan = $conn->query("SELECT * FROM animals");
   <div class="container-fluid">
     <a class="navbar-brand" href="dashboard.php">Admin Panel</a>
     <div class="d-flex">
-      <a href="logout.php" class="btn btn-danger btn-sm">Logout</a>
+      <a href="../acount/logout.php" class="btn btn-danger btn-sm">Logout</a>
     </div>
   </div>
 </nav>
 
 <div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>Data Hewan</h3>
-    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#modalTambah">+ Tambah Hewan</button>
-  </div>
+
 
   <table class="table table-bordered table-striped">
     <thead class="table-success">
@@ -188,52 +185,12 @@ $hewan = $conn->query("SELECT * FROM animals");
       <?php endwhile; ?>
     </tbody>
   </table>
-</div>
-
-<!-- Modal Tambah -->
-<div class="modal fade" id="modalTambah" tabindex="-1">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <form method="post" enctype="multipart/form-data">
-        <div class="modal-header bg-success text-white">
-          <h5 class="modal-title">Tambah Hewan</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label>Nama</label>
-            <input type="text" name="nama" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label>Habitat</label>
-            <input type="text" name="habitat" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label>Makanan</label>
-            <input type="text" name="makanan" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label>Deskripsi</label>
-            <textarea name="deskripsi" class="form-control" required></textarea>
-          </div>
-          <div class="mb-3">
-            <label>Status Konservasi</label>
-            <input type="text" name="status_konservasi" class="form-control" required>
-          </div>
-          <div class="mb-3">
-            <label>Gambar</label>
-            <input type="file" name="gambar" class="form-control">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-          <button type="submit" name="tambah" class="btn btn-success">Tambah</button>
-        </div>
-      </form>
-    </div>
+  <div class="mt-4 text-center">
+    <a href="dashboard.php" class="btn btn-outline-success"><i class="bi bi-arrow-left"></i> Kembali ke Dashboard</a>
+    <a href="add_animal.php" class="btn btn-success ms-2"><i class="bi bi-ticket-perforated"></i> tambah Hewan</a>
   </div>
 </div>
-<a href="dashboard.php" class="btn btn-outline-success" style="margin-top: 10px; margin-left: 150px;" ><i class="bi bi-arrow-left">Kembali ke Dashboard</i> </a>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
