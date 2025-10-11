@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Oct 07, 2025 at 08:35 AM
--- Server version: 8.0.30
--- PHP Version: 8.1.10
+-- Waktu pembuatan: 11 Okt 2025 pada 07.37
+-- Versi server: 8.0.30
+-- Versi PHP: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `animals`
+-- Struktur dari tabel `animals`
 --
 
 CREATE TABLE `animals` (
@@ -38,17 +38,17 @@ CREATE TABLE `animals` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `animals`
+-- Dumping data untuk tabel `animals`
 --
 
 INSERT INTO `animals` (`id`, `nama`, `habitat`, `makanan`, `deskripsi`, `status_konservasi`, `gambar`) VALUES
-(1, 'singa', 'afrika', 'daging', 'Singa adalah spesies hewan dari famili Felidae atau famili kucing. Singa berada di benua Afrika dan sebagian di wilayah India. Singa merupakan hewan yang hidup berkelompok. Biasanya terdiri dari seekor jantan dan banyak betina. Kelompok ini menjaga daerah kekuasaannya.', 'tidak terancam punah', '../uploads/1759731125_download (2).jpg'),
-(2, 'koala', 'australia', 'daun', 'Koala adalah salah satu binatang berkantung khas dari Australia dan merupakan wakil satu-satunya dari famili Phascolarctidae', 'tidak terancam punah', '../uploads/1759731262_koala.jpg');
+(3, 'panda', 'tiongkok', 'bambu', 'Panda raksasa atau hanya disebut panda, adalah seekor mamalia yang diklasifikasikan ke dalam famili beruang, Ursidae, yang merupakan hewan asli Tiongkok Tengah. Panda raksasa tinggal di wilayah pegunungan, seperti Sichuan dan Tibet.', 'tidak terancam punah', '../uploads/1760146452_panda.jpg'),
+(9, 'singa', 'australia', 'daging', 'Singa adalah spesies hewan dari famili Felidae atau famili kucing. Singa berada di benua Afrika dan sebagian di wilayah India. Singa merupakan hewan yang hidup berkelompok. Biasanya terdiri dari seekor jantan dan banyak betina. Kelompok ini menjaga daerah kekuasaannya.', 'rentan', '1760167098_download (2).jpg');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `booking`
+-- Struktur dari tabel `booking`
 --
 
 CREATE TABLE `booking` (
@@ -61,20 +61,44 @@ CREATE TABLE `booking` (
   `jumlah_remaja` int DEFAULT '0',
   `total_harga` int NOT NULL,
   `catatan` text,
-  `tanggal_booking` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+  `tanggal_booking` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` varchar(20) NOT NULL DEFAULT 'dibooking'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `booking`
+-- Dumping data untuk tabel `booking`
 --
 
-INSERT INTO `booking` (`id`, `nama_pengunjung`, `email`, `tanggal_kunjungan`, `jumlah_dewasa`, `jumlah_anak`, `jumlah_remaja`, `total_harga`, `catatan`, `tanggal_booking`) VALUES
-(3, 'zahwan', 'zahwanfth@gmail.com', '2025-10-27', 1, 0, 0, 40000, '', '2025-10-06 04:06:13');
+INSERT INTO `booking` (`id`, `nama_pengunjung`, `email`, `tanggal_kunjungan`, `jumlah_dewasa`, `jumlah_anak`, `jumlah_remaja`, `total_harga`, `catatan`, `tanggal_booking`, `status`) VALUES
+(3, 'zahwan', 'zahwanfth@gmail.com', '2025-10-27', 1, 0, 0, 40000, '', '2025-10-06 04:06:13', 'acc'),
+(7, 'awan', 'zahwanfth@gmail.com', '2025-10-28', 1, 0, 0, 40000, '', '2025-10-11 03:39:45', 'acc'),
+(8, 'awan', 'zahwanfth@gmail.com', '2025-10-12', 3, 2, 2, 240000, '', '2025-10-11 04:41:45', 'acc'),
+(9, 'awan', 'zahwanfth@gmail.com', '2025-10-12', 5, 0, 0, 200000, '', '2025-10-11 04:45:15', 'acc');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `transaksi`
+-- Struktur dari tabel `stok_tiket`
+--
+
+CREATE TABLE `stok_tiket` (
+  `id` int NOT NULL,
+  `tanggal` date NOT NULL,
+  `sisa_stok` int NOT NULL DEFAULT '500'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data untuk tabel `stok_tiket`
+--
+
+INSERT INTO `stok_tiket` (`id`, `tanggal`, `sisa_stok`) VALUES
+(2, '2025-10-12', 488),
+(3, '2025-10-11', 500);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `transaksi`
 --
 
 CREATE TABLE `transaksi` (
@@ -93,7 +117,7 @@ CREATE TABLE `transaksi` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Struktur dari tabel `users`
 --
 
 CREATE TABLE `users` (
@@ -105,69 +129,82 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dumping data for table `users`
+-- Dumping data untuk tabel `users`
 --
 
 INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role`) VALUES
-(8, 'zahwan', 'zahwanfth@gmail.com', 'cbbbaec93fc2198df1c1d3fd9f30307f', 'admin'),
-(12, 'azqya', 'azqya@gmail.com', '82bb82446c362087c5d814e7136e865a', 'user');
+(18, 'wan', 'zahwanfth@gmail.com', '81126b5d19f1e8030e070c9e6acdfe60', 'admin'),
+(19, 'farhani', 'paan@gmail.com', 'bfe04a104d81808959ef2c327c4d866b', 'user');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `animals`
+-- Indeks untuk tabel `animals`
 --
 ALTER TABLE `animals`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `booking`
+-- Indeks untuk tabel `booking`
 --
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `transaksi`
+-- Indeks untuk tabel `stok_tiket`
+--
+ALTER TABLE `stok_tiket`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `tanggal` (`tanggal`);
+
+--
+-- Indeks untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users`
+-- Indeks untuk tabel `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `animals`
+-- AUTO_INCREMENT untuk tabel `animals`
 --
 ALTER TABLE `animals`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `booking`
+-- AUTO_INCREMENT untuk tabel `booking`
 --
 ALTER TABLE `booking`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT untuk tabel `stok_tiket`
+--
+ALTER TABLE `stok_tiket`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `transaksi`
+-- AUTO_INCREMENT untuk tabel `transaksi`
 --
 ALTER TABLE `transaksi`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
