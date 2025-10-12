@@ -2,13 +2,13 @@
 session_start();
 include "../database/conn.php";
 
-// Pastikan hanya admin yang bisa akses
+// Cek hak akses
 if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../acount/login.php");
     exit();
 }
 
-// Ambil total tiket terjual per kategori
+// --- Ambil total tiket terjual ---
 $queryTotal = "
     SELECT 
         SUM(jumlah_dewasa) AS total_dewasa,
@@ -24,9 +24,20 @@ $total_remaja = $totalData['total_remaja'] ?? 0;
 $total_anak   = $totalData['total_anak'] ?? 0;
 $total_semua  = $total_dewasa + $total_remaja + $total_anak;
 
-// Ambil semua detail booking
+// --- Ambil semua detail booking ---
 $queryDetail = "SELECT * FROM booking ORDER BY tanggal_booking DESC";
 $detailResult = mysqli_query($conn, $queryDetail);
+
+// --- Ambil penghasilan bulanan ---
+$queryBulanan = "
+    SELECT 
+        DATE_FORMAT(tanggal_booking, '%Y-%m') AS bulan,
+        SUM(total_harga) AS total_bulanan
+    FROM booking
+    GROUP BY DATE_FORMAT(tanggal_booking, '%Y-%m')
+    ORDER BY bulan DESC
+";
+$bulananResult = mysqli_query($conn, $queryBulanan);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -37,69 +48,93 @@ $detailResult = mysqli_query($conn, $queryDetail);
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <style>
-    body {
-      background-color: #f8fff8;
-    }
-    .card {
-      border-radius: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .stat-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-    .stat-number {
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: #198754;
-    }
-    table th {
-      background-color: #198754;
-      color: #fff;
+    body { background-color: #f8fff8; }
+    .card { border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    table th { background-color: #198754; color: #fff; }
+    .stat-title { font-size: 1.1rem; font-weight: 600; }
+    .stat-number { font-size: 1.8rem; font-weight: bold; color: #198754; }
+    @media print {
+        .no-print { display: none; }
     }
   </style>
 </head>
 <body>
 
 <!-- Header -->
-<div class="text-center py-3 bg-white shadow-sm mb-4">
+<div class="text-center py-3 bg-white shadow-sm mb-4 no-print">
   <h1 class="text-success"><i class="bi bi-clipboard-data"></i> Laporan Penjualan Tiket</h1>
   <p class="lead">Halaman Admin - Kebun Binatang Indah</p>
 </div>
 
 <div class="container mb-5">
 
-  <!-- Statistik -->
+  <!-- Statistik Total Tiket -->
   <div class="row g-4 mb-4">
     <div class="col-md-3">
       <div class="card text-center p-4">
         <div class="stat-title">Dewasa</div>
-        <div class="stat-number"><?php echo $total_dewasa; ?></div>
+        <div class="stat-number"><?= $total_dewasa ?></div>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card text-center p-4">
         <div class="stat-title">Remaja</div>
-        <div class="stat-number"><?php echo $total_remaja; ?></div>
+        <div class="stat-number"><?= $total_remaja ?></div>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card text-center p-4">
         <div class="stat-title">Anak-anak</div>
-        <div class="stat-number"><?php echo $total_anak; ?></div>
+        <div class="stat-number"><?= $total_anak ?></div>
       </div>
     </div>
     <div class="col-md-3">
       <div class="card text-center p-4 bg-success text-white">
         <div class="stat-title">Total Tiket Terjual</div>
-        <div class="stat-number text-white"><?php echo $total_semua; ?></div>
+        <div class="stat-number text-white"><?= $total_semua ?></div>
       </div>
+    </div>
+  </div>
+
+  <!-- Penghasilan Bulanan -->
+  <div class="card p-4 mb-4">
+    <h3 class="mb-3 text-success"><i class="bi bi-cash-coin"></i> Penghasilan Bulanan</h3>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Bulan</th>
+            <th>Total Penghasilan</th>
+          </tr>
+        </thead>
+        <tbody>
+        <?php
+        if (mysqli_num_rows($bulananResult) > 0) {
+            while ($row = mysqli_fetch_assoc($bulananResult)) {
+                $bulan = date('F Y', strtotime($row['bulan']."-01"));
+                $total = number_format($row['total_bulanan'], 0, ',', '.');
+                echo "<tr>
+                        <td>{$bulan}</td>
+                        <td>Rp {$total}</td>
+                      </tr>";
+            }
+        } else {
+            echo "<tr><td colspan='2' class='text-center text-muted'>Belum ada data penghasilan</td></tr>";
+        }
+        ?>
+        </tbody>
+      </table>
     </div>
   </div>
 
   <!-- Tabel Detail -->
   <div class="card p-4">
-    <h3 class="mb-3 text-success"><i class="bi bi-list-ul"></i> Detail Tiket Terjual</h3>
+    <div class="d-flex justify-content-between mb-3">
+      <h3 class="text-success"><i class="bi bi-list-ul"></i> Detail Tiket Terjual</h3>
+      <button class="btn btn-outline-success no-print" onclick="window.print()">
+        <i class="bi bi-printer"></i> Print
+      </button>
+    </div>
     <div class="table-responsive">
       <table class="table table-bordered table-striped align-middle">
         <thead>
@@ -142,7 +177,7 @@ $detailResult = mysqli_query($conn, $queryDetail);
     </div>
   </div>
 
-  <div class="mt-4 text-center">
+  <div class="mt-4 text-center no-print">
     <a href="dashboard.php" class="btn btn-outline-success"><i class="bi bi-arrow-left"></i> Kembali ke Dashboard</a>
     <a href="tiket_list.php" class="btn btn-success ms-2"><i class="bi bi-ticket-perforated"></i> Kelola Tiket</a>
   </div>

@@ -148,7 +148,6 @@ include "../database/conn.php";
     <!-- Ticket Content -->
     <div class="container mb-5">
         <?php
-        // jika belum login tunjukkan pesan (tanpa warning)
         if (!isset($_SESSION['email'])) {
             echo '<div class="no-tickets">
             <i class="bi bi-ticket-perforated-fill text-muted" style="font-size:4rem"></i>
@@ -157,7 +156,6 @@ include "../database/conn.php";
             <a href="../acount/login.php" class="btn btn-success mt-2"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
           </div>';
         } else {
-            // ambil booking user dari DB
             $email = mysqli_real_escape_string($conn, $_SESSION['email']);
             $query = "SELECT * FROM booking WHERE email = '$email' ORDER BY tanggal_booking DESC";
             $result = mysqli_query($conn, $query);
@@ -166,14 +164,10 @@ include "../database/conn.php";
                 echo '<div class="row">';
                 while ($row = mysqli_fetch_assoc($result)) {
 
-                    // jika ingin HIDE tiket yg ditolak, uncomment baris berikut:
-                    // if (isset($row['status']) && $row['status'] === 'dec') continue;
-
                     $nomor = 'TKB' . date('Ymd', strtotime($row['tanggal_booking'])) . '-' . str_pad($row['id'], 3, '0', STR_PAD_LEFT);
                     $kode_redeem = strtoupper(substr(md5($row['id'] . $row['email'] . $row['tanggal_booking']), 0, 4)) . '-' . rand(1000, 9999);
                     $tanggal_kunjungan = date('d F Y', strtotime($row['tanggal_kunjungan']));
 
-                    // Tentukan status tampilannya
                     $statusText = 'Dibooking';
                     $statusClass = 'bg-warning text-dark';
                     $statusIcon = 'bi-clock-history';
@@ -193,7 +187,6 @@ include "../database/conn.php";
                         }
                     }
 
-                    // output card
                     echo '<div class="col-md-6 mb-4">
                     <div class="card ticket-card">
                         <div class="card-header d-flex justify-content-between align-items-center">
@@ -206,16 +199,15 @@ include "../database/conn.php";
                             </div>';
 
                     if (!empty($row['jumlah_dewasa']) && $row['jumlah_dewasa'] > 0) {
-                        echo '<div class="ticket-info"><i class="bi bi-person-fill"></i><span>Dewasa: <strong>' . (int)$row['jumlah_dewasa'] . ' tiket</strong></span></div>';
+                        echo '<div class="ticket-info"><i class="bi bi-person-fill"></i><span>Dewasa: <strong>' . (int)$row['jumlah_dewasa'] . ' orang</strong></span></div>';
                     }
                     if (!empty($row['jumlah_remaja']) && $row['jumlah_remaja'] > 0) {
-                        echo '<div class="ticket-info"><i class="bi bi-person"></i><span>Remaja: <strong>' . (int)$row['jumlah_remaja'] . ' tiket</strong></span></div>';
+                        echo '<div class="ticket-info"><i class="bi bi-person"></i><span>Remaja: <strong>' . (int)$row['jumlah_remaja'] . ' orang</strong></span></div>';
                     }
                     if (!empty($row['jumlah_anak']) && $row['jumlah_anak'] > 0) {
-                        echo '<div class="ticket-info"><i class="bi bi-person-heart"></i><span>Anak-anak: <strong>' . (int)$row['jumlah_anak'] . ' tiket</strong></span></div>';
+                        echo '<div class="ticket-info"><i class="bi bi-person-heart"></i><span>Anak-anak: <strong>' . (int)$row['jumlah_anak'] . ' orang</strong></span></div>';
                     }
 
-                    // jika tiket ditolak tambahkan keterangan (jika ada kolom alasan di DB)
                     if (isset($row['status']) && $row['status'] === 'dec') {
                         if (!empty($row['alasan'])) {
                             echo '<div class="alert alert-danger mt-3 mb-0">Alasan penolakan: ' . htmlspecialchars($row['alasan']) . '</div>';
@@ -228,6 +220,9 @@ include "../database/conn.php";
                     <p class="mb-1">Kode Redeem:</p>
                     <div class="ticket-code">' . htmlspecialchars($kode_redeem) . '</div>
                     <p class="text-muted mt-2 small">Tunjukkan kode ini saat memasuki kebun binatang</p>
+                    <button class="btn btn-outline-secondary btn-sm mt-3" onclick="printTicket(this)">
+                        <i class="bi bi-printer"></i> Print Tiket
+                    </button>
                   </div>
                 </div>
                 <div class="card-footer text-center bg-light">
@@ -235,9 +230,9 @@ include "../database/conn.php";
                 </div>
             </div>
         </div>';
-                } // end while
+                }
 
-                echo '</div>'; // end row
+                echo '</div>';
             } else {
                 echo '<div class="no-tickets">
                 <i class="bi bi-ticket-perforated-fill text-muted" style="font-size:4rem"></i>
@@ -282,6 +277,34 @@ include "../database/conn.php";
             </div>
         </div>
     </footer>
+
+    <script>
+    function printTicket(button) {
+        const card = button.closest('.ticket-card');
+        const printContents = card.outerHTML;
+        const printWindow = window.open('', '', 'width=800,height=600');
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Print Tiket</title>
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+            </head>
+            <body>
+                ${printContents}
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        printWindow.onload = function() {
+            printWindow.print();
+            printWindow.onafterprint = function() {
+                printWindow.close();
+            };
+        };
+    }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
