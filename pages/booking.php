@@ -141,7 +141,9 @@ if (isset($_GET['logout'])) {
 
             <div class="mb-3">
               <label for="nama" class="form-label fw-bold">Nama Lengkap</label>
-              <input type="text" class="form-control" id="nama" name="nama_pengunjung" placeholder="Masukkan nama lengkap" required>
+              <input type="text" class="form-control" id="nama" name="nama_pengunjung" placeholder="Masukkan nama lengkap" required
+                value="<?php echo isset($_SESSION['nama']) ? htmlspecialchars($_SESSION['nama']) : ''; ?>">
+
             </div>
             <div class="mb-3">
               <label for="email" class="form-label fw-bold">Email</label>
@@ -318,8 +320,27 @@ if (isset($_GET['logout'])) {
     document.getElementById('anak').addEventListener('input', hitungTotal);
     document.getElementById('remaja').addEventListener('input', hitungTotal);
 
-    // Inisialisasi total harga saat halaman dibuka
     window.addEventListener('DOMContentLoaded', hitungTotal);
+
+    // 
+    document.getElementById('tanggal_kunjungan').addEventListener('change', function() {
+      const tanggal = this.value;
+      if (!tanggal) return;
+
+      fetch(`../admin/cek_stok.php?tanggal=${tanggal}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'ok') {
+            if (data.stok <= 0) {
+              alert('❌ Maaf, stok tiket pada tanggal ini sudah habis.');
+              document.getElementById('formBooking').querySelector('button[type="submit"]').disabled = true;
+            } else {
+              document.getElementById('formBooking').querySelector('button[type="submit"]').disabled = false;
+            }
+          }
+        })
+        .catch(err => console.error(err));
+    });
   </script>
 </body>
 

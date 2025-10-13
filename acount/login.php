@@ -130,7 +130,6 @@ if (isset($_POST['login'])) {
 
       <div class="text-center mt-3">
         <p class="mb-1">Belum punya akun? <a href="register.php" class="text-success fw-bold">Daftar</a></p>
-        <a href="#" class="text-muted">Lupa kata sandi?</a>
       </div>
     </div>
   </div>

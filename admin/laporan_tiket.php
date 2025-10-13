@@ -146,6 +146,7 @@ $bulananResult = mysqli_query($conn, $queryBulanan);
             <th>Dewasa</th>
             <th>Remaja</th>
             <th>Anak-anak</th>
+            <th>catatan</th>
             <th>Total Harga</th>
             <th>Tanggal Booking</th>
           </tr>
@@ -163,6 +164,7 @@ $bulananResult = mysqli_query($conn, $queryBulanan);
                         <td>{$row['jumlah_dewasa']}</td>
                         <td>{$row['jumlah_remaja']}</td>
                         <td>{$row['jumlah_anak']}</td>
+                        <td>{$row['catatan']}</td>
                         <td>Rp ".number_format($row['total_harga'], 0, ',', '.')."</td>
                         <td>".date('d-m-Y H:i', strtotime($row['tanggal_booking']))."</td>
                       </tr>";

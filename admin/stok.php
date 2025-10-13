@@ -8,9 +8,19 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     exit;
 }
 
+// hapus stok jika tanggal sudah lewat
+$today = date('Y-m-d');
+$conn->query("DELETE FROM stok_tiket WHERE tanggal < '$today'");
 
+// hapus manual stok jika form disubmit
+if (isset($_POST['hapus_tanggal'])) {
+    $hapus_tanggal = $_POST['hapus_tanggal'];
+    $conn->query("DELETE FROM stok_tiket WHERE tanggal = '$hapus_tanggal'");
+    header("Location: stok.php");
+    exit;
+}
 
-// Tambah stok baru jika form disubmit
+// Tambah stok 
 if (isset($_POST['tambah_stok'])) {
     $tanggal = $_POST['tanggal'];
     $jumlah_stok = $_POST['jumlah_stok'];
@@ -29,7 +39,7 @@ if (isset($_POST['tambah_stok'])) {
     }
 }
 
-// Ambil semua stok dari DB
+// Ambil stok dari DB
 $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
 ?>
 <!DOCTYPE html>
