@@ -4,7 +4,7 @@ include "../database/conn.php";
 
 // cek login & role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../pages/beranda.php");
+    header("Location: ../pages/index.php");
     exit;
 }
 
@@ -251,7 +251,7 @@ $result = $conn->query($query);
           </a>
         </li>
         <li class="nav-item mt-4">
-          <a class="nav-link" href="../pages/beranda.php">
+          <a class="nav-link" href="../pages/index.php">
             <i class="fas fa-home"></i>
             <span>Halaman Utama</span>
           </a>

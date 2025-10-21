@@ -5,7 +5,7 @@ include '../database/conn.php';
 // Logout jika tombol logout ditekan 
 if (isset($_GET['logout'])) { 
   session_destroy(); 
-  header("Location: beranda.php"); 
+  header("Location: index.php"); 
   exit; 
 } 
 
@@ -90,7 +90,7 @@ $result = $conn->query($sql);
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="beranda.php">
+      <a class="navbar-brand" href="index.php">
         <i class="bi bi-tree-fill me-2"></i>Zoo Ticket
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -99,7 +99,7 @@ $result = $conn->query($sql);
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="beranda.php">Beranda</a>
+            <a class="nav-link" href="index.php">Beranda</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" href="animal.php">Hewan</a>

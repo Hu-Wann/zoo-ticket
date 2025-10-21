@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($conn->query($sql) === TRUE) {
       // Setelah registrasi, arahkan ke beranda user
-      header("Location: ../pages/beranda.php");
+      header("Location: ../pages/index.php");
       exit;
     } else {
       $pesan = "<div class='alert alert-danger text-center'>❌ Error: " . $conn->error . "</div>";
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <div class="register-card">
     <div class="register-header position-relative">
-      <a href="../pages/beranda.php" class="btn btn-sm btn-light position-absolute" style="top: 10px; left: 10px;">
+      <a href="../pages/index.php" class="btn btn-sm btn-light position-absolute" style="top: 10px; left: 10px;">
         <i class="bi bi-house-door"></i> Kembali ke Beranda
       </a>
       <i class="bi bi-person-plus" style="font-size:2rem;"></i>
@@ -134,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-        <button type="submit" class="btn btn-register w-100">Daftar</button>
+        <button type="submit" class="btn btn-register w-100"><a href="login.php">Daftar</a></button>
       </form>
 
       <div class="text-center mt-3">
