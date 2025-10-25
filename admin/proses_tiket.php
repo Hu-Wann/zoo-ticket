@@ -12,9 +12,9 @@ if (isset($_GET['id']) && isset($_GET['aksi'])) {
     $aksi = $_GET['aksi'];
 
     if ($aksi === 'acc') {
-        $status = 'acc';
+        $status = 'dibooking';
     } elseif ($aksi === 'dec') {
-        $status = 'dec';
+        $status = 'dibatalkan';
     } else {
         header("Location: tiket_list.php");
         exit;

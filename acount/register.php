@@ -8,7 +8,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $password = $_POST['password'];
   $confirm  = $_POST['confirm'];
 
-  // Role ditetapkan otomatis sebagai 'user'
   $role = 'user';
 
   if ($password !== $confirm) {

@@ -133,9 +133,5 @@ if (isset($_POST['login'])) {
       </div>
     </div>
   </div>
-
-  <?php
-  // Kode validasi login sudah dipindahkan ke bagian atas file
-  ?>
 </body>
 </html>

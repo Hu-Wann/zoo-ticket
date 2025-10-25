@@ -1,8 +1,8 @@
 <?php
 session_start();
-session_unset();   // Hapus semua data session
-session_destroy(); // Hancurkan session
+session_unset();   
+session_destroy(); 
 
-header("Location: ../pages/beranda.php"); // Arahkan ke halaman utama
+header("Location: ../pages/beranda.php"); 
 exit;
 ?>

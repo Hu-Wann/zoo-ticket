@@ -4,22 +4,22 @@ include "../database/conn.php";
 
 // cek login & role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../pages/beranda.php");
-    exit;
+  header("Location: ../pages/beranda.php");
+  exit;
 }
 
 // Hapus pengguna jika ada request
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
-    $id = $_GET['delete'];
-    // Tidak menghapus admin yang sedang login
-    if ($id != $_SESSION['user_id']) {
-        $conn->query("DELETE FROM users WHERE id = $id");
-        header("Location: users.php?status=deleted");
-        exit;
-    } else {
-        header("Location: users.php?status=error");
-        exit;
-    }
+  $id = $_GET['delete'];
+  // Tidak menghapus admin yang sedang login
+  if ($id != $_SESSION['user_id']) {
+    $conn->query("DELETE FROM users WHERE id = $id");
+    header("Location: users.php?status=deleted");
+    exit;
+  } else {
+    header("Location: users.php?status=error");
+    exit;
+  }
 }
 
 // Ambil data pengguna
@@ -29,6 +29,7 @@ $result = $conn->query($query);
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,13 +43,13 @@ $result = $conn->query($query);
       --accent-color: #ffc107;
       --sidebar-width: 250px;
     }
-    
+
     body {
       font-family: 'Poppins', sans-serif;
       background-color: #f8f9fa;
       overflow-x: hidden;
     }
-    
+
     .sidebar {
       width: var(--sidebar-width);
       height: 100vh;
@@ -61,73 +62,74 @@ $result = $conn->query($query);
       transition: all 0.3s;
       z-index: 1000;
     }
-    
+
     .sidebar .logo {
       padding: 15px 25px;
       font-size: 22px;
       font-weight: 700;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       margin-bottom: 20px;
     }
-    
+
     .sidebar .nav-link {
-      color: rgba(255,255,255,0.8);
+      color: rgba(255, 255, 255, 0.8);
       padding: 12px 25px;
       transition: all 0.3s;
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    
-    .sidebar .nav-link:hover, .sidebar .nav-link.active {
+
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
       color: white;
-      background: rgba(255,255,255,0.1);
+      background: rgba(255, 255, 255, 0.1);
       border-left: 4px solid var(--accent-color);
     }
-    
+
     .sidebar .nav-link i {
       width: 20px;
       text-align: center;
     }
-    
+
     .main-content {
       margin-left: var(--sidebar-width);
       padding: 20px;
       transition: all 0.3s;
     }
-    
+
     .header {
       background: white;
       padding: 15px 25px;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       margin-bottom: 25px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-    
+
     .content-card {
       background: white;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
       padding: 25px;
       margin-bottom: 25px;
     }
-    
+
     .table-container {
       border-radius: 10px;
       overflow: hidden;
     }
-    
+
     .table {
       margin-bottom: 0;
     }
-    
+
     .table thead {
       background-color: #f8f9fa;
     }
-    
+
     .table thead th {
       border-bottom: none;
       font-weight: 600;
@@ -136,50 +138,50 @@ $result = $conn->query($query);
       color: #6c757d;
       padding: 15px;
     }
-    
+
     .table tbody td {
       padding: 15px;
       vertical-align: middle;
     }
-    
+
     .badge {
       padding: 6px 12px;
       font-weight: 500;
       border-radius: 50px;
     }
-    
+
     .btn-action {
       border-radius: 50px;
       padding: 6px 15px;
       font-weight: 500;
       transition: all 0.3s;
     }
-    
+
     .btn-action:hover {
       transform: translateY(-2px);
-      box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     }
-    
+
     .alert {
       border-radius: 10px;
       border-left: 4px solid;
       padding: 15px 20px;
     }
-    
+
     .alert-success {
       border-left-color: #28a745;
     }
-    
+
     .alert-danger {
       border-left-color: #dc3545;
     }
-    
+
     .user-info {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-    
+
     .user-info .avatar {
       width: 40px;
       height: 40px;
@@ -191,33 +193,34 @@ $result = $conn->query($query);
       justify-content: center;
       font-weight: 600;
     }
-    
+
     @media (max-width: 992px) {
       .sidebar {
         width: 70px;
       }
-      
+
       .sidebar .logo {
         padding: 15px;
         font-size: 18px;
         text-align: center;
       }
-      
+
       .sidebar .nav-link span {
         display: none;
       }
-      
+
       .sidebar .nav-link {
         padding: 12px;
         justify-content: center;
       }
-      
+
       .main-content {
         margin-left: 70px;
       }
     }
   </style>
 </head>
+
 <body>
   <div class="d-flex">
     <!-- Sidebar -->
@@ -264,7 +267,7 @@ $result = $conn->query($query);
         </li>
       </ul>
     </div>
-    
+
     <!-- Main Content -->
     <div class="main-content">
       <div class="header">
@@ -279,7 +282,7 @@ $result = $conn->query($query);
           </div>
         </div>
       </div>
-      
+
       <?php if (isset($_GET['status']) && $_GET['status'] == 'deleted'): ?>
         <div class="alert alert-success">
           <i class="fas fa-check-circle me-2"></i> Pengguna berhasil dihapus!
@@ -289,7 +292,7 @@ $result = $conn->query($query);
           <i class="fas fa-exclamation-circle me-2"></i> Tidak dapat menghapus akun admin yang sedang aktif!
         </div>
       <?php endif; ?>
-      
+
       <div class="content-card">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h5 class="mb-0">
@@ -301,7 +304,7 @@ $result = $conn->query($query);
             </a>
           </div>
         </div>
-        
+
         <div class="table-container">
           <table class="table table-striped table-hover">
             <thead>
@@ -314,10 +317,13 @@ $result = $conn->query($query);
               </tr>
             </thead>
             <tbody>
-              <?php if ($result->num_rows > 0): ?>
-                <?php while ($user = $result->fetch_assoc()): ?>
+              <?php
+              if ($result->num_rows > 0):
+                $no = 1; // ✅ Nomor urut mulai dari 1
+                while ($user = $result->fetch_assoc()):
+              ?>
                   <tr>
-                    <td><?= $user['id'] ?></td>
+                    <td><?= $no++ ?></td> <!-- ✅ Tampilkan nomor urut -->
                     <td>
                       <div class="d-flex align-items-center">
                         <div class="avatar me-2" style="width: 30px; height: 30px; font-size: 12px;">
@@ -335,8 +341,8 @@ $result = $conn->query($query);
                     </td>
                     <td>
                       <?php if ($user['id'] != $_SESSION['user_id']): ?>
-                        <a href="users.php?delete=<?= $user['id'] ?>" class="btn btn-danger btn-action" 
-                           onclick="return confirm('Yakin ingin menghapus pengguna ini?')">
+                        <a href="users.php?delete=<?= $user['id'] ?>" class="btn btn-danger btn-action"
+                          onclick="return confirm('Yakin ingin menghapus pengguna ini?')">
                           <i class="fas fa-trash-alt me-1"></i> Hapus
                         </a>
                       <?php else: ?>
@@ -346,8 +352,8 @@ $result = $conn->query($query);
                       <?php endif; ?>
                     </td>
                   </tr>
-                <?php endwhile; ?>
-              <?php else: ?>
+                <?php endwhile;
+              else: ?>
                 <tr>
                   <td colspan="5" class="text-center py-4">
                     <i class="fas fa-users fa-3x mb-3 text-muted"></i>
@@ -356,6 +362,7 @@ $result = $conn->query($query);
                 </tr>
               <?php endif; ?>
             </tbody>
+
           </table>
         </div>
       </div>
@@ -364,4 +371,5 @@ $result = $conn->query($query);
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

@@ -102,33 +102,28 @@
                         <?php
                         include("../database/conn.php");
 
-                        // Cek apakah user sudah login sebagai admin
                         session_start();
                         if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
                             header("Location: ../acount/login.php");
                             exit();
                         }
 
-                        // Fungsi untuk upload gambar ke folder picture
+
                         function uploadGambar($file)
                         {
                             $target_dir = "../picture/";
 
-                            // Pastikan direktori ada
+                            // Pastikan folder ada
                             if (!file_exists($target_dir)) {
                                 mkdir($target_dir, 0777, true);
                             }
 
-                            $timestamp = time();
                             $file_name = basename($file["name"]);
-                            $new_file_name = $timestamp . "_" . $file_name;
-                            $target_file = $target_dir . $new_file_name;
-
+                            $target_file = $target_dir . $file_name;
                             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-                            // Cek apakah file benar-benar gambar
-                            $check = getimagesize($file["tmp_name"]);
-                            if ($check === false) {
+                            // Cek file valid gambar
+                            if (!getimagesize($file["tmp_name"])) {
                                 return ["status" => false, "message" => "File bukan gambar."];
                             }
 
@@ -137,18 +132,25 @@
                                 return ["status" => false, "message" => "Ukuran file terlalu besar (max 5MB)."];
                             }
 
-                            // Format yang diizinkan
-                            if (!in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
+                            // Format diizinkan
+                            $allowed = ["jpg", "jpeg", "png", "gif"];
+                            if (!in_array($imageFileType, $allowed)) {
                                 return ["status" => false, "message" => "Hanya file JPG, JPEG, PNG & GIF yang diizinkan."];
                             }
 
-                            // Upload file ke folder picture
+                            // Jika file dengan nama sama sudah ada → hapus file lama supaya tidak dobel
+                            if (file_exists($target_file)) {
+                                unlink($target_file);
+                            }
+
+                            // Upload file baru
                             if (move_uploaded_file($file["tmp_name"], $target_file)) {
-                                return ["status" => true, "file_name" => $new_file_name];
+                                return ["status" => true, "file_name" => $file_name];
                             } else {
                                 return ["status" => false, "message" => "Gagal mengupload file."];
                             }
                         }
+
 
                         // Proses form saat disubmit
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
