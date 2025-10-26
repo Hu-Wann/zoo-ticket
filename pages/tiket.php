@@ -100,7 +100,7 @@ include "../database/conn.php";
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="beranda.php">
+            <a class="navbar-brand" href="index.php">
                 <i class="bi bi-tree-fill me-2"></i>Kebun Binatang Indah
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -108,7 +108,7 @@ include "../database/conn.php";
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="beranda.php">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.php">Beranda</a></li>
                     <li class="nav-item"><a class="nav-link" href="animal.php">Hewan</a></li>
                     <li class="nav-item"><a class="nav-link" href="booking.php">Booking</a></li>
                     <li class="nav-item"><a class="nav-link active" href="tiket.php">Tiket Saya</a></li>
@@ -256,7 +256,7 @@ include "../database/conn.php";
                 <div class="col-md-3">
                     <h5>Menu</h5>
                     <ul class="list-unstyled">
-                        <li><a href="beranda.php" class="text-white">Beranda</a></li>
+                        <li><a href="index.php" class="text-white">Beranda</a></li>
                         <li><a href="animal.php" class="text-white">Hewan</a></li>
                         <li><a href="booking.php" class="text-white">Booking</a></li>
                         <li><a href="tiket.php" class="text-white">Tiket Saya</a></li>

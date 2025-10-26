@@ -208,7 +208,7 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
                     </a>
                 </li>
                 <li class="nav-item mt-4">
-                    <a class="nav-link" href="../pages/beranda.php">
+                    <a class="nav-link" href="../pages/index.php">
                         <i class="fas fa-home"></i>
                         <span>Halaman Utama</span>
                     </a>
