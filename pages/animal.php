@@ -9,8 +9,16 @@ if (isset($_GET['logout'])) {
   exit; 
 } 
 
-$sql = "SELECT * FROM animals";
-$result = $conn->query($sql);
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+if (!empty($search)) {
+    $query = "SELECT * FROM animals WHERE nama LIKE '%$search%' ORDER BY id DESC";
+} else {
+    $query = "SELECT * FROM animals ORDER BY id DESC";
+}
+
+$result = $conn->query($query);
+
 ?>
 
 <!DOCTYPE html>
@@ -149,6 +157,20 @@ $result = $conn->query($sql);
   </div>
 
   <div class="container">
+    <div class="row mb-4">
+      <div class="col-md-6 mx-auto">
+        <form class="d-flex shadow-sm rounded overflow-hidden" method="GET" action="" >
+          <input class="form-control border-0 py-2" 
+                 type="search" 
+                 name="search" 
+                 placeholder="Cari nama hewan..." 
+                 value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+          <button style="margin-left: 10px;" class="btn btn-success px-3" type="submit">
+            <i class="bi bi-search"></i> Cari
+          </button>
+        </form>
+      </div>
+    </div>
     <!-- Konten -->
     <div class="row">
       <div class="col-12">
