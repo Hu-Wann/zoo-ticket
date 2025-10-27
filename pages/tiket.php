@@ -1,6 +1,23 @@
 <?php
 session_start();
-include "../database/conn.php"; 
+include "../database/conn.php";
+
+if (!isset($_SESSION['email'])) {
+    header("Location: ../acount/login.php");
+    exit;
+}
+
+$email = $_SESSION['email'];
+$today = date('Y-m-d');
+
+// ✅ Update otomatis semua tiket kadaluwarsa (AMAN)
+$conn->query("
+    UPDATE booking
+    SET status = 'kadaluwarsa'
+    WHERE email = '$email'
+      AND tanggal_kunjungan < '$today'
+      AND status NOT IN ('kadaluwarsa')
+");
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -16,7 +33,6 @@ include "../database/conn.php";
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
         .ticket-header {
             background-color: #198754;
             color: white;
@@ -25,7 +41,6 @@ include "../database/conn.php";
             border-radius: 0 0 1rem 1rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
         .ticket-card {
             border-radius: 1rem;
             overflow: hidden;
@@ -34,25 +49,21 @@ include "../database/conn.php";
             border: none;
             transition: transform .3s;
         }
-
         .ticket-card:hover {
             transform: translateY(-5px);
         }
-
         .card-header {
             background-color: #198754;
             color: white;
             font-weight: bold;
             padding: 1rem;
         }
-
         .status-badge {
             padding: .25rem .75rem;
             border-radius: 1rem;
             font-size: .9rem;
             font-weight: 600;
         }
-
         .ticket-code {
             font-family: monospace;
             font-size: 1.2rem;
@@ -63,18 +74,15 @@ include "../database/conn.php";
             border-radius: .5rem;
             display: inline-block;
         }
-
         .ticket-info {
             display: flex;
             align-items: center;
             margin-bottom: .5rem;
         }
-
         .ticket-info i {
             margin-right: .5rem;
             color: #198754;
         }
-
         .no-tickets {
             text-align: center;
             padding: 3rem;
@@ -82,12 +90,10 @@ include "../database/conn.php";
             border-radius: 1rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
         .navbar {
             background-color: white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-
         .navbar-brand {
             font-weight: bold;
             color: #198754;
@@ -96,8 +102,6 @@ include "../database/conn.php";
 </head>
 
 <body>
-
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
             <a class="navbar-brand" href="index.php">
@@ -119,10 +123,9 @@ include "../database/conn.php";
                             </a>
                         </li>
                     <?php endif; ?>
-
                     <?php if (isset($_SESSION['email'])): ?>
                         <li class="nav-item">
-                            <span class="nav-link text-success">👋 <?php echo htmlspecialchars($_SESSION['nama'] ?? ''); ?></span>
+                            <span class="nav-link text-success">👋 <?= htmlspecialchars($_SESSION['nama'] ?? ''); ?></span>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-danger" href="../acount/logout.php"><i class="bi bi-box-arrow-right"></i> Logout</a>
@@ -137,57 +140,57 @@ include "../database/conn.php";
         </div>
     </nav>
 
-    <!-- Header -->
-    <div class="ticket-header">
-        <div class="container text-center">
+    <div class="ticket-header text-center">
+        <div class="container">
             <h1><i class="bi bi-ticket-perforated-fill me-2"></i>Tiket Saya</h1>
             <p class="lead">Lihat dan kelola tiket yang telah Anda pesan</p>
         </div>
     </div>
 
-    <!-- Ticket Content -->
     <div class="container mb-5">
         <?php
-        if (!isset($_SESSION['email'])) {
-            echo '<div class="no-tickets">
-            <i class="bi bi-ticket-perforated-fill text-muted" style="font-size:4rem"></i>
-            <h3 class="mt-3">Silakan login untuk melihat tiket Anda</h3>
-            <p class="text-muted">Masuk untuk melihat detail tiket yang sudah dipesan.</p>
-            <a href="../acount/login.php" class="btn btn-success mt-2"><i class="bi bi-box-arrow-in-right me-2"></i>Login</a>
-          </div>';
-        } else {
-            $email = mysqli_real_escape_string($conn, $_SESSION['email']);
-            $query = "SELECT * FROM booking WHERE email = '$email' ORDER BY tanggal_booking DESC";
-            $result = mysqli_query($conn, $query);
+        $query = "SELECT * FROM booking WHERE email = '$email' ORDER BY tanggal_booking DESC";
+        $result = mysqli_query($conn, $query);
 
-            if ($result && mysqli_num_rows($result) > 0) {
-                echo '<div class="row">';
-                while ($row = mysqli_fetch_assoc($result)) {
+        if ($result && mysqli_num_rows($result) > 0) {
+            echo '<div class="row">';
+            while ($row = mysqli_fetch_assoc($result)) {
+                $nomor = 'TKB' . date('Ymd', strtotime($row['tanggal_booking'])) . '-' . str_pad($row['id'], 3, '0', STR_PAD_LEFT);
+                $kode_redeem = strtoupper(substr(md5($row['id'] . $row['email'] . $row['tanggal_booking']), 0, 4)) . '-' . rand(1000, 9999);
+                $tanggal_kunjungan = date('d F Y', strtotime($row['tanggal_kunjungan']));
 
-                    $nomor = 'TKB' . date('Ymd', strtotime($row['tanggal_booking'])) . '-' . str_pad($row['id'], 3, '0', STR_PAD_LEFT);
-                    $kode_redeem = strtoupper(substr(md5($row['id'] . $row['email'] . $row['tanggal_booking']), 0, 4)) . '-' . rand(1000, 9999);
-                    $tanggal_kunjungan = date('d F Y', strtotime($row['tanggal_kunjungan']));
+                // Tentukan status tampilan
+                $status = strtolower(trim($row['status']));
+                switch ($status) {
+                    case 'acc':
+                        $statusText = 'Disetujui';
+                        $statusClass = 'bg-success text-white';
+                        $statusIcon = 'bi-check-circle-fill';
+                        break;
+                    case 'dec':
+                        $statusText = 'Ditolak';
+                        $statusClass = 'bg-danger text-white';
+                        $statusIcon = 'bi-x-circle-fill';
+                        break;
+                    case 'kadaluwarsa':
+                        $statusText = 'Kadaluwarsa';
+                        $statusClass = 'bg-secondary text-white';
+                        $statusIcon = 'bi-hourglass-split';
+                        break;
+                    case 'pending':
+                        $statusText = 'Dibooking';
+                        $statusClass = 'bg-warning text-dark';
+                        $statusIcon = 'bi-clock-history';
+                        break;
+                    default:
+                        $statusText = 'Dibooking';
+                        $statusClass = 'bg-warning text-dark';
+                        $statusIcon = 'bi-clock-history';
+                        break;
+                }
 
-                    $statusText = 'Dibooking';
-                    $statusClass = 'bg-warning text-dark';
-                    $statusIcon = 'bi-clock-history';
-                    if (isset($row['status'])) {
-                        if ($row['status'] === 'acc') {
-                            $statusText = 'Disetujui';
-                            $statusClass = 'bg-success text-white';
-                            $statusIcon = 'bi-check-circle-fill';
-                        } elseif ($row['status'] === 'dec') {
-                            $statusText = 'Ditolak';
-                            $statusClass = 'bg-danger text-white';
-                            $statusIcon = 'bi-x-circle-fill';
-                        } elseif ($row['status'] === 'dibooking') {
-                            $statusText = 'Dibooking';
-                            $statusClass = 'bg-warning text-dark';
-                            $statusIcon = 'bi-clock-history';
-                        }
-                    }
-
-                    echo '<div class="col-md-6 mb-4">
+                echo '
+                <div class="col-md-6 mb-4">
                     <div class="card ticket-card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-ticket-perforated-fill me-2"></i>Nomor: ' . htmlspecialchars($nomor) . '</span>
@@ -198,115 +201,75 @@ include "../database/conn.php";
                                 <span>Tanggal Kunjungan: <strong>' . htmlspecialchars($tanggal_kunjungan) . '</strong></span>
                             </div>';
 
-                    if (!empty($row['jumlah_dewasa']) && $row['jumlah_dewasa'] > 0) {
-                        echo '<div class="ticket-info"><i class="bi bi-person-fill"></i><span>Dewasa: <strong>' . (int)$row['jumlah_dewasa'] . ' orang</strong></span></div>';
-                    }
-                    if (!empty($row['jumlah_remaja']) && $row['jumlah_remaja'] > 0) {
-                        echo '<div class="ticket-info"><i class="bi bi-person"></i><span>Remaja: <strong>' . (int)$row['jumlah_remaja'] . ' orang</strong></span></div>';
-                    }
-                    if (!empty($row['jumlah_anak']) && $row['jumlah_anak'] > 0) {
-                        echo '<div class="ticket-info"><i class="bi bi-person-heart"></i><span>Anak-anak: <strong>' . (int)$row['jumlah_anak'] . ' orang</strong></span></div>';
-                    }
+                if ($row['jumlah_dewasa'] > 0)
+                    echo '<div class="ticket-info"><i class="bi bi-person-fill"></i><span>Dewasa: <strong>' . $row['jumlah_dewasa'] . ' orang</strong></span></div>';
+                if ($row['jumlah_remaja'] > 0)
+                    echo '<div class="ticket-info"><i class="bi bi-person"></i><span>Remaja: <strong>' . $row['jumlah_remaja'] . ' orang</strong></span></div>';
+                if ($row['jumlah_anak'] > 0)
+                    echo '<div class="ticket-info"><i class="bi bi-person-heart"></i><span>Anak-anak: <strong>' . $row['jumlah_anak'] . ' orang</strong></span></div>';
 
-                    if (isset($row['status']) && $row['status'] === 'dec') {
-                        if (!empty($row['alasan'])) {
-                            echo '<div class="alert alert-danger mt-3 mb-0">Alasan penolakan: ' . htmlspecialchars($row['alasan']) . '</div>';
-                        } else {
-                            echo '<div class="alert alert-danger mt-3 mb-0">Tiket ini ditolak oleh admin.</div>';
-                        }
-                    }
+                if ($row['status'] === 'dec') {
+                    echo '<div class="alert alert-danger mt-3 mb-0">Alasan: ' . htmlspecialchars($row['alasan'] ?? 'Tidak diketahui') . '</div>';
+                }
 
-                    echo '<div class="mt-3 text-center">
-                    <p class="mb-1">Kode Redeem:</p>
-                    <div class="ticket-code">' . htmlspecialchars($kode_redeem) . '</div>
-                    <p class="text-muted mt-2 small">Tunjukkan kode ini saat memasuki kebun binatang</p>
-                    <button class="btn btn-outline-secondary btn-sm mt-3" onclick="printTicket(this)">
+                echo '
+                    <div class="mt-3 text-center">
+                        <p class="mb-1">Kode Redeem:</p>
+                        <div class="ticket-code">' . htmlspecialchars($kode_redeem) . '</div>
+                        <p class="text-muted mt-2 small">Tunjukkan kode ini saat memasuki kebun binatang</p>';
+                if ($status !== 'kadaluwarsa') {
+                    echo '<button class="btn btn-outline-secondary btn-sm mt-3" onclick="printTicket(this)">
                         <i class="bi bi-printer"></i> Print Tiket
-                    </button>
-                  </div>
+                    </button>';
+                } else {
+                    echo '<button class="btn btn-outline-secondary btn-sm mt-3" disabled>
+                        <i class="bi bi-x-circle"></i> Tidak Dapat Dicetak
+                    </button>';
+                }
+
+                echo '
+                    </div>
                 </div>
                 <div class="card-footer text-center bg-light">
                     <small class="text-muted">Dipesan pada: ' . date('d F Y H:i', strtotime($row['tanggal_booking'])) . '</small>
                 </div>
             </div>
         </div>';
-                }
-
-                echo '</div>';
-            } else {
-                echo '<div class="no-tickets">
+            }
+            echo '</div>';
+        } else {
+            echo '<div class="no-tickets">
                 <i class="bi bi-ticket-perforated-fill text-muted" style="font-size:4rem"></i>
                 <h3 class="mt-3">Belum ada tiket yang dipesan</h3>
                 <p class="text-muted">Anda belum memesan tiket kebun binatang</p>
                 <a href="booking.php" class="btn btn-success mt-2"><i class="bi bi-plus-circle me-2"></i>Pesan Tiket Sekarang</a>
-              </div>';
-            }
+            </div>';
         }
         ?>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5><i class="bi bi-tree-fill me-2"></i>Zoo Ticket</h5>
-                    <p>Sistem pemesanan tiket kebun binatang online yang mudah dan cepat.</p>
-                </div>
-                <div class="col-md-3">
-                    <h5>Menu</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="index.php" class="text-white">Beranda</a></li>
-                        <li><a href="animal.php" class="text-white">Hewan</a></li>
-                        <li><a href="booking.php" class="text-white">Booking</a></li>
-                        <li><a href="tiket.php" class="text-white">Tiket Saya</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>Kontak</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-geo-alt-fill me-2"></i>Jl. Kebun Binatang No. 1</li>
-                        <li><i class="bi bi-telephone-fill me-2"></i>(021) 1234-5678</li>
-                        <li><i class="bi bi-envelope-fill me-2"></i>info@zooticket.com</li>
-                    </ul>
-                </div>
-            </div>
-            <hr>
-            <div class="text-center">
-                <p class="mb-0">&copy; <?php echo date('Y'); ?> Zoo Ticket. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
     <script>
-    function printTicket(button) {
-        const card = button.closest('.ticket-card');
-        const printContents = card.outerHTML;
-        const printWindow = window.open('', '', 'width=800,height=600');
-        printWindow.document.write(`
-            <html>
-            <head>
-                <title>Print Tiket</title>
-                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-            </head>
-            <body>
-                ${printContents}
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.focus();
-        printWindow.onload = function() {
-            printWindow.print();
-            printWindow.onafterprint = function() {
-                printWindow.close();
+        function printTicket(button) {
+            const card = button.closest('.ticket-card');
+            const printContents = card.outerHTML;
+            const printWindow = window.open('', '', 'width=800,height=600');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Print Tiket</title>
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+                </head>
+                <body>${printContents}</body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.focus();
+            printWindow.onload = () => {
+                printWindow.print();
+                printWindow.onafterprint = () => printWindow.close();
             };
-        };
-    }
+        }
     </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
