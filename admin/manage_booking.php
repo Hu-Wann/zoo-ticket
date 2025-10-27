@@ -4,7 +4,7 @@ include '../database/conn.php';
 
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../pages/beranda.php');
+    header('Location: ../pages/index.php');
     exit;
 }
 

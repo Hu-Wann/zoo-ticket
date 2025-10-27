@@ -4,7 +4,7 @@ session_start();
 // Logout jika tombol logout ditekan
 if (isset($_GET['logout'])) {
   session_destroy();
-  header("Location: beranda.php");
+  header("Location: index.php");
   exit;
 }
 
@@ -77,7 +77,7 @@ if (isset($_GET['logout'])) {
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light sticky-top" style="background-color: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
     <div class="container">
-      <a class="navbar-brand" href="beranda.php" style="font-weight: bold; color: #198754;">
+      <a class="navbar-brand" href="index.php" style="font-weight: bold; color: #198754;">
         <i class="bi bi-tree-fill me-2"></i>Zoo Ticket
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -132,7 +132,7 @@ if (isset($_GET['logout'])) {
       <div class="col-md-2 sidebar position-sticky" style="top: 80px; height: calc(100vh - 80px); z-index: 2;">
         <ul class="nav flex-column">
           <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="beranda.php">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="index.php">
               <i class="bi bi-house-door me-2"></i> Beranda
             </a>
           </li>
