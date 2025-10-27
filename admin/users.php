@@ -5,10 +5,9 @@ include "../database/conn.php";
 // cek login & role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
-  header("Location: ../pages/index.php");
+  header("Location: ../pages/beranda.php");
   exit;
 }
-
 // Hapus pengguna jika ada request
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
   $id = $_GET['delete'];
