@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
   header("Location: ../pages/index.php");
   exit;
-}     
+}
 
 // Hapus pengguna jika ada request
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
@@ -22,6 +22,24 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     exit;
   }
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_user'])) {
+  $nama = mysqli_real_escape_string($conn, $_POST['nama']);
+  $email = mysqli_real_escape_string($conn, $_POST['email']);
+  $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+  $role = mysqli_real_escape_string($conn, $_POST['role']);
+
+  $cek = $conn->query("SELECT id FROM users WHERE email='$email'");
+  if ($cek->num_rows == 0) {
+    $conn->query("INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', '$role')");
+    header("Location: users.php?status=added");
+    exit;
+  } else {
+    header("Location: users.php?status=exists");
+    exit;
+  }
+}
+
 
 // Ambil data pengguna
 $query = "SELECT * FROM users ORDER BY id DESC";
@@ -305,6 +323,47 @@ $result = $conn->query($query);
             </a>
           </div>
         </div>
+
+        <div class="card p-4 mb-4 shadow-sm border-0">
+          <h5 class="text-success mb-3"><i class="fas fa-user-plus me-2"></i> Tambah Pengguna Baru</h5>
+          <form method="POST" action="users.php">
+            <div class="row g-3 align-items-center">
+              <div class="col-md-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="fas fa-user text-primary"></i></span>
+                  <input type="text" name="nama" class="form-control border-0 bg-light" placeholder="Nama Lengkap" required>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="fas fa-envelope text-primary"></i></span>
+                  <input type="email" name="email" class="form-control border-0 bg-light" placeholder="Email" required>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="fas fa-lock text-primary"></i></span>
+                  <input type="password" name="password" class="form-control border-0 bg-light" placeholder="Password" required>
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-0"><i class="fas fa-user-tag text-primary"></i></span>
+                  <select name="role" class="form-select border-0 bg-light">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-1">
+                <button type="submit" name="add_user" class="btn btn-success w-100 btn-action shadow-sm" style="height: 100%; border-radius: 8px;">
+                  <i class="fas fa-user-plus me-1"></i> <span class="d-none d-xl-inline"></span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
 
         <div class="table-container">
           <table class="table table-striped table-hover">
