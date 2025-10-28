@@ -140,7 +140,11 @@
 
                             // Jika file dengan nama sama sudah ada → hapus file lama supaya tidak dobel
                             if (file_exists($target_file)) {
-                                unlink($target_file);
+
+                                $target_file = '../picture/' . $file_name;
+                                if (file_exists($target_file) && is_writable($target_file)) {
+                                    @unlink($target_file);
+                                }
                             }
 
                             // Upload file baru

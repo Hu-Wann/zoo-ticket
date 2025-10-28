@@ -1,29 +1,32 @@
 <?php
 session_start();
-include '../database/conn.php'; 
+include '../database/conn.php';
 
-// Logout jika tombol logout ditekan 
-if (isset($_GET['logout'])) { 
-  session_destroy(); 
-  header("Location: index.php"); 
-  exit; 
-} 
+if (isset($_GET['logout'])) {
+  session_destroy();
+  header("Location: index.php");
+  exit;
+}
 
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-if (!empty($search)) {
-    $query = "SELECT * FROM animals WHERE nama LIKE '%$search%' ORDER BY id DESC";
+if ($search !== '') {
+  $query = "SELECT * FROM animals WHERE 
+            nama LIKE '%$search%' OR 
+            habitat LIKE '%$search%' OR 
+            makanan LIKE '%$search%' OR 
+            deskripsi LIKE '%$search%' OR 
+            status_konservasi LIKE '%$search%' 
+            ORDER BY id DESC";
 } else {
-    $query = "SELECT * FROM animals ORDER BY id DESC";
+  $query = "SELECT * FROM animals ORDER BY id DESC";
 }
 
 $result = $conn->query($query);
-
 ?>
 
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,66 +34,16 @@ $result = $conn->query($query);
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
   <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    .animal-img {
-      border-radius: 1rem;
-      object-fit: cover;
-      height: 200px;
-      width: 100%;
-    }
-
-    .animal-card {
-      border-radius: 1rem;
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-      border: none;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .animal-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(25, 135, 84, 0.15);
-    }
-
-    .ticket-header {
-      background-color: #198754;
-      color: white;
-      padding: 2rem 0;
-      margin-bottom: 2rem;
-      border-radius: 0 0 1rem 1rem;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .navbar {
-      background-color: white;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .navbar-brand {
-      font-weight: bold;
-      color: #198754;
-    }
-
-    .nav-link {
-      color: #333;
-      font-weight: 500;
-    }
-
-    .nav-link:hover {
-      color: #198754;
-    }
-
-    .footer {
-      background: #343a40;
-      color: white;
-      padding: 24px 0 12px 0;
-      margin-top: 48px;
-      width: 100%;
-    }
+    body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .animal-img { border-radius: 1rem; object-fit: cover; height: 200px; width: 100%; }
+    .animal-card { border-radius: 1rem; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; border: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); }
+    .animal-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(25, 135, 84, 0.15); }
+    .ticket-header { background-color: #198754; color: white; padding: 2rem 0; margin-bottom: 2rem; border-radius: 0 0 1rem 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+    .navbar { background-color: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+    .navbar-brand { font-weight: bold; color: #198754; }
+    .nav-link { color: #333; font-weight: 500; }
+    .nav-link:hover { color: #198754; }
+    .footer { background: #343a40; color: white; padding: 24px 0 12px 0; margin-top: 48px; width: 100%; }
   </style>
 </head>
 
@@ -106,42 +59,18 @@ $result = $conn->query($query);
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="index.php">Beranda</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="animal.php">Hewan</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="booking.php">Booking</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="tiket.php">Tiket Saya</a>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="index.php">Beranda</a></li>
+          <li class="nav-item"><a class="nav-link active" href="animal.php">Hewan</a></li>
+          <li class="nav-item"><a class="nav-link" href="booking.php">Booking</a></li>
+          <li class="nav-item"><a class="nav-link" href="tiket.php">Tiket Saya</a></li>
           <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-          <li class="nav-item">
-            <a class="nav-link text-primary fw-bold" href="../admin/dashboard.php">
-              <i class="bi bi-speedometer2"></i> Admin Panel
-            </a>
-          </li>
+            <li class="nav-item"><a class="nav-link text-primary fw-bold" href="../admin/dashboard.php"><i class="bi bi-speedometer2"></i> Admin Panel</a></li>
           <?php endif; ?>
           <?php if (isset($_SESSION['email'])): ?>
-          <li class="nav-item">
-            <span class="nav-link text-success">
-              👋 <?php echo htmlspecialchars($_SESSION['nama']); ?>
-            </span>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-danger" href="?logout=1">
-              <i class="bi bi-box-arrow-right"></i> Logout
-            </a>
-          </li>
+            <li class="nav-item"><span class="nav-link text-success">👋 <?php echo htmlspecialchars($_SESSION['nama']); ?></span></li>
+            <li class="nav-item"><a class="nav-link text-danger" href="?logout=1"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
           <?php else: ?>
-          <li class="nav-item">
-            <a class="nav-link text-success" href="../acount/login.php">
-              <i class="bi bi-box-arrow-in-right"></i> Login
-            </a>
-          </li>
+            <li class="nav-item"><a class="nav-link text-success" href="../acount/login.php"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
           <?php endif; ?>
         </ul>
       </div>
@@ -156,22 +85,29 @@ $result = $conn->query($query);
     </div>
   </div>
 
+  <!-- Form Pencarian -->
   <div class="container">
     <div class="row mb-4">
       <div class="col-md-6 mx-auto">
-        <form class="d-flex shadow-sm rounded overflow-hidden" method="GET" action="" >
-          <input class="form-control border-0 py-2" 
-                 type="search" 
-                 name="search" 
-                 placeholder="Cari nama hewan..." 
-                 value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+        <form class="d-flex shadow-sm rounded overflow-hidden" method="GET" action="">
+          <input 
+            class="form-control border-0 py-2"
+            type="search"
+            name="search"
+            placeholder="Cari nama hewan..."
+            value="<?php echo htmlspecialchars($search); ?>"
+          >
           <button style="margin-left: 10px;" class="btn btn-success px-3" type="submit">
             <i class="bi bi-search"></i> Cari
           </button>
+          <?php if ($search !== ''): ?>
+            <a href="animal.php" class="btn btn-outline-secondary ms-2">Reset</a>
+          <?php endif; ?>
         </form>
       </div>
     </div>
-    <!-- Konten -->
+
+    <!-- Daftar Hewan -->
     <div class="row">
       <div class="col-12">
         <h2 class="text-success mb-4 fs-2">Daftar Hewan</h2>
@@ -193,7 +129,7 @@ $result = $conn->query($query);
               </div>
             <?php endwhile; ?>
           <?php else: ?>
-            <p class="text-muted">Belum ada data hewan.</p>
+            <p class="text-muted">Tidak ada hewan ditemukan.</p>
           <?php endif; ?>
         </div>
       </div>
@@ -209,7 +145,7 @@ $result = $conn->query($query);
           <p>Sistem pemesanan tiket kebun binatang online yang mudah dan cepat.</p>
         </div>
         <div class="col-md-6 text-md-end">
-          <p>&copy; 2023 Zoo Ticket. All rights reserved.</p>
+          <p>&copy; 2025 Zoo Ticket. All rights reserved.</p>
         </div>
       </div>
     </div>
