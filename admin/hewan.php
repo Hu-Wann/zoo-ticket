@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     exit;
 }
 
-// ==== CREATE ====
+// create
 if (isset($_POST['tambah'])) {
     $nama = $_POST['nama'];
     $habitat = $_POST['habitat'];
@@ -39,7 +39,7 @@ if (isset($_POST['tambah'])) {
     exit;
 }
 
-// ==== UPDATE ====
+// update
 if (isset($_POST['edit'])) {
     $id = $_POST['id'];
     $nama = $_POST['nama'];
@@ -69,7 +69,7 @@ if (isset($_POST['edit'])) {
     exit;
 }
 
-// ==== DELETE ====
+// delete
 if (isset($_GET['hapus'])) {
     $id = $_GET['hapus'];
     // hapus juga file gambarnya
@@ -83,7 +83,7 @@ if (isset($_GET['hapus'])) {
     exit;
 }
 
-// ==== READ ====
+// read
 $hewan = $conn->query("SELECT * FROM animals");
 ?>
 

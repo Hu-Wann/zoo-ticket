@@ -7,9 +7,7 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
-// ===================
-//  LAPORAN BULANAN
-// ===================
+// laporan bulanan
 $queryBulanan = "
     SELECT 
         DATE_FORMAT(tanggal_booking, '%Y-%m') AS bulan,
@@ -20,9 +18,7 @@ $queryBulanan = "
 ";
 $resultBulanan = mysqli_query($conn, $queryBulanan);
 
-// ===================
-//  LAPORAN TAHUNAN
-// ===================
+// laporan tahunan
 $queryTahunan = "
     SELECT 
         YEAR(tanggal_booking) AS tahun,

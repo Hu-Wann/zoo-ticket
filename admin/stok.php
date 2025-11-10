@@ -12,7 +12,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 $today = date('Y-m-d');
 $conn->query("DELETE FROM stok_tiket WHERE tanggal < '$today'");
 
-// hapus manual stok jika form disubmit
+
 if (isset($_POST['hapus_tanggal'])) {
     $hapus_tanggal = $_POST['hapus_tanggal'];
     $conn->query("DELETE FROM stok_tiket WHERE tanggal = '$hapus_tanggal'");
