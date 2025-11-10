@@ -1,0 +1,103 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36" version="28.2.9">
+  <diagram name="Alur Pengunjung" id="Pengunjung_Simplified">
+    <mxGraphModel dx="1426" dy="777" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" value="Pengunjung (User)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;spacingTop=36;labelBackgroundColor=none;" parent="1" vertex="1">
+          <mxGeometry x="60" y="80" width="120" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="3" value="Sistem (UI &amp; Logic)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;spacingTop=36;labelBackgroundColor=none;" parent="1" vertex="1">
+          <mxGeometry x="340" y="80" width="120" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="14" value="Tampilkan Riwayat Booking" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;dashed=1;" parent="3" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="59.5" y="410" as="sourcePoint" />
+            <mxPoint x="-220.5" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="13" value="Konfirmasi Booking (ID Booking)" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;dashed=1;" parent="3" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="339.5" y="380" as="sourcePoint" />
+            <mxPoint x="59.5" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="6" value="Tampilkan Daftar Hewan" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;dashed=1;" parent="3" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="59.5" y="290" as="sourcePoint" />
+            <mxPoint x="-220.5" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="11" value="Pilih Tiket &amp; Isi Form Booking" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;" parent="3" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-220.5" y="310" as="sourcePoint" />
+            <mxPoint x="59.5" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="4" value="Database" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;spacingTop=36;labelBackgroundColor=none;" parent="1" vertex="1">
+          <mxGeometry x="620" y="80" width="120" height="850" as="geometry" />
+        </mxCell>
+        <mxCell id="9" value="Verifikasi / Simpan Data User" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;" parent="4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-220.5" y="240" as="sourcePoint" />
+            <mxPoint x="59.5" y="240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5" value="Akses Halaman Awal &amp; Permintaan Daftar Hewan" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="119.5" y="190" as="sourcePoint" />
+            <mxPoint x="399.5" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7" value="opt [Jika Belum Login: Login/Register]" style="shape=umlFrame;whiteSpace=wrap;html=1;width=600;" parent="1" vertex="1">
+          <mxGeometry x="50" y="210" width="700" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="8" value="Submit Kredensial (Input Data)" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="119.5" y="274.5" as="sourcePoint" />
+            <mxPoint x="399.5" y="274.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="10" value="Status Kredensial / Konfirmasi Simpan" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;dashed=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="679.5" y="290" as="sourcePoint" />
+            <mxPoint x="399.5" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="12" value="Simpan Booking (Status Pending)" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;" parent="1" source="3" target="4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="410" as="sourcePoint" />
+            <mxPoint x="620" y="410" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="450" y="410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="15" value="opt [Cetak Struk/Tiket]" style="shape=umlFrame;whiteSpace=wrap;html=1;width=600;" parent="1" vertex="1">
+          <mxGeometry x="50" y="520" width="700" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="16" value="Permintaan Generate Struk" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="119.5" y="570" as="sourcePoint" />
+            <mxPoint x="399.5" y="570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="17" value="Tampilkan/Cetak Struk" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;dashed=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="399.5" y="600" as="sourcePoint" />
+            <mxPoint x="119.5" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="18" value="Logout" style="html=1;verticalAlign=bottom;endArrow=block;endFill=1;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="119.5" y="640" as="sourcePoint" />
+            <mxPoint x="399.5" y="640" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="230" y="640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
