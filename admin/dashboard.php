@@ -264,6 +264,18 @@ if ($resultPendapatan->num_rows > 0) {
           </a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="laporan_pendapatan.php">
+            <i class="fas fa-chart-line"></i>
+            <span>Laporan Keuangan</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="pengeluaran_list.php">
+            <i class="fas fa-receipt"></i>
+            <span>Kelola Pengeluaran</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="users.php">
             <i class="fas fa-users"></i>
             <span>Kelola Pengguna</span>

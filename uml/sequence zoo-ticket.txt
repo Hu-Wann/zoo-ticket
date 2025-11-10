@@ -1,0 +1,75 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Zoo Ticket Sequence Diagram" id="zooticket-seq">
+    <mxGraphModel dx="1430" dy="870" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Lifelines -->
+        <mxCell id="user" value="User" style="shape=umlLifeline;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="80" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin" value="Admin" style="shape=umlLifeline;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="380" y="40" width="80" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="db" value="Database" style="shape=umlLifeline;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="680" y="40" width="80" height="600" as="geometry"/>
+        </mxCell>
+
+        <!-- Sequence: User Register -->
+        <mxCell id="r1" value="Open registration page" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="user" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="r2" value="Insert new account data" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="user" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Sequence: User Login -->
+        <mxCell id="l1" value="Input username &amp; password" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="user" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="l2" value="Validate credentials &amp; return session" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="db" target="user" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Sequence: Booking Ticket -->
+        <mxCell id="b1" value="Select animal &amp; ticket type" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="user" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="b2" value="Store booking data" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="db" target="user" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Sequence: Print Ticket -->
+        <mxCell id="p1" value="Request ticket print" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="user" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="p2" value="Generate ticket PDF" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="db" target="user" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Sequence: Admin Login -->
+        <mxCell id="a1" value="Input admin credentials" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="admin" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="a2" value="Validate admin &amp; load dashboard" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="db" target="admin" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Sequence: Manage Animals -->
+        <mxCell id="m1" value="Add / Edit / Delete Animal Data" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="admin" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- Sequence: Handle Booking -->
+        <mxCell id="h1" value="View Booking Requests" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="admin" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="h2" value="Accept / Reject Booking" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;html=1;" edge="1" source="admin" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

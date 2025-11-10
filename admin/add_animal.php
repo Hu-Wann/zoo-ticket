@@ -202,7 +202,11 @@
 
                             <div class="mb-3">
                                 <label for="makanan" class="form-label"><i class="bi bi-egg-fried"></i> Makanan</label>
-                                <input type="text" id="makanan" name="makanan" placeholder="Masukkan jenis makanan" required class="form-control">
+                                <select name="makanan" class="form-select border-0 bg-light">
+                                    <option value="Karnivora">Karnivora</option>
+                                    <option value="Herbivora">Herbivora</option>
+                                    <option value="Omnivora">Omnivora</option>
+                                </select>
                             </div>
 
                             <div class="mb-3">
