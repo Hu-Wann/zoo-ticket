@@ -17,6 +17,31 @@ $totalUser  = $conn->query("SELECT COUNT(*) as jml FROM users")->fetch_assoc()['
 $today = date('Y-m-d');
 $stokHariIni = $conn->query("SELECT sisa_stok FROM stok_tiket WHERE tanggal = '$today'")->fetch_assoc();
 $sisaStok = $stokHariIni ? $stokHariIni['sisa_stok'] : 0;
+
+// Ambil data laporan bulanan
+$bulanIni = date('Y-m');
+$laporanBulanan = [];
+
+// Query untuk mendapatkan total pendapatan per bulan
+$queryPendapatan = "SELECT 
+                    DATE_FORMAT(tanggal_booking, '%Y-%m') as bulan,
+                    SUM(total_harga) as total_pendapatan,
+                    COUNT(*) as jumlah_tiket
+                FROM booking
+                WHERE DATE_FORMAT(tanggal_booking, '%Y-%m') = '$bulanIni'
+                GROUP BY DATE_FORMAT(tanggal_booking, '%Y-%m')";
+                
+$resultPendapatan = $conn->query($queryPendapatan);
+
+if ($resultPendapatan->num_rows > 0) {
+    $laporanBulanan = $resultPendapatan->fetch_assoc();
+} else {
+    $laporanBulanan = [
+        'bulan' => $bulanIni,
+        'total_pendapatan' => 0,
+        'jumlah_tiket' => 0
+    ];
+}
 ?>
 
 <!DOCTYPE html>
@@ -324,6 +349,44 @@ $sisaStok = $stokHariIni ? $stokHariIni['sisa_stok'] : 0;
             <a href="users.php" class="btn btn-warning btn-manage">
               <i class="fas fa-cog me-1"></i> Kelola Pengguna
             </a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Laporan Bulanan -->
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i> Laporan Bulanan (<?= date('F Y') ?>)</h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <h5 class="card-title text-primary">Total Pendapatan Bulan Ini</h5>
+                      <h2 class="display-6 fw-bold">Rp <?= number_format($laporanBulanan['total_pendapatan'], 0, ',', '.') ?></h2>
+                      <p class="text-muted">Periode: <?= date('F Y') ?></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title text-primary">Jumlah Tiket Terjual Bulan Ini</h5>
+                      <h2 class="display-6 fw-bold"><?= $laporanBulanan['jumlah_tiket'] ?> Tiket</h2>
+                      <p class="text-muted">Periode: <?= date('F Y') ?></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-end mt-3">
+                <a href="laporan_pendapatan.php" class="btn btn-primary">
+                  <i class="fas fa-file-alt me-1"></i> Lihat Laporan Lengkap
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

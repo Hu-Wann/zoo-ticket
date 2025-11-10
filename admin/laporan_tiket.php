@@ -2,7 +2,6 @@
 session_start();
 include "../database/conn.php";
 
-// Cek hak akses
 if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../acount/login.php");
     exit();
@@ -27,17 +26,6 @@ $total_semua  = $total_dewasa + $total_remaja + $total_anak;
 // --- Ambil semua detail booking ---
 $queryDetail = "SELECT * FROM booking ORDER BY tanggal_booking DESC";
 $detailResult = mysqli_query($conn, $queryDetail);
-
-// --- Ambil penghasilan bulanan ---
-$queryBulanan = "
-    SELECT 
-        DATE_FORMAT(tanggal_booking, '%Y-%m') AS bulan,
-        SUM(total_harga) AS total_bulanan
-    FROM booking
-    GROUP BY DATE_FORMAT(tanggal_booking, '%Y-%m')
-    ORDER BY bulan DESC
-";
-$bulananResult = mysqli_query($conn, $queryBulanan);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -53,14 +41,11 @@ $bulananResult = mysqli_query($conn, $queryBulanan);
     table th { background-color: #198754; color: #fff; }
     .stat-title { font-size: 1.1rem; font-weight: 600; }
     .stat-number { font-size: 1.8rem; font-weight: bold; color: #198754; }
-    @media print {
-        .no-print { display: none; }
-    }
+    @media print { .no-print { display: none; } }
   </style>
 </head>
 <body>
 
-<!-- Header -->
 <div class="text-center py-3 bg-white shadow-sm mb-4 no-print">
   <h1 class="text-success"><i class="bi bi-clipboard-data"></i> Laporan Penjualan Tiket</h1>
   <p class="lead">Halaman Admin - Kebun Binatang Indah</p>
@@ -68,66 +53,15 @@ $bulananResult = mysqli_query($conn, $queryBulanan);
 
 <div class="container mb-5">
 
-  <!-- Statistik Total Tiket -->
+  <!-- Statistik Total -->
   <div class="row g-4 mb-4">
-    <div class="col-md-3">
-      <div class="card text-center p-4">
-        <div class="stat-title">Dewasa</div>
-        <div class="stat-number"><?= $total_dewasa ?></div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center p-4">
-        <div class="stat-title">Remaja</div>
-        <div class="stat-number"><?= $total_remaja ?></div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center p-4">
-        <div class="stat-title">Anak-anak</div>
-        <div class="stat-number"><?= $total_anak ?></div>
-      </div>
-    </div>
-    <div class="col-md-3">
-      <div class="card text-center p-4 bg-success text-white">
-        <div class="stat-title">Total Tiket Terjual</div>
-        <div class="stat-number text-white"><?= $total_semua ?></div>
-      </div>
-    </div>
+    <div class="col-md-3"><div class="card text-center p-4"><div class="stat-title">Dewasa</div><div class="stat-number"><?= $total_dewasa ?></div></div></div>
+    <div class="col-md-3"><div class="card text-center p-4"><div class="stat-title">Remaja</div><div class="stat-number"><?= $total_remaja ?></div></div></div>
+    <div class="col-md-3"><div class="card text-center p-4"><div class="stat-title">Anak-anak</div><div class="stat-number"><?= $total_anak ?></div></div></div>
+    <div class="col-md-3"><div class="card text-center p-4 bg-success text-white"><div class="stat-title">Total Tiket</div><div class="stat-number text-white"><?= $total_semua ?></div></div></div>
   </div>
 
-  <!-- Penghasilan Bulanan -->
-  <div class="card p-4 mb-4">
-    <h3 class="mb-3 text-success"><i class="bi bi-cash-coin"></i> Penghasilan Bulanan</h3>
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped align-middle">
-        <thead>
-          <tr>
-            <th>Bulan</th>
-            <th>Total Penghasilan</th>
-          </tr>
-        </thead>
-        <tbody>
-        <?php
-        if (mysqli_num_rows($bulananResult) > 0) {
-            while ($row = mysqli_fetch_assoc($bulananResult)) {
-                $bulan = date('F Y', strtotime($row['bulan']."-01"));
-                $total = number_format($row['total_bulanan'], 0, ',', '.');
-                echo "<tr>
-                        <td>{$bulan}</td>
-                        <td>Rp {$total}</td>
-                      </tr>";
-            }
-        } else {
-            echo "<tr><td colspan='2' class='text-center text-muted'>Belum ada data penghasilan</td></tr>";
-        }
-        ?>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Tabel Detail -->
+  <!-- Detail Tiket -->
   <div class="card p-4">
     <div class="d-flex justify-content-between mb-3">
       <h3 class="text-success"><i class="bi bi-list-ul"></i> Detail Tiket Terjual</h3>
@@ -139,16 +73,8 @@ $bulananResult = mysqli_query($conn, $queryBulanan);
       <table class="table table-bordered table-striped align-middle">
         <thead>
           <tr>
-            <th>No</th>
-            <th>Nama Pengunjung</th>
-            <th>Email</th>
-            <th>Tanggal Kunjungan</th>
-            <th>Dewasa</th>
-            <th>Remaja</th>
-            <th>Anak-anak</th>
-            <th>catatan</th>
-            <th>Total Harga</th>
-            <th>Tanggal Booking</th>
+            <th>No</th><th>Nama Pengunjung</th><th>Email</th><th>Tanggal Kunjungan</th>
+            <th>Dewasa</th><th>Remaja</th><th>Anak-anak</th><th>Catatan</th><th>Total Harga</th><th>Tanggal Booking</th>
           </tr>
         </thead>
         <tbody>
@@ -164,14 +90,14 @@ $bulananResult = mysqli_query($conn, $queryBulanan);
                         <td>{$row['jumlah_dewasa']}</td>
                         <td>{$row['jumlah_remaja']}</td>
                         <td>{$row['jumlah_anak']}</td>
-                        <td>{$row['catatan']}</td>
+                        <td>".htmlspecialchars($row['catatan'])."</td>
                         <td>Rp ".number_format($row['total_harga'], 0, ',', '.')."</td>
                         <td>".date('d-m-Y H:i', strtotime($row['tanggal_booking']))."</td>
                       </tr>";
                 $no++;
             }
         } else {
-            echo "<tr><td colspan='9' class='text-center text-muted'>Belum ada data booking</td></tr>";
+            echo "<tr><td colspan='10' class='text-center text-muted'>Belum ada data booking</td></tr>";
         }
         ?>
         </tbody>
@@ -181,10 +107,9 @@ $bulananResult = mysqli_query($conn, $queryBulanan);
 
   <div class="mt-4 text-center no-print">
     <a href="dashboard.php" class="btn btn-outline-success"><i class="bi bi-arrow-left"></i> Kembali ke Dashboard</a>
-    <a href="tiket_list.php" class="btn btn-success ms-2"><i class="bi bi-ticket-perforated"></i> Kelola Tiket</a>
+    <a href="laporan_pendapatan.php" class="btn btn-success ms-2"><i class="bi bi-calendar-month"></i> Laporan Bulanan</a>
   </div>
 
 </div>
-
 </body>
 </html>

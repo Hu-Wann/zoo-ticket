@@ -156,8 +156,10 @@ $conn->query("
             echo '<div class="row">';
             while ($row = mysqli_fetch_assoc($result)) {
                 $nomor = 'TKB' . date('Ymd', strtotime($row['tanggal_booking'])) . '-' . str_pad($row['id'], 3, '0', STR_PAD_LEFT);
-                $kode_redeem = strtoupper(substr(md5($row['id'] . $row['email'] . $row['tanggal_booking']), 0, 4)) . '-' . rand(1000, 9999);
                 $tanggal_kunjungan = date('d F Y', strtotime($row['tanggal_kunjungan']));
+                
+                // Gunakan kode redeem dari database
+                $kode_redeem = htmlspecialchars($row['kode_redeem'] ?? 'BELUM ADA');
 
                 // Tentukan status tampilan
                 $status = strtolower(trim($row['status']));
@@ -176,11 +178,6 @@ $conn->query("
                         $statusText = 'Kadaluwarsa';
                         $statusClass = 'bg-secondary text-white';
                         $statusIcon = 'bi-hourglass-split';
-                        break;
-                    case 'pending':
-                        $statusText = 'Dibooking';
-                        $statusClass = 'bg-warning text-dark';
-                        $statusIcon = 'bi-clock-history';
                         break;
                     default:
                         $statusText = 'Dibooking';
@@ -215,7 +212,7 @@ $conn->query("
                 echo '
                     <div class="mt-3 text-center">
                         <p class="mb-1">Kode Redeem:</p>
-                        <div class="ticket-code">' . htmlspecialchars($kode_redeem) . '</div>
+                        <div class="ticket-code">' . $kode_redeem . '</div>
                         <p class="text-muted mt-2 small">Tunjukkan kode ini saat memasuki kebun binatang</p>';
                 if ($status !== 'kadaluwarsa') {
                     echo '<button class="btn btn-outline-secondary btn-sm mt-3" onclick="printTicket(this)">

@@ -11,7 +11,10 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 // Proses ACC
 if (isset($_GET['acc'])) {
     $id = (int)$_GET['acc'];
-    $conn->query("UPDATE booking SET status = 'acc' WHERE id = $id");
+    // Pastikan query dijalankan dengan benar dan tambahkan pengecekan error
+    if (!$conn->query("UPDATE booking SET status = 'acc' WHERE id = $id")) {
+        echo "Error updating record: " . $conn->error;
+    }
     header('Location: manage_booking.php');
     exit;
 }
@@ -19,7 +22,10 @@ if (isset($_GET['acc'])) {
 // Proses DEC
 if (isset($_GET['dec'])) {
     $id = (int)$_GET['dec'];
-    $conn->query("UPDATE booking SET status = 'dec' WHERE id = $id");
+    // Pastikan query dijalankan dengan benar dan tambahkan pengecekan error
+    if (!$conn->query("UPDATE booking SET status = 'dec' WHERE id = $id")) {
+        echo "Error updating record: " . $conn->error;
+    }
     header('Location: manage_booking.php');
     exit;
 }
@@ -70,16 +76,20 @@ $result = $conn->query("SELECT * FROM booking ORDER BY tanggal_kunjungan DESC");
             <td><?= $row['jumlah_remaja']; ?></td>
             <td><?= $row['jumlah_anak']; ?></td>
             <td>
-              <?php if ($row['status'] === 'dibooking'): ?>
+              <?php 
+              $status = strtolower(trim($row['status']));
+              if ($status === 'dibooking' || $status === '' || $status === 'pending'): ?>
                 <span class="badge bg-warning text-dark">Dibooking</span>
-              <?php elseif ($row['status'] === 'acc'): ?>
+              <?php elseif ($status === 'acc'): ?>
                 <span class="badge bg-success">Disetujui</span>
-              <?php elseif ($row['status'] === 'dec'): ?>
+              <?php elseif ($status === 'dec'): ?>
                 <span class="badge bg-danger">Ditolak</span>
+              <?php else: ?>
+                <span class="badge bg-secondary"><?= htmlspecialchars($status) ?></span>
               <?php endif; ?>
             </td>
             <td>
-              <?php if ($row['status'] === 'dibooking'): ?>
+              <?php if ($status === 'dibooking' || $status === '' || $status === 'pending'): ?>
                 <a href="?acc=<?= $row['id']; ?>" class="btn btn-sm btn-success" onclick="return confirm('Setujui booking ini?')">
                   <i class="bi bi-check-circle"></i>
                 </a>
