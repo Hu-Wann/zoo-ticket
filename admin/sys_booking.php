@@ -5,12 +5,14 @@ mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-if (!isset($_SESSION['email'])) {
-    header("Location: ../acount/login.php");
-    exit;
-}
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Debug: Cek session data
+    if (!isset($_SESSION['email'])) {
+        $_SESSION['error'] = "Session email tidak ditemukan. Silakan login kembali.";
+        header("Location: ../pages/booking.php");
+        exit;
+    }
+    
     $nama_pengunjung = mysqli_real_escape_string($conn, $_POST['nama_pengunjung']);
     $email           = $_SESSION['email'];
     $tanggal_kunjungan = mysqli_real_escape_string($conn, $_POST['tanggal_kunjungan']);
@@ -47,16 +49,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $total_harga = ($dewasa * $harga_dewasa) + ($remaja * $harga_remaja) + ($anak * $harga_anak);
 
-    // Pastikan stok tersedia
+    // Pastikan stok tersedia - buat stok default jika belum ada
     $stok = $conn->query("SELECT sisa_stok FROM stok_tiket WHERE tanggal = '$tanggal_kunjungan'");
     if ($stok->num_rows === 0) {
-        $_SESSION['error'] = "Stok untuk tanggal ini belum tersedia. Silakan pilih tanggal lain.";
-        header("Location: ../pages/booking.php");
-        exit;
+        // Buat stok default untuk tanggal yang dipilih
+        $conn->query("INSERT INTO stok_tiket (tanggal, sisa_stok) VALUES ('$tanggal_kunjungan', 500)");
+        $sisa_stok = 500;
+    } else {
+        $stok_data = $stok->fetch_assoc();
+        $sisa_stok = (int)$stok_data['sisa_stok'];
     }
-
-    $stok_data = $stok->fetch_assoc();
-    $sisa_stok = (int)$stok_data['sisa_stok'];
 
     if ($sisa_stok < $total_tiket) {
         $_SESSION['error'] = "Stok tiket untuk tanggal " . date('d-m-Y', strtotime($tanggal_kunjungan)) . " tidak mencukupi. Sisa stok: $sisa_stok.";
@@ -68,19 +70,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn->begin_transaction();
 
     try {
-        // Generate unique redeem code (tidak akan berubah)
+        // Generate unique redeem code
         $kode_redeem = strtoupper(substr(md5(uniqid(rand(), true)), 0, 4)) . '-' . rand(1000, 9999);
 
-        // Simpan data booking
+        // Simpan data booking - Sesuaikan urutan kolom dengan struktur tabel
         $query = "INSERT INTO booking 
             (nama_pengunjung, email, tanggal_kunjungan, jumlah_dewasa, jumlah_remaja, jumlah_anak, total_harga, catatan, status, kode_redeem, tanggal_booking)
             VALUES 
-            ('$nama_pengunjung', '$email', '$tanggal_kunjungan', $dewasa, $remaja, $anak, $total_harga, '$catatan', 'dibooking', '$kode_redeem', NOW())";
+            ('{$nama_pengunjung}', '{$email}', '{$tanggal_kunjungan}', {$dewasa}, {$remaja}, {$anak}, {$total_harga}, '{$catatan}', 'dibooking', '{$kode_redeem}', NOW())";
 
-        $conn->query($query); // <--- ✅ JALANKAN QUERY INI!
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Gagal menyimpan booking: " . $conn->error);
+        }
 
         // Kurangi stok sesuai total tiket
-        $conn->query("UPDATE stok_tiket SET sisa_stok = sisa_stok - $total_tiket WHERE tanggal = '$tanggal_kunjungan'");
+        $update_result = $conn->query("UPDATE stok_tiket SET sisa_stok = sisa_stok - $total_tiket WHERE tanggal = '$tanggal_kunjungan'");
+        if (!$update_result) {
+            throw new Exception("Gagal mengupdate stok tiket: " . $conn->error);
+        }
 
         // Commit transaksi
         $conn->commit();

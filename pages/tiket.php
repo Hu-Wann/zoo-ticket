@@ -149,8 +149,18 @@ $conn->query("
 
     <div class="container mb-5">
         <?php
+        // Debug: Tampilkan email yang digunakan untuk query
+        error_log("Debug: Query booking untuk email: " . $email);
+        
         $query = "SELECT * FROM booking WHERE email = '$email' ORDER BY tanggal_booking DESC";
         $result = mysqli_query($conn, $query);
+        
+        // Debug: Tampilkan jumlah rows
+        if ($result) {
+            error_log("Debug: Jumlah rows ditemukan: " . mysqli_num_rows($result));
+        } else {
+            error_log("Debug: Query error: " . mysqli_error($conn));
+        }
 
         if ($result && mysqli_num_rows($result) > 0) {
             echo '<div class="row">';
@@ -165,11 +175,16 @@ $conn->query("
                 $status = strtolower(trim($row['status']));
                 switch ($status) {
                     case 'acc':
+                    case 'accepted':
+                    case 'disetujui':
                         $statusText = 'Disetujui';
                         $statusClass = 'bg-success text-white';
                         $statusIcon = 'bi-check-circle-fill';
                         break;
                     case 'dec':
+                    case 'declined':
+                    case 'ditolak':
+                    case 'dibatalkan':
                         $statusText = 'Ditolak';
                         $statusClass = 'bg-danger text-white';
                         $statusIcon = 'bi-x-circle-fill';
@@ -179,6 +194,8 @@ $conn->query("
                         $statusClass = 'bg-secondary text-white';
                         $statusIcon = 'bi-hourglass-split';
                         break;
+                    case 'dibooking':
+                    case 'pending':
                     default:
                         $statusText = 'Dibooking';
                         $statusClass = 'bg-warning text-dark';

@@ -118,6 +118,7 @@ $result = $conn->query($query);
                 <div class="card animal-card h-100 text-center">
                   <img src="../picture/<?php echo $row['gambar']; ?>" class="animal-img" alt="<?php echo $row['nama']; ?>">
                   <div class="card-body">
+                    <h5 class="card-title text-success fw-bold mb-3"><?php echo htmlspecialchars($row['nama']); ?></h5>
                     <div class="animal-info mb-2">
                       <span class="badge bg-light text-dark mb-1"><i class="bi bi-geo-alt me-1"></i>Habitat: <?php echo $row['habitat']; ?></span><br>
                       <span class="badge bg-light text-dark"><i class="bi bi-egg-fried me-1"></i>Makanan: <?php echo $row['makanan']; ?></span>

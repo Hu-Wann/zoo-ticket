@@ -107,6 +107,7 @@ $detailResult = mysqli_query($conn, $queryDetail);
 
   <div class="mt-4 text-center no-print">
     <a href="dashboard.php" class="btn btn-outline-success"><i class="bi bi-arrow-left"></i> Kembali ke Dashboard</a>
+    <a href="tiket_list.php" class="btn btn-success ms-2">kelola booking</a>
     <a href="laporan_pendapatan.php" class="btn btn-success ms-2"><i class="bi bi-calendar-month"></i> Laporan Bulanan</a>
   </div>
 
