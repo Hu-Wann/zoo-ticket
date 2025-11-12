@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 10 Nov 2025 pada 04.16
--- Versi server: 8.0.30
--- Versi PHP: 8.1.10
+-- Generation Time: Nov 12, 2025 at 12:30 AM
+-- Server version: 8.0.30
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,49 +24,42 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `animals`
+-- Table structure for table `animals`
 --
 
 CREATE TABLE `animals` (
   `id` int NOT NULL,
-  `nama` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `habitat` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `makanan` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `deskripsi` text COLLATE utf8mb4_general_ci NOT NULL,
-  `status_konservasi` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `gambar` varchar(255) COLLATE utf8mb4_general_ci NOT NULL
+  `nama` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `habitat` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `makanan` enum('Herbivora','Karnivora','Omnivora','') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `deskripsi` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `status_konservasi` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `gambar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data untuk tabel `animals`
---
-
-INSERT INTO `animals` (`id`, `nama`, `habitat`, `makanan`, `deskripsi`, `status_konservasi`, `gambar`) VALUES
-(12, 'Panda', 'Hutan', 'Bambu', 'Panda raksasa atau hanya disebut panda, adalah seekor mamalia yang diklasifikasikan ke dalam famili beruang, Ursidae, yang merupakan hewan asli Tiongkok Tengah. Panda raksasa tinggal di wilayah pegunungan, seperti Sichuan dan Tibet.', 'Dilindungi', '1760183821_panda.jpg');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `booking`
+-- Table structure for table `booking`
 --
 
 CREATE TABLE `booking` (
   `id` int NOT NULL,
-  `nama_pengunjung` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `nama_pengunjung` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `tanggal_kunjungan` date NOT NULL,
   `jumlah_dewasa` int DEFAULT '0',
   `jumlah_anak` int DEFAULT '0',
   `jumlah_remaja` int DEFAULT '0',
   `total_harga` int NOT NULL,
-  `catatan` text COLLATE utf8mb4_general_ci,
+  `catatan` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `tanggal_booking` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` varchar(20) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'dibooking',
-  `kode_redeem` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL
+  `status` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'dibooking',
+  `kode_redeem` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `booking`
+-- Dumping data for table `booking`
 --
 
 INSERT INTO `booking` (`id`, `nama_pengunjung`, `email`, `tanggal_kunjungan`, `jumlah_dewasa`, `jumlah_anak`, `jumlah_remaja`, `total_harga`, `catatan`, `tanggal_booking`, `status`, `kode_redeem`) VALUES
@@ -79,7 +72,32 @@ INSERT INTO `booking` (`id`, `nama_pengunjung`, `email`, `tanggal_kunjungan`, `j
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `stok_tiket`
+-- Table structure for table `pengeluaran`
+--
+
+CREATE TABLE `pengeluaran` (
+  `id` int NOT NULL,
+  `tanggal` date NOT NULL,
+  `kategori` varchar(100) NOT NULL,
+  `deskripsi` text,
+  `jumlah` int NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `pengeluaran`
+--
+
+INSERT INTO `pengeluaran` (`id`, `tanggal`, `kategori`, `deskripsi`, `jumlah`, `created_at`) VALUES
+(2, '2025-11-10', 'Gaji Karyawan', '', 2000000, '2025-11-10 12:22:06'),
+(3, '2025-11-10', 'Pangan', '', 300000, '2025-11-10 12:22:06'),
+(4, '2025-11-10', 'Perawatan Hewan', '', 150000, '2025-11-10 12:22:06'),
+(5, '2025-11-10', 'Pemeliharaan Kandang', '', 50000, '2025-11-10 12:22:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stok_tiket`
 --
 
 CREATE TABLE `stok_tiket` (
@@ -89,28 +107,28 @@ CREATE TABLE `stok_tiket` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `stok_tiket`
+-- Dumping data for table `stok_tiket`
 --
 
 INSERT INTO `stok_tiket` (`id`, `tanggal`, `sisa_stok`) VALUES
-(5, '2025-11-10', 498);
+(5, '2025-11-10', 500);
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
   `id` int NOT NULL,
-  `nama` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `role` enum('admin','user') COLLATE utf8mb4_general_ci DEFAULT 'user'
+  `nama` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `role` enum('admin','user') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'user'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role`) VALUES
@@ -122,13 +140,13 @@ INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role`) VALUES
 --
 
 --
--- Indeks untuk tabel `animals`
+-- Indexes for table `animals`
 --
 ALTER TABLE `animals`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indeks untuk tabel `booking`
+-- Indexes for table `booking`
 --
 ALTER TABLE `booking`
   ADD PRIMARY KEY (`id`),
@@ -136,53 +154,65 @@ ALTER TABLE `booking`
   ADD KEY `tanggal_kunjungan` (`tanggal_kunjungan`);
 
 --
--- Indeks untuk tabel `stok_tiket`
+-- Indexes for table `pengeluaran`
+--
+ALTER TABLE `pengeluaran`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `stok_tiket`
 --
 ALTER TABLE `stok_tiket`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `tanggal` (`tanggal`);
 
 --
--- Indeks untuk tabel `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `animals`
+-- AUTO_INCREMENT for table `animals`
 --
 ALTER TABLE `animals`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT untuk tabel `booking`
+-- AUTO_INCREMENT for table `booking`
 --
 ALTER TABLE `booking`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
--- AUTO_INCREMENT untuk tabel `stok_tiket`
+-- AUTO_INCREMENT for table `pengeluaran`
+--
+ALTER TABLE `pengeluaran`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `stok_tiket`
 --
 ALTER TABLE `stok_tiket`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `booking`
+-- Constraints for table `booking`
 --
 ALTER TABLE `booking`
   ADD CONSTRAINT `booking_ibfk_1` FOREIGN KEY (`email`) REFERENCES `users` (`email`);

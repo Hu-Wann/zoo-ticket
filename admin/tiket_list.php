@@ -130,6 +130,7 @@ $result = $conn->query($query);
                             <th width="70px">Dewasa</th>
                             <th width="70px">Remaja</th>
                             <th width="70px">Anak</th>
+                            <th width="100px">Kode Redeem</th>
                             <th width="100px">Status</th>
                             <th width="120px">Aksi</th>
                         </tr>
@@ -149,6 +150,7 @@ $result = $conn->query($query);
                                     <td class="text-center"><?= $row['jumlah_dewasa']; ?></td>
                                     <td class="text-center"><?= $row['jumlah_remaja']; ?></td>
                                     <td class="text-center"><?= $row['jumlah_anak']; ?></td>
+                                    <td class="text-center"><?= htmlspecialchars($row['kode_redeem']); ?></td>
                                     <td class="text-center">
                                         <?php
                                             $status = $row['status'];

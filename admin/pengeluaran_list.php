@@ -121,7 +121,7 @@ foreach ($pengeluaran_per_tanggal as $data) {
                                     <a href="pengeluaran_edit.php?tanggal=<?= $data['tanggal'] ?>" class="btn btn-sm btn-outline-primary btn-action" title="Edit">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
-                                    <a href="pengeluaran_hapus.php?tanggal=<?= $data['tanggal'] ?>" class="btn btn-sm btn-outline-danger btn-action" title="Hapus" onclick="return confirm('Yakin ingin menghapus semua data pengeluaran pada tanggal ini?');">
+                                    <a href="sys_pengeluaran.php?action=delete_by_date&tanggal=<?= $data['tanggal'] ?>" class="btn btn-sm btn-outline-danger btn-action" title="Hapus" onclick="return confirm('Yakin ingin menghapus semua data pengeluaran pada tanggal ini?');">
                                         <i class="bi bi-trash3"></i>
                                     </a>
                                 </td>

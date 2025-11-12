@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "../database/conn.php";
+include "sys_pengeluaran.php";
 
 if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../acount/login.php");
@@ -8,33 +9,10 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $tanggal = $_POST['tanggal'];
-    $jumlah_arr = $_POST['jumlah'];
-    $deskripsi_arr = $_POST['deskripsi'];
-    $added_count = 0;
-
-    $stmt = $conn->prepare("INSERT INTO pengeluaran (tanggal, kategori, deskripsi, jumlah) VALUES (?, ?, ?, ?)");
-
-    foreach ($jumlah_arr as $kategori => $jumlah) {
-        // Konversi format rupiah ke angka
-        $jumlah_val = (int) filter_var($jumlah, FILTER_SANITIZE_NUMBER_INT);
-
-        if ($jumlah_val > 0) {
-            $kategori_val = $kategori;
-            $deskripsi_val = $deskripsi_arr[$kategori] ?? '';
-
-            $stmt->bind_param("sssi", $tanggal, $kategori_val, $deskripsi_val, $jumlah_val);
-            
-            if ($stmt->execute()) {
-                $added_count++;
-            }
-        }
-    }
-    $stmt->close();
-
-    if ($added_count > 0) {
-        $_SESSION['success'] = "$added_count data pengeluaran berhasil ditambahkan.";
+    $res = pengeluaran_insert_batch($conn, $tanggal, $_POST['jumlah'], $_POST['deskripsi']);
+    if ($res['added'] > 0) {
+        $_SESSION['success'] = $res['added'] . " data pengeluaran berhasil ditambahkan.";
         header("Location: pengeluaran_list.php");
         exit;
     } else {
@@ -97,12 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <hr class="my-4">
 
                     <?php 
-                    $kategori_list = [
-                        "Gaji Karyawan" => "bi-person-badge", 
-                        "Pangan" => "bi-egg-fried", 
-                        "Perawatan Hewan" => "bi-heart-pulse", 
-                        "Pemeliharaan Kandang" => "bi-house-gear"
-                    ];
+                    $kategori_list = pengeluaran_kategori_list();
                     foreach ($kategori_list as $kategori => $icon) {
                     ?>
                     <div class="kategori-group">

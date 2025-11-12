@@ -13,15 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($password !== $confirm) {
     $pesan = "<div class='alert alert-danger text-center'>❌ Password tidak cocok!</div>";
   } else {
-    // Hash password dengan md5 (agar sesuai proses login kamu)
     $password_md5 = md5($password);
 
     $sql = "INSERT INTO users (nama, email, password, role) 
             VALUES ('$nama', '$email', '$password_md5', '$role')";
 
     if ($conn->query($sql) === TRUE) {
-      // Setelah registrasi, arahkan ke beranda user
-      header("Location: ../pages/index.php");
+      header("Location: ../acount/login.php");
       exit;
     } else {
       $pesan = "<div class='alert alert-danger text-center'>❌ Error: " . $conn->error . "</div>";
@@ -133,7 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-        <button type="submit" class="btn btn-register w-100"><a href="login.php">Daftar</a></button>
+     <button type="submit" class="btn btn-register w-100">Daftar</button>
+
       </form>
 
       <div class="text-center mt-3">

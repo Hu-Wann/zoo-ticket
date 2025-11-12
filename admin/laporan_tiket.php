@@ -1,4 +1,5 @@
 <?php
+session_name("admin_session");
 session_start();
 include "../database/conn.php";
 
@@ -74,7 +75,7 @@ $detailResult = mysqli_query($conn, $queryDetail);
         <thead>
           <tr>
             <th>No</th><th>Nama Pengunjung</th><th>Email</th><th>Tanggal Kunjungan</th>
-            <th>Dewasa</th><th>Remaja</th><th>Anak-anak</th><th>Catatan</th><th>Total Harga</th><th>Tanggal Booking</th>
+            <th>Dewasa</th><th>Remaja</th><th>Anak-anak</th><th>Kode Redeem</th><th>Catatan</th><th>Total Harga</th><th>Tanggal Booking</th>
           </tr>
         </thead>
         <tbody>
@@ -90,6 +91,7 @@ $detailResult = mysqli_query($conn, $queryDetail);
                         <td>{$row['jumlah_dewasa']}</td>
                         <td>{$row['jumlah_remaja']}</td>
                         <td>{$row['jumlah_anak']}</td>
+                        <td>".htmlspecialchars($row['kode_redeem'])."</td>
                         <td>".htmlspecialchars($row['catatan'])."</td>
                         <td>Rp ".number_format($row['total_harga'], 0, ',', '.')."</td>
                         <td>".date('d-m-Y H:i', strtotime($row['tanggal_booking']))."</td>
