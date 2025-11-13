@@ -4,7 +4,7 @@ include '../database/conn.php';
 
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header('Location: ../pages/index.php');
+    header('Location: ./index.php');
     exit;
 }
 
@@ -84,6 +84,8 @@ $result = $conn->query("SELECT * FROM booking ORDER BY tanggal_kunjungan DESC");
                 <span class="badge bg-success">Disetujui</span>
               <?php elseif ($status === 'dec'): ?>
                 <span class="badge bg-danger">Ditolak</span>
+              <?php elseif ($status === 'dibayar'): ?>
+                <span class="badge bg-danger">Dibayar</span>
               <?php else: ?>
                 <span class="badge bg-secondary"><?= htmlspecialchars($status) ?></span>
               <?php endif; ?>

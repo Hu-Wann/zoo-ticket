@@ -33,6 +33,7 @@ $conn->query("
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
         .ticket-header {
             background-color: #198754;
             color: white;
@@ -41,48 +42,59 @@ $conn->query("
             border-radius: 0 0 1rem 1rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .ticket-card {
-            border-radius: 1rem;
+            border-radius: 0.75rem;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1.5rem;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1rem;
             border: none;
             transition: transform .3s;
         }
+
         .ticket-card:hover {
             transform: translateY(-5px);
         }
+
         .card-header {
             background-color: #198754;
             color: white;
-            font-weight: bold;
-            padding: 1rem;
+            font-weight: 600;
+            padding: 0.75rem;
+            font-size: 0.95rem;
         }
+
         .status-badge {
-            padding: .25rem .75rem;
-            border-radius: 1rem;
-            font-size: .9rem;
+            padding: .2rem .6rem;
+            border-radius: 0.9rem;
+            font-size: .8rem;
             font-weight: 600;
         }
+
         .ticket-code {
             font-family: monospace;
-            font-size: 1.2rem;
-            font-weight: bold;
+            font-size: 1rem;
+            font-weight: 600;
             color: #198754;
             background-color: #e9f7ef;
-            padding: .5rem;
-            border-radius: .5rem;
+            padding: .4rem .5rem;
+            border-radius: .4rem;
             display: inline-block;
         }
+
         .ticket-info {
             display: flex;
             align-items: center;
-            margin-bottom: .5rem;
+            margin-bottom: .4rem;
+            font-size: 0.95rem;
         }
+
         .ticket-info i {
-            margin-right: .5rem;
+            margin-right: .45rem;
             color: #198754;
+            font-size: 0.95rem;
         }
+
         .no-tickets {
             text-align: center;
             padding: 3rem;
@@ -90,21 +102,28 @@ $conn->query("
             border-radius: 1rem;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+
         .navbar {
             background-color: white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .navbar-brand {
             font-weight: bold;
             color: #198754;
         }
+
+        /* Sidebar (match index.php) */
+        .sidebar { min-height: 100vh; background-color: #d4f8d4; padding-top: 20px; border-right: 2px solid #b2f7b2; }
+        .sidebar-link { border-radius: 0.5rem; padding: 0.5rem 1rem; transition: background 0.2s, color 0.2s; }
+        .sidebar-link:hover, .sidebar-link.active { background: linear-gradient(90deg, #e8fbe8 60%, #b2f7b2 100%); color: #157347 !important; text-decoration: none; }
     </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="../index.php">
                 <i class="bi bi-tree-fill me-2"></i>Kebun Binatang Indah
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -112,10 +131,6 @@ $conn->query("
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.php">Beranda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="animal.php">Hewan</a></li>
-                    <li class="nav-item"><a class="nav-link" href="booking.php">Booking</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="tiket.php">Tiket Saya</a></li>
                     <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
                         <li class="nav-item">
                             <a class="nav-link text-primary fw-bold" href="../admin/dashboard.php">
@@ -147,14 +162,37 @@ $conn->query("
         </div>
     </div>
 
-    <div class="container mb-5">
+    <div class="container-fluid mb-5">
+      <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 sidebar position-sticky" style="top: 80px; height: calc(100vh - 80px); z-index: 2;">
+          <?php $page = basename($_SERVER['SCRIPT_NAME']); ?>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+              <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link <?php echo $page==='index.php'?'active':''; ?>" href="../index.php">
+                <i class="bi bi-house-door me-2"></i> Beranda
+              </a>
+            </li>
+            <li class="nav-item mb-2">
+              <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link <?php echo $page==='animal.php'?'active':''; ?>" href="animal.php">
+                <i class="bi bi-paw me-2"></i> Animal
+              </a>
+            </li>
+            <li class="nav-item mb-2">
+              <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link <?php echo $page==='booking.php'?'active':''; ?>" href="booking.php">
+                <i class="bi bi-ticket-perforated me-2"></i> Booking Tiket
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-10 p-4">
         <?php
         // Debug: Tampilkan email yang digunakan untuk query
         error_log("Debug: Query booking untuk email: " . $email);
-        
+
         $query = "SELECT * FROM booking WHERE email = '$email' ORDER BY tanggal_booking DESC";
         $result = mysqli_query($conn, $query);
-        
+
         // Debug: Tampilkan jumlah rows
         if ($result) {
             error_log("Debug: Jumlah rows ditemukan: " . mysqli_num_rows($result));
@@ -167,7 +205,7 @@ $conn->query("
             while ($row = mysqli_fetch_assoc($result)) {
                 $nomor = 'TKB' . date('Ymd', strtotime($row['tanggal_booking'])) . '-' . str_pad($row['id'], 3, '0', STR_PAD_LEFT);
                 $tanggal_kunjungan = date('d F Y', strtotime($row['tanggal_kunjungan']));
-                
+
                 // Gunakan kode redeem dari database
                 $kode_redeem = htmlspecialchars($row['kode_redeem'] ?? 'BELUM ADA');
 
@@ -189,6 +227,14 @@ $conn->query("
                         $statusClass = 'bg-danger text-white';
                         $statusIcon = 'bi-x-circle-fill';
                         break;
+                    case 'dibayar':
+                    case 'dibayar':
+                    case 'dibayar':
+                    case 'dibayar':
+                        $statusText = 'Dibayar';
+                        $statusClass = 'bg-primary text-white';
+                        $statusIcon = 'bi-check-circle-fill';
+                        break;
                     case 'kadaluwarsa':
                         $statusText = 'Kadaluwarsa';
                         $statusClass = 'bg-secondary text-white';
@@ -204,7 +250,7 @@ $conn->query("
                 }
 
                 echo '
-                <div class="col-md-6 mb-4">
+                <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
                     <div class="card ticket-card">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <span><i class="bi bi-ticket-perforated-fill me-2"></i>Nomor: ' . htmlspecialchars($nomor) . '</span>
@@ -230,11 +276,8 @@ $conn->query("
                     <div class="mt-3 text-center">
                         <p class="mb-1">Kode Redeem:</p>
                         <div class="ticket-code">' . $kode_redeem . '</div>
-                        <p class="text-muted mt-2 small">Tunjukkan kode ini saat memasuki kebun binatang</p>';
+                        <p class="text-muted mt-2 small">Tunjukkan bukti ini pada karcis di kebun binatang</p>';
                 if ($status !== 'kadaluwarsa') {
-                    echo '<button class="btn btn-outline-secondary btn-sm mt-3" onclick="printTicket(this)">
-                        <i class="bi bi-printer"></i> Print Tiket
-                    </button>';
                 } else {
                     echo '<button class="btn btn-outline-secondary btn-sm mt-3" disabled>
                         <i class="bi bi-x-circle"></i> Tidak Dapat Dicetak
@@ -260,30 +303,13 @@ $conn->query("
             </div>';
         }
         ?>
+        </div>
+      </div>
     </div>
 
     <script>
-        function printTicket(button) {
-            const card = button.closest('.ticket-card');
-            const printContents = card.outerHTML;
-            const printWindow = window.open('', '', 'width=800,height=600');
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>Print Tiket</title>
-                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-                    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-                </head>
-                <body>${printContents}</body>
-                </html>
-            `);
-            printWindow.document.close();
-            printWindow.focus();
-            printWindow.onload = () => {
-                printWindow.print();
-                printWindow.onafterprint = () => printWindow.close();
-            };
-        }
+        // Tidak diperlukan fungsi print custom; tombol membuka halaman cetak khusus
     </script>
 </body>
+
 </html>

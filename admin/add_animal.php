@@ -226,7 +226,7 @@
                             </div>
 
                             <div class="d-flex justify-content-between mt-4">
-                                <a href="dashboard.php" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Kembali ke Dashboard</a>
+                                <a href="hewan.php" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Kembali</a>
                                 <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Tambah Hewan</button>
                             </div>
                         </form>

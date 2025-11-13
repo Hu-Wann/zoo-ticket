@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <div class="register-card">
     <div class="register-header position-relative">
-      <a href="../pages/index.php" class="btn btn-sm btn-light position-absolute" style="top: 10px; left: 10px;">
+      <a href="./index.php" class="btn btn-sm btn-light position-absolute" style="top: 10px; left: 10px;">
         <i class="bi bi-house-door"></i> Kembali ke Beranda
       </a>
       <i class="bi bi-person-plus" style="font-size:2rem;"></i>

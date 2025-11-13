@@ -22,21 +22,32 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
   }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_user'])) {
+// Edit user: ambil data saat GET edit=id
+$editUser = null;
+if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
+  $editId = (int)$_GET['edit'];
+  $res = $conn->query("SELECT id, nama, email, role FROM users WHERE id = $editId");
+  if ($res && $res->num_rows === 1) {
+    $editUser = $res->fetch_assoc();
+  }
+}
+
+// Update user saat POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
+  $id = (int)$_POST['id'];
   $nama = mysqli_real_escape_string($conn, $_POST['nama']);
   $email = mysqli_real_escape_string($conn, $_POST['email']);
-  $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
   $role = mysqli_real_escape_string($conn, $_POST['role']);
+  $password = $_POST['password'] ?? '';
 
-  $cek = $conn->query("SELECT id FROM users WHERE email='$email'");
-  if ($cek->num_rows == 0) {
-    $conn->query("INSERT INTO users (nama, email, password, role) VALUES ('$nama', '$email', '$password', '$role')");
-    header("Location: users.php?status=added");
-    exit;
+  if ($password !== '') {
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $conn->query("UPDATE users SET nama='$nama', email='$email', role='$role', password='$hash' WHERE id=$id");
   } else {
-    header("Location: users.php?status=exists");
-    exit;
+    $conn->query("UPDATE users SET nama='$nama', email='$email', role='$role' WHERE id=$id");
   }
+  header("Location: users.php?status=updated");
+  exit;
 }
 
 
@@ -66,48 +77,6 @@ $result = $conn->query($query);
       font-family: 'Poppins', sans-serif;
       background-color: #f8f9fa;
       overflow-x: hidden;
-    }
-
-    .sidebar {
-      width: var(--sidebar-width);
-      height: 100vh;
-      position: fixed;
-      left: 0;
-      top: 0;
-      background: var(--primary-color);
-      color: white;
-      padding: 20px 0;
-      transition: all 0.3s;
-      z-index: 1000;
-    }
-
-    .sidebar .logo {
-      padding: 15px 25px;
-      font-size: 22px;
-      font-weight: 700;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 20px;
-    }
-
-    .sidebar .nav-link {
-      color: rgba(255, 255, 255, 0.8);
-      padding: 12px 25px;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .sidebar .nav-link:hover,
-    .sidebar .nav-link.active {
-      color: white;
-      background: rgba(255, 255, 255, 0.1);
-      border-left: 4px solid var(--accent-color);
-    }
-
-    .sidebar .nav-link i {
-      width: 20px;
-      text-align: center;
     }
 
     .main-content {
@@ -212,220 +181,155 @@ $result = $conn->query($query);
       font-weight: 600;
     }
 
-    @media (max-width: 992px) {
-      .sidebar {
-        width: 70px;
-      }
-
-      .sidebar .logo {
-        padding: 15px;
-        font-size: 18px;
-        text-align: center;
-      }
-
-      .sidebar .nav-link span {
-        display: none;
-      }
-
-      .sidebar .nav-link {
-        padding: 12px;
-        justify-content: center;
-      }
-
-      .main-content {
-        margin-left: 70px;
-      }
-    }
+   
   </style>
 </head>
 
 <body>
   <div class="d-flex">
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="logo">
-        <i class="fas fa-paw me-2"></i> Zoo Admin
-      </div>
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link" href="dashboard.php">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>Dashboard</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="hewan.php">
-            <i class="fas fa-hippo"></i>
-            <span>Kelola Hewan</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="laporan_tiket.php">
-            <i class="fas fa-ticket-alt"></i>
-            <span>Kelola Tiket</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="users.php">
-            <i class="fas fa-users"></i>
-            <span>Kelola Pengguna</span>
-          </a>
-        </li>
-        <li class="nav-item mt-4">
-          <a class="nav-link" href="../pages/index.php">
-            <i class="fas fa-home"></i>
-            <span>Halaman Utama</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-danger" href="../acount/logout.php">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-          </a>
-        </li>
-      </ul>
-    </div>
+    <main class="flex-grow-1 p-4">
+      <?php include 'sidebar.php'; ?>
 
-    <!-- Main Content -->
-    <div class="main-content">
-      <div class="header">
-        <h4 class="mb-0">Kelola Pengguna</h4>
-        <div class="user-info">
-          <div class="avatar">
-            <?= substr($_SESSION['nama'], 0, 1) ?>
-          </div>
-          <div>
-            <p class="mb-0 fw-bold"><?= $_SESSION['nama'] ?></p>
-            <small class="text-muted">Administrator</small>
-          </div>
-        </div>
-      </div>
-
-      <?php if (isset($_GET['status']) && $_GET['status'] == 'deleted'): ?>
-        <div class="alert alert-success">
-          <i class="fas fa-check-circle me-2"></i> Pengguna berhasil dihapus!
-        </div>
-      <?php elseif (isset($_GET['status']) && $_GET['status'] == 'error'): ?>
-        <div class="alert alert-danger">
-          <i class="fas fa-exclamation-circle me-2"></i> Tidak dapat menghapus akun admin yang sedang aktif!
-        </div>
-      <?php endif; ?>
-
-      <div class="content-card">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h5 class="mb-0">
-            <i class="fas fa-users me-2 text-primary"></i> Daftar Pengguna
-          </h5>
-          <div>
-            <a href="dashboard.php" class="btn btn-outline-secondary btn-action">
-              <i class="fas fa-arrow-left me-1"></i> Kembali
-            </a>
-          </div>
-        </div>
-
-        <div class="card p-4 mb-4 shadow-sm border-0">
-          <h5 class="text-success mb-3"><i class="fas fa-user-plus me-2"></i> Tambah Pengguna Baru</h5>
-          <form method="POST" action="users.php">
-            <div class="row g-3 align-items-center">
-              <div class="col-md-3">
-                <div class="input-group">
-                  <span class="input-group-text bg-light border-0"><i class="fas fa-user text-primary"></i></span>
-                  <input type="text" name="nama" class="form-control border-0 bg-light" placeholder="Nama Lengkap" required>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="input-group">
-                  <span class="input-group-text bg-light border-0"><i class="fas fa-envelope text-primary"></i></span>
-                  <input type="email" name="email" class="form-control border-0 bg-light" placeholder="Email" required>
-                </div>
-              </div>
-              <div class="col-md-3">
-                <div class="input-group">
-                  <span class="input-group-text bg-light border-0"><i class="fas fa-lock text-primary"></i></span>
-                  <input type="password" name="password" class="form-control border-0 bg-light" placeholder="Password" required>
-                </div>
-              </div>
-              <div class="col-md-2">
-                <div class="input-group">
-                  <span class="input-group-text bg-light border-0"><i class="fas fa-user-tag text-primary"></i></span>
-                  <select name="role" class="form-select border-0 bg-light">
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-1">
-                <button type="submit" name="add_user" class="btn btn-success w-100 btn-action shadow-sm" style="height: 100%; border-radius: 8px;">
-                  <i class="fas fa-user-plus me-1"></i> <span class="d-none d-xl-inline"></span>
-                </button>
-              </div>
+      <!-- Main Content -->
+      <div class="main-content">
+        <div class="header">
+          <h4 class="mb-0">Kelola Pengguna</h4>
+          <div class="user-info">
+            <div class="avatar">
+              <?= substr($_SESSION['nama'], 0, 1) ?>
             </div>
-          </form>
+            <div>
+              <p class="mb-0 fw-bold"><?= $_SESSION['nama'] ?></p>
+              <small class="text-muted">Administrator</small>
+            </div>
+          </div>
         </div>
 
+        <?php if (isset($_GET['status']) && $_GET['status'] == 'deleted'): ?>
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle me-2"></i> Pengguna berhasil dihapus!
+          </div>
+        <?php elseif (isset($_GET['status']) && $_GET['status'] == 'error'): ?>
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i> Tidak dapat menghapus akun admin yang sedang aktif!
+          </div>
+        <?php endif; ?>
 
-        <div class="table-container">
-          <table class="table table-striped table-hover">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nama</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-              if ($result->num_rows > 0):
-                $no = 1; // ✅ Nomor urut mulai dari 1
-                while ($user = $result->fetch_assoc()):
-              ?>
-                  <tr>
-                    <td><?= $no++ ?></td> <!-- ✅ Tampilkan nomor urut -->
-                    <td>
-                      <div class="d-flex align-items-center">
-                        <div class="avatar me-2" style="width: 30px; height: 30px; font-size: 12px;">
-                          <?= substr($user['nama'], 0, 1) ?>
+        <div class="content-card">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="mb-0">
+              <i class="fas fa-users me-2 text-primary"></i> Daftar Pengguna
+            </h5>
+            <div>
+              <a href="dashboard.php" class="btn btn-outline-secondary btn-action">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
+              </a>
+            </div>
+          </div>
+
+          <?php if ($editUser): ?>
+          <div class="card p-4 mb-4 shadow-sm border-0">
+            <h5 class="text-primary mb-3"><i class="fas fa-user-edit me-2"></i> Edit Pengguna</h5>
+            <form method="POST" action="users.php">
+              <input type="hidden" name="id" value="<?= (int)$editUser['id'] ?>">
+              <div class="row g-3 align-items-center">
+                <div class="col-md-3">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-0"><i class="fas fa-user text-primary"></i></span>
+                    <input type="text" name="nama" class="form-control border-0 bg-light" placeholder="Nama Lengkap" value="<?= htmlspecialchars($editUser['nama']) ?>" required>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-0"><i class="fas fa-envelope text-primary"></i></span>
+                    <input type="email" name="email" class="form-control border-0 bg-light" placeholder="Email" value="<?= htmlspecialchars($editUser['email']) ?>" required>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-0"><i class="fas fa-user-tag text-primary"></i></span>
+                    <select name="role" class="form-select border-0 bg-light">
+                      <option value="user" <?= $editUser['role']=='user'?'selected':''; ?>>User</option>
+                      <option value="admin" <?= $editUser['role']=='admin'?'selected':''; ?>>Admin</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-1">
+                  <button type="submit" name="update_user" class="btn btn-primary w-100 btn-action shadow-sm" style="height: 100%; border-radius: 8px;">
+                    <i class="fas fa-save me-1"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <?php endif; ?>
+
+
+          <div class="table-container">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nama</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                if ($result->num_rows > 0):
+                  $no = 1; // ✅ Nomor urut mulai dari 1
+                  while ($user = $result->fetch_assoc()):
+                ?>
+                    <tr>
+                      <td><?= $no++ ?></td> 
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <div class="avatar me-2" style="width: 30px; height: 30px; font-size: 12px;">
+                            <?= substr($user['nama'], 0, 1) ?>
+                          </div>
+                          <?= htmlspecialchars($user['nama']) ?>
                         </div>
-                        <?= htmlspecialchars($user['nama']) ?>
-                      </div>
-                    </td>
-                    <td><?= htmlspecialchars($user['email']) ?></td>
-                    <td>
-                      <span class="badge <?= $user['role'] == 'admin' ? 'bg-danger' : 'bg-primary' ?>">
-                        <i class="fas <?= $user['role'] == 'admin' ? 'fa-user-shield' : 'fa-user' ?> me-1"></i>
-                        <?= $user['role'] ?>
-                      </span>
-                    </td>
-                    <td>
-                      <?php if ($user['id'] != $_SESSION['user_id']): ?>
-                        <a href="users.php?delete=<?= $user['id'] ?>" class="btn btn-danger btn-action"
-                          onclick="return confirm('Yakin ingin menghapus pengguna ini?')">
-                          <i class="fas fa-trash-alt me-1"></i> Hapus
-                        </a>
-                      <?php else: ?>
-                        <span class="badge bg-secondary">
-                          <i class="fas fa-user-check me-1"></i> Akun Aktif
+                      </td>
+                      <td><?= htmlspecialchars($user['email']) ?></td>
+                      <td>
+                        <span class="badge <?= $user['role'] == 'admin' ? 'bg-danger' : 'bg-primary' ?>">
+                          <i class="fas <?= $user['role'] == 'admin' ? 'fa-user-shield' : 'fa-user' ?> me-1"></i>
+                          <?= $user['role'] ?>
                         </span>
-                      <?php endif; ?>
+                      </td>
+                      <td>
+                        <a href="users.php?edit=<?= $user['id'] ?>" class="btn btn-primary btn-action me-2">
+                          <i class="fas fa-edit me-1"></i> Edit
+                        </a>
+                        <?php if ($user['id'] != $_SESSION['user_id']): ?>
+                          <a href="users.php?delete=<?= $user['id'] ?>" class="btn btn-danger btn-action"
+                            onclick="return confirm('Yakin ingin menghapus pengguna ini?')">
+                            <i class="fas fa-trash-alt me-1"></i> Hapus
+                          </a>
+                        <?php else: ?>
+                          <span class="badge bg-secondary">
+                            <i class="fas fa-user-check me-1"></i> Akun Aktif
+                          </span>
+                        <?php endif; ?>
+                      </td>
+                    </tr>
+                  <?php endwhile;
+                else: ?>
+                  <tr>
+                    <td colspan="5" class="text-center py-4">
+                      <i class="fas fa-users fa-3x mb-3 text-muted"></i>
+                      <p>Tidak ada data pengguna</p>
                     </td>
                   </tr>
-                <?php endwhile;
-              else: ?>
-                <tr>
-                  <td colspan="5" class="text-center py-4">
-                    <i class="fas fa-users fa-3x mb-3 text-muted"></i>
-                    <p>Tidak ada data pengguna</p>
-                  </td>
-                </tr>
-              <?php endif; ?>
-            </tbody>
+                <?php endif; ?>
+              </tbody>
 
-          </table>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

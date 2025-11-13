@@ -20,7 +20,7 @@ if (isset($_POST['login'])) {
         if ($user['role'] === 'admin') {
             header("Location: ../admin/dashboard.php");
         } else {
-            header("Location: ../pages/index.php");
+            header("Location: ../index.php");
         }
         exit;
     } else {
@@ -94,7 +94,7 @@ if (isset($_POST['login'])) {
   <div class="container min-vh-100 d-flex flex-column justify-content-center align-items-center">
     <div class="card login-card p-4">
       <div class="text-center">
-        <a href="../pages/index.php" class="btn btn-sm btn-outline-success mb-3 position-absolute" style="top: 15px; left: 15px;">
+        <a href="./index.php" class="btn btn-sm btn-outline-success mb-3 position-absolute" style="top: 15px; left: 15px;">
           <i class="bi bi-house-door"></i> Kembali ke Beranda
         </a>
         <span class="login-icon">

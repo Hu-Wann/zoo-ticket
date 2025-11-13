@@ -54,7 +54,7 @@ try {
     }
 
     // 1) single actions via GET links (proses cepat)
-    if (isset($_GET['id']) && ($aksi === 'acc' || $aksi === 'dec')) {
+    if (isset($_GET['id']) && ($aksi === 'acc' || $aksi === 'dec' || $aksi === 'paid')) {
         $id = intval($_GET['id']);
 
         if ($aksi === 'acc') {
@@ -62,6 +62,12 @@ try {
             $stmt->bind_param("i", $id);
             $stmt->execute();
             go("Tiket #$id disetujui.");
+        } else if ($aksi === 'paid') {
+            // Tandai tiket sebagai dibayar (tidak mengubah stok)
+            $stmt = $conn->prepare("UPDATE booking SET status = 'dibayar' WHERE id = ?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            go("Tiket #$id ditandai sebagai dibayar.");
         } else { // dec
             // saat ditolak, kembalikan stok
             $conn->begin_transaction();
@@ -109,7 +115,7 @@ try {
         }
         
         // Tombol aksi massal baru: acc_selected / dec_selected / delete_selected
-        if (($aksi === 'acc_selected' || $aksi === 'dec_selected' || $aksi === 'delete_selected') && isset($_POST['selected_ids'])) {
+        if (($aksi === 'acc_selected' || $aksi === 'dec_selected' || $aksi === 'delete_selected' || $aksi === 'paid_selected') && isset($_POST['selected_ids'])) {
             $selected_ids = $_POST['selected_ids'];
             
             if (empty($selected_ids)) {
@@ -144,6 +150,18 @@ try {
                     
                     $conn->commit();
                     go("$count tiket berhasil ditolak dan stok dikembalikan.");
+
+                } else if ($aksi === 'paid_selected') {
+                    // Tandai dibayar untuk tiket terpilih
+                    $stmt = $conn->prepare("UPDATE booking SET status = 'dibayar' WHERE id = ?");
+                    
+                    foreach ($selected_ids as $id) {
+                        $stmt->bind_param("i", $id);
+                        $stmt->execute();
+                    }
+                    
+                    $conn->commit();
+                    go("$count tiket berhasil ditandai sebagai dibayar.");
                     
                 } else if ($aksi === 'delete_selected') {
                     // Hapus tiket yang dipilih

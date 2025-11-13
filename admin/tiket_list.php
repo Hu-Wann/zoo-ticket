@@ -109,6 +109,9 @@ $result = $conn->query($query);
             <button type="submit" name="aksi" value="dec_selected" class="btn btn-danger" id="rejectSelected" disabled>
                 <i class="bi bi-x-square me-1"></i> Tolak Terpilih
             </button>
+            <button type="submit" name="aksi" value="paid_selected" class="btn btn-primary" id="paidSelected" disabled>
+                <i class="bi bi-cash-coin me-1"></i> Tandai Dibayar Terpilih
+            </button>
             <button type="submit" name="aksi" value="delete_selected" class="btn btn-outline-danger" id="deleteSelected" disabled>
                 <i class="bi bi-trash me-1"></i> Hapus Terpilih
             </button>
@@ -154,14 +157,17 @@ $result = $conn->query($query);
                                     <td class="text-center">
                                         <?php
                                             $status = $row['status'];
-                                            if ($status === 'dibooking')
+                                            if ($status === 'dibooking') {
                                                 echo "<span class='badge bg-warning text-dark'>Dibooking</span>";
-                                            elseif ($status === 'acc' || $status === 'accepted')
-                                                echo "<span class='badge bg-success'>Disetujui</span>";
-                                            elseif ($status === 'dec' || $status === 'declined')
+                                            } elseif ($status === 'acc' || $status === 'accepted') {
+                                                echo "<span class='badge bg-info text-dark'>Disetujui</span>";
+                                            } elseif ($status === 'dibayar') {
+                                                echo "<span class='badge bg-success'>Dibayar</span>";
+                                            } elseif ($status === 'dec' || $status === 'declined') {
                                                 echo "<span class='badge bg-danger'>Ditolak</span>";
-                                            elseif ($status === 'kadaluwarsa')
+                                            } elseif ($status === 'kadaluwarsa') {
                                                 echo "<span class='badge bg-secondary'>Kadaluwarsa</span>";
+                                            }
                                         ?>
                                     </td>
                                     <td class="text-center">
@@ -171,6 +177,16 @@ $result = $conn->query($query);
                                             </a>
                                             <a href="proses_tiket.php?id=<?= $row['id']; ?>&aksi=dec" class="btn btn-danger btn-sm btn-action" title="Tolak">
                                                 <i class="bi bi-x-circle"></i>
+                                            </a>
+                                        <?php elseif ($status === 'acc' || $status === 'accepted'): ?>
+                                            <a href="proses_tiket.php?id=<?= $row['id']; ?>&aksi=paid" class="btn btn-primary btn-sm btn-action" title="Tandai Dibayar">
+                                                <i class="bi bi-cash-coin"></i>
+                                            </a>
+                                            <a href="print_tiket.php?id=<?= $row['id']; ?>" target="_blank" class="btn btn-primary btn-sm btn-action" title="Cetak">
+                                                <i class="bi bi-printer"></i>
+                                            </a>
+                                            <a href="javascript:void(0)" onclick="confirmDelete(<?= $row['id']; ?>)" class="btn btn-outline-danger btn-sm btn-action" title="Hapus">
+                                                <i class="bi bi-trash"></i>
                                             </a>
                                         <?php else: ?>
                                             <a href="print_tiket.php?id=<?= $row['id']; ?>" target="_blank" class="btn btn-primary btn-sm btn-action" title="Cetak">
@@ -223,6 +239,7 @@ $result = $conn->query($query);
         const actionButtons = [
             document.getElementById('approveSelected'),
             document.getElementById('rejectSelected'),
+            document.getElementById('paidSelected'),
             document.getElementById('deleteSelected')
         ];
         
@@ -254,6 +271,10 @@ $result = $conn->query($query);
             }
         } else if (action === 'dec_selected') {
             if (!confirm('Tolak semua tiket yang dipilih?')) {
+                e.preventDefault();
+            }
+        } else if (action === 'paid_selected') {
+            if (!confirm('Tandai dibayar untuk semua tiket yang dipilih?')) {
                 e.preventDefault();
             }
         } else if (action === 'delete_selected') {

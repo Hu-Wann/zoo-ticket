@@ -86,11 +86,11 @@ if (isset($_GET['logout'])) {
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="tiket.php">Tiket Saya</a>
+            <a class="nav-link" href="./pages/tiket.php">Tiket Saya</a>
           </li>
           <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
             <li class="nav-item">
-              <a class="nav-link text-primary fw-bold" href="../admin/dashboard.php">
+              <a class="nav-link text-primary fw-bold" href="./admin/dashboard.php">
                 <i class="bi bi-speedometer2"></i> Admin Panel
               </a>
             </li>
@@ -108,7 +108,7 @@ if (isset($_GET['logout'])) {
             </li>
           <?php else: ?>
             <li class="nav-item">
-              <a class="nav-link text-success" href="../acount/login.php">
+              <a class="nav-link text-success" href="./acount/login.php">
                 <i class="bi bi-box-arrow-in-right"></i> Login
               </a>
             </li>
@@ -137,12 +137,12 @@ if (isset($_GET['logout'])) {
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="animal.php">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="./pages/animal.php">
               <i class="bi bi-paw me-2"></i> Animal
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="booking.php">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="./pages/booking.php">
               <i class="bi bi-ticket-perforated me-2"></i> Booking Tiket
             </a>
           </li>
@@ -156,11 +156,11 @@ if (isset($_GET['logout'])) {
           <div>
             <h2 class="text-success fw-bold mb-2">Selamat Datang di Kebun Binatang Indah</h2>
             <p class="lead mb-3">Wisata keluarga, edukasi satwa, dan rekreasi alam terbaik di kota Anda!</p>
-            <a href="booking.php" class="btn btn-success btn-lg fw-bold shadow-sm"><i
+            <a href="./pages/booking.php" class="btn btn-success btn-lg fw-bold shadow-sm"><i
                 class="bi bi-ticket-perforated me-2"></i>Pesan Tiket Sekarang</a>
           </div>
           <img
-            src="../picture/maskot.png"
+            src="./picture/maskot.png"
             class="rounded shadow ms-md-4 mt-4 mt-md-0" alt="Zoo Hero" style="max-width: 350px;">
         </div>
 
@@ -194,13 +194,13 @@ if (isset($_GET['logout'])) {
           <div id="carouselZoo" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner rounded shadow-sm">
               <div class="carousel-item active">
-                <img src="../picture/gate.png" class="d-block w-50 mx-auto" alt="Kebun Binatang">
+                <img src="./picture/gate.png" class="d-block w-50 mx-auto" alt="Kebun Binatang">
               </div>
               <div class="carousel-item">
-                <img src="../picture/panda.jpg" class="d-block w-50 mx-auto" alt="panda">
+                <img src="./picture/panda.jpg" class="d-block w-50 mx-auto" alt="panda">
               </div>
               <div class="carousel-item">
-                <img src="../picture/koala.jpg" class="d-block w-50 mx-auto" alt="koala">
+                <img src="./picture/koala.jpg" class="d-block w-50 mx-auto" alt="koala">
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselZoo" data-bs-slide="prev">
@@ -294,7 +294,7 @@ if (isset($_GET['logout'])) {
           </div>
           <div class="col-md-2 col-6">
             <div class="card shadow-sm h-100 text-center overflow-hidden d-flex flex-column justify-content-between">
-              <img src="../picture/panda.jpg" class="animal-img" alt="Panda">
+              <img src="./picture/panda.jpg" class="animal-img" alt="Panda">
               <div class="card-body py-2">
                 <h6 class="card-title text-success mb-0 fs-5">Panda</h6>
               </div>
@@ -302,7 +302,7 @@ if (isset($_GET['logout'])) {
           </div>
           <div class="col-md-2 col-6">
             <div class="card shadow-sm h-100 text-center overflow-hidden d-flex flex-column justify-content-between">
-              <img src="../picture/koala.jpg" class="animal-img" alt="Koala">
+              <img src="./picture/koala.jpg" class="animal-img" alt="Koala">
               <div class="card-body py-2">
                 <h6 class="card-title text-success mb-0 fs-5">Koala</h6>
               </div>

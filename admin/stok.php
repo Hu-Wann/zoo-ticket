@@ -172,55 +172,7 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
 <body>
     <div class="d-flex">
         <!-- Sidebar -->
-        <div class="sidebar">
-            <div class="logo">
-                <i class="fas fa-paw me-2"></i> Zoo Admin
-            </div>
-            <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link" href="dashboard.php">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="hewan.php">
-                        <i class="fas fa-hippo"></i>
-                        <span>Kelola Hewan</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="laporan_tiket.php">
-                        <i class="fas fa-ticket-alt"></i>
-                        <span>Kelola Tiket</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="stok.php">
-                        <i class="fas fa-calendar-day"></i>
-                        <span>Kelola Stok</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="users.php">
-                        <i class="fas fa-users"></i>
-                        <span>Kelola Pengguna</span>
-                    </a>
-                </li>
-                <li class="nav-item mt-4">
-                    <a class="nav-link" href="../pages/index.php">
-                        <i class="fas fa-home"></i>
-                        <span>Halaman Utama</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="../acount/logout.php">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Logout</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+        <?php include 'sidebar.php'; ?>
 
         <!-- Main Content -->
         <div class="main-content">

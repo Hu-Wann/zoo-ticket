@@ -4,7 +4,7 @@ session_start();
 // Logout jika tombol logout ditekan 
 if (isset($_GET['logout'])) {
   session_destroy();
-  header("Location: index.php");
+  header("Location: ../index.php");
   exit;
 }
 ?>
@@ -66,6 +66,11 @@ if (isset($_GET['logout'])) {
       padding: 24px 0 12px 0;
       margin-top: 48px;
     }
+
+    /* Sidebar (match index.php) */
+    .sidebar { min-height: 100vh; background-color: #d4f8d4; padding-top: 20px; border-right: 2px solid #b2f7b2; }
+    .sidebar-link { border-radius: 0.5rem; padding: 0.5rem 1rem; transition: background 0.2s, color 0.2s; }
+    .sidebar-link:hover, .sidebar-link.active { background: linear-gradient(90deg, #e8fbe8 60%, #b2f7b2 100%); color: #157347 !important; text-decoration: none; }
   </style>
 </head>
 
@@ -73,7 +78,7 @@ if (isset($_GET['logout'])) {
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="index.php">
+      <a class="navbar-brand" href="../index.php">
         <i class="bi bi-tree-fill me-2"></i>Zoo Ticket
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -81,15 +86,6 @@ if (isset($_GET['logout'])) {
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="index.php">Beranda</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="animal.php">Hewan</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="booking.php">Booking</a>
-          </li>
           <li class="nav-item">
             <a class="nav-link" href="tiket.php">Tiket Saya</a>
           </li>
@@ -130,7 +126,30 @@ if (isset($_GET['logout'])) {
     </div>
   </div>
 
-  <div class="container">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-2 sidebar position-sticky" style="top: 80px; height: calc(100vh - 80px); z-index: 2;">
+        <?php $page = basename($_SERVER['SCRIPT_NAME']); ?>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link <?php echo $page==='index.php'?'active':''; ?>" href="../index.php">
+              <i class="bi bi-house-door me-2"></i> Beranda
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link <?php echo $page==='animal.php'?'active':''; ?>" href="animal.php">
+              <i class="bi bi-paw me-2"></i> Animal
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link <?php echo $page==='booking.php'?'active':''; ?>" href="booking.php">
+              <i class="bi bi-ticket-perforated me-2"></i> Booking Tiket
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-10 p-4">
     <!-- Pesan Error/Success -->
     <?php if (isset($_SESSION['error'])): ?>
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -239,12 +258,6 @@ if (isset($_GET['logout'])) {
                 </div>
               </div>
             </div>
-
-            <div class="mb-3">
-              <label for="catatan" class="form-label fw-bold">Catatan Tambahan</label>
-              <textarea class="form-control" id="catatan" name="catatan" rows="2" placeholder="(Opsional)"></textarea>
-            </div>
-
             <div class="mb-4">
               <div class="alert alert-success mb-2">
                 <strong>Harga Tiket:</strong>
@@ -295,6 +308,8 @@ if (isset($_GET['logout'])) {
         </div>
 
 
+      </div>
+    </div>
       </div>
     </div>
   </div>
