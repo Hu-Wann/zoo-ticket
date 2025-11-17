@@ -50,9 +50,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
   exit;
 }
 
+// Tambah pengguna baru
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_user'])) {
+  $nama = mysqli_real_escape_string($conn, $_POST['nama']);
+  $email = mysqli_real_escape_string($conn, $_POST['email']);
+  $role = mysqli_real_escape_string($conn, $_POST['role']);
+  $password = $_POST['password'] ?? '';
+
+  if ($password === '') {
+    header("Location: users.php?status=error_password");
+    exit;
+  }
+
+  $hash = password_hash($password, PASSWORD_DEFAULT);
+  $conn->query("INSERT INTO users (nama, email, role, password) VALUES ('$nama', '$email', '$role', '$hash')");
+  header("Location: users.php?status=created");
+  exit;
+}
+
 
 // Ambil data pengguna
-$query = "SELECT * FROM users ORDER BY id DESC";
+$q = isset($_GET['q']) ? trim($_GET['q']) : '';
+$where = '';
+if ($q !== '') {
+  $qEsc = mysqli_real_escape_string($conn, $q);
+  $like = "%$qEsc%";
+  $where = "WHERE nama LIKE '$like' OR email LIKE '$like' OR role LIKE '$like'";
+}
+$query = "SELECT * FROM users $where ORDER BY id DESC";
 $result = $conn->query($query);
 ?>
 
@@ -138,7 +163,6 @@ $result = $conn->query($query);
     }
 
     .btn-action {
-      border-radius: 50px;
       padding: 6px 15px;
       font-weight: 500;
       transition: all 0.3s;
@@ -213,6 +237,14 @@ $result = $conn->query($query);
           <div class="alert alert-danger">
             <i class="fas fa-exclamation-circle me-2"></i> Tidak dapat menghapus akun admin yang sedang aktif!
           </div>
+        <?php elseif (isset($_GET['status']) && $_GET['status'] == 'created'): ?>
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle me-2"></i> Pengguna baru berhasil dibuat!
+          </div>
+        <?php elseif (isset($_GET['status']) && $_GET['status'] == 'error_password'): ?>
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i> Password wajib diisi untuk akun baru!
+          </div>
         <?php endif; ?>
 
         <div class="content-card">
@@ -220,49 +252,74 @@ $result = $conn->query($query);
             <h5 class="mb-0">
               <i class="fas fa-users me-2 text-primary"></i> Daftar Pengguna
             </h5>
-            <div>
+            <div class="d-flex align-items-center gap-2">
+              <form method="GET" action="users.php" class="d-flex gap-2">
+                <input type="text" name="q" class="form-control" placeholder="Cari akun" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
+                <button type="submit" class="btn btn-success btn-action"><i class="fas fa-search"></i> Cari</button>
+                <a href="users.php" class="btn btn-outline-secondary btn-action">Reset</a>
+              </form>
               <a href="dashboard.php" class="btn btn-outline-secondary btn-action">
                 <i class="fas fa-arrow-left me-1"></i> Kembali
               </a>
             </div>
           </div>
 
-          <?php if ($editUser): ?>
           <div class="card p-4 mb-4 shadow-sm border-0">
-            <h5 class="text-primary mb-3"><i class="fas fa-user-edit me-2"></i> Edit Pengguna</h5>
+            <h5 class="text-primary mb-3">
+              <?php if ($editUser): ?>
+                <i class="fas fa-user-edit me-2"></i> Edit Pengguna
+              <?php else: ?>
+                <i class="fas fa-user-plus me-2"></i> Tambah Pengguna
+              <?php endif; ?>
+            </h5>
             <form method="POST" action="users.php">
-              <input type="hidden" name="id" value="<?= (int)$editUser['id'] ?>">
+              <?php if ($editUser): ?>
+                <input type="hidden" name="id" value="<?= (int)$editUser['id'] ?>">
+              <?php endif; ?>
               <div class="row g-3 align-items-center">
                 <div class="col-md-3">
                   <div class="input-group">
                     <span class="input-group-text bg-light border-0"><i class="fas fa-user text-primary"></i></span>
-                    <input type="text" name="nama" class="form-control border-0 bg-light" placeholder="Nama Lengkap" value="<?= htmlspecialchars($editUser['nama']) ?>" required>
+                    <input type="text" name="nama" class="form-control border-0 bg-light" placeholder="Nama Lengkap" value="<?= $editUser ? htmlspecialchars($editUser['nama']) : '' ?>" required>
                   </div>
                 </div>
                 <div class="col-md-3">
                   <div class="input-group">
                     <span class="input-group-text bg-light border-0"><i class="fas fa-envelope text-primary"></i></span>
-                    <input type="email" name="email" class="form-control border-0 bg-light" placeholder="Email" value="<?= htmlspecialchars($editUser['email']) ?>" required>
+                    <input type="email" name="email" class="form-control border-0 bg-light" placeholder="Email" value="<?= $editUser ? htmlspecialchars($editUser['email']) : '' ?>" required>
                   </div>
                 </div>
                 <div class="col-md-2">
                   <div class="input-group">
                     <span class="input-group-text bg-light border-0"><i class="fas fa-user-tag text-primary"></i></span>
                     <select name="role" class="form-select border-0 bg-light">
-                      <option value="user" <?= $editUser['role']=='user'?'selected':''; ?>>User</option>
-                      <option value="admin" <?= $editUser['role']=='admin'?'selected':''; ?>>Admin</option>
+                      <option value="user" <?= $editUser && $editUser['role']=='user'?'selected':''; ?>>User</option>
+                      <option value="admin" <?= $editUser && $editUser['role']=='admin'?'selected':''; ?>>Admin</option>
                     </select>
                   </div>
                 </div>
+                <div class="col-md-3">
+                  <div class="input-group">
+                    <span class="input-group-text bg-light border-0"><i class="fas fa-lock text-primary"></i></span>
+                    <input type="password" name="password" class="form-control border-0 bg-light" placeholder="<?= $editUser ? 'Kata sandi baru (opsional)' : 'Password' ?>" <?= $editUser ? '' : 'required' ?> minlength="6">
+                  </div>
+                </div>
                 <div class="col-md-1">
-                  <button type="submit" name="update_user" class="btn btn-primary w-100 btn-action shadow-sm" style="height: 100%; border-radius: 8px;">
-                    <i class="fas fa-save me-1"></i>
-                  </button>
+                  <?php if ($editUser): ?>
+                    <button type="submit" name="update_user" class="btn btn-primary w-100 btn-action shadow-sm" style="height: 100%; border-radius: 8px;">
+                      <i class="fas fa-save me-1"></i>
+                    </button>
+                  <?php else: ?>
+                    <button type="submit" name="create_user" class="btn btn-success w-100 btn-action shadow-sm" style="height: 100%; border-radius: 8px;">
+                      <i class="fas fa-plus me-1"></i>
+                    </button>
+                  <?php endif; ?>
                 </div>
               </div>
             </form>
           </div>
-          <?php endif; ?>
+
+          
 
 
           <div class="table-container">

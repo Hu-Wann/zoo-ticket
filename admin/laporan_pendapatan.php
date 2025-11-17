@@ -89,6 +89,7 @@ $laba_rugi = $totalPendapatan - $totalPengeluaran;
   <title>Laporan Keuangan - Admin</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body {
       background-color: #f8fff8;
@@ -143,15 +144,18 @@ $laba_rugi = $totalPendapatan - $totalPengeluaran;
             <form method="GET" class="row g-3">
               <div class="col-md-4">
                 <label for="start_date" class="form-label">Tanggal Mulai</label>
-                <input type="date" class="form-control" id="start_date" name="start_date" value="<?php echo htmlspecialchars($start_date); ?>">
+                <input type="date" class="form-control" id="start_date" name="start_date"
+                  value="<?php echo htmlspecialchars($start_date); ?>">
               </div>
               <div class="col-md-4">
                 <label for="end_date" class="form-label">Tanggal Akhir</label>
-                <input type="date" class="form-control" id="end_date" name="end_date" value="<?php echo htmlspecialchars($end_date); ?>">
+                <input type="date" class="form-control" id="end_date" name="end_date"
+                  value="<?php echo htmlspecialchars($end_date); ?>">
               </div>
               <div class="col-md-4 d-flex align-items-end">
                 <button type="submit" class="btn btn-success me-2"><i class="bi bi-search"></i> Cari</button>
-                <a href="laporan_pendapatan.php" class="btn btn-outline-secondary"><i class="bi bi-arrow-clockwise"></i> Reset</a>
+                <a href="laporan_pendapatan.php" class="btn btn-outline-secondary"><i class="bi bi-arrow-clockwise"></i>
+                  Reset</a>
               </div>
             </form>
           </div>
@@ -163,7 +167,8 @@ $laba_rugi = $totalPendapatan - $totalPengeluaran;
                 <div class="card-body">
                   <h5 class="card-title"><i class="bi bi-arrow-down-circle"></i> Total Pendapatan</h5>
                   <h3>Rp <?php echo number_format($totalPendapatan, 0, ',', '.'); ?></h3>
-                  <small>Periode: <?php echo date('d/m/Y', strtotime($start_date)) . ' - ' . date('d/m/Y', strtotime($end_date)); ?></small>
+                  <small>Periode:
+                    <?php echo date('d/m/Y', strtotime($start_date)) . ' - ' . date('d/m/Y', strtotime($end_date)); ?></small>
                 </div>
               </div>
             </div>
@@ -172,7 +177,8 @@ $laba_rugi = $totalPendapatan - $totalPengeluaran;
                 <div class="card-body">
                   <h5 class="card-title"><i class="bi bi-arrow-up-circle"></i> Total Pengeluaran</h5>
                   <h3>Rp <?php echo number_format($totalPengeluaran, 0, ',', '.'); ?></h3>
-                  <small>Periode: <?php echo date('d/m/Y', strtotime($start_date)) . ' - ' . date('d/m/Y', strtotime($end_date)); ?></small>
+                  <small>Periode:
+                    <?php echo date('d/m/Y', strtotime($start_date)) . ' - ' . date('d/m/Y', strtotime($end_date)); ?></small>
                 </div>
               </div>
             </div>
@@ -191,7 +197,8 @@ $laba_rugi = $totalPendapatan - $totalPengeluaran;
           <div class="card p-4 mb-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h3 class="section-title"><i class="bi bi-calendar-day"></i> Laporan Harian</h3>
-              <button class="btn btn-outline-success no-print" onclick="window.print()"><i class="bi bi-printer"></i> Print</button>
+              <button class="btn btn-outline-success no-print" onclick="window.print()"><i class="bi bi-printer"></i>
+                Print</button>
             </div>
             <div class="table-responsive">
               <table class="table table-bordered table-striped align-middle">
@@ -228,7 +235,8 @@ $laba_rugi = $totalPendapatan - $totalPengeluaran;
           <div class="card p-4 mb-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h3 class="section-title"><i class="bi bi-calendar-month"></i> Laporan Penghasilan Bulanan</h3>
-              <button class="btn btn-outline-success no-print" onclick="window.print()"><i class="bi bi-printer"></i> Print</button>
+              <button class="btn btn-outline-success no-print" onclick="window.print()"><i class="bi bi-printer"></i>
+                Print</button>
             </div>
             <div class="table-responsive">
               <table class="table table-bordered table-striped align-middle">
@@ -343,8 +351,10 @@ $laba_rugi = $totalPendapatan - $totalPengeluaran;
           </div>
 
           <div class="mt-4 text-center no-print">
-            <a href="dashboard.php" class="btn btn-outline-success"><i class="bi bi-arrow-left"></i> Kembali ke Dashboard</a>
-            <a href="laporan_tiket.php" class="btn btn-success ms-2"><i class="bi bi-ticket-perforated"></i> Laporan Tiket</a>
+            <a href="dashboard.php" class="btn btn-outline-success"><i class="bi bi-arrow-left"></i> Kembali ke
+              Dashboard</a>
+            <a href="laporan_tiket.php" class="btn btn-success ms-2"><i class="bi bi-ticket-perforated"></i> Laporan
+              Tiket</a>
           </div>
         </div>
       </div>

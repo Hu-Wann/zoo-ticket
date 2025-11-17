@@ -3,8 +3,8 @@ include "../database/conn.php";
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $nama     = $_POST['nama'];
-  $email    = $_POST['email'];
+  $nama     = mysqli_real_escape_string($conn, $_POST['nama']);
+  $email    = mysqli_real_escape_string($conn, $_POST['email']);
   $password = $_POST['password'];
   $confirm  = $_POST['confirm'];
 
@@ -13,10 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($password !== $confirm) {
     $pesan = "<div class='alert alert-danger text-center'>❌ Password tidak cocok!</div>";
   } else {
-    $password_md5 = md5($password);
+    $hash = password_hash($password, PASSWORD_DEFAULT);
 
     $sql = "INSERT INTO users (nama, email, password, role) 
-            VALUES ('$nama', '$email', '$password_md5', '$role')";
+            VALUES ('$nama', '$email', '$hash', '$role')";
 
     if ($conn->query($sql) === TRUE) {
       header("Location: ../acount/login.php");

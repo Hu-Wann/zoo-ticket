@@ -43,6 +43,24 @@ if ($resultPendapatan->num_rows > 0) {
     'jumlah_tiket' => 0
   ];
 }
+
+$conn->query("CREATE TABLE IF NOT EXISTS admin_messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  sender_name VARCHAR(100),
+  sender_email VARCHAR(150),
+  content TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  is_read TINYINT(1) DEFAULT 0
+) ENGINE=InnoDB");
+
+if (isset($_GET['mark_read']) && is_numeric($_GET['mark_read'])) {
+  $mid = (int)$_GET['mark_read'];
+  $conn->query("UPDATE admin_messages SET is_read=1 WHERE id=$mid");
+  header("Location: dashboard.php");
+  exit;
+}
+
+$messages = $conn->query("SELECT * FROM admin_messages ORDER BY created_at DESC LIMIT 5");
 ?>
 
 <!DOCTYPE html>
@@ -284,6 +302,42 @@ if ($resultPendapatan->num_rows > 0) {
                     <i class="fas fa-file-alt me-1"></i> Lihat Laporan Lengkap
                   </a>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pesan untuk Admin -->
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-inbox me-2"></i> Pesan Masuk</h5>
+              </div>
+              <div class="card-body">
+                <?php if ($messages && $messages->num_rows > 0): ?>
+                  <div class="list-group">
+                    <?php while($msg = $messages->fetch_assoc()): ?>
+                      <div class="list-group-item d-flex justify-content-between align-items-start">
+                        <div class="ms-2 me-auto">
+                          <div class="fw-bold">
+                            <?= htmlspecialchars($msg['sender_name'] ?? 'Pengunjung') ?>
+                            <span class="text-muted">&lt;<?= htmlspecialchars($msg['sender_email'] ?? '') ?>&gt;</span>
+                          </div>
+                          <div><?= nl2br(htmlspecialchars($msg['content'])) ?></div>
+                          <small class="text-muted"><?= date('d-m-Y H:i', strtotime($msg['created_at'])) ?></small>
+                        </div>
+                        <?php if ((int)$msg['is_read'] === 0): ?>
+                          <a href="dashboard.php?mark_read=<?= (int)$msg['id'] ?>" class="badge bg-success rounded-pill">Tandai dibaca</a>
+                        <?php else: ?>
+                          <span class="badge bg-secondary rounded-pill">Dibaca</span>
+                        <?php endif; ?>
+                      </div>
+                    <?php endwhile; ?>
+                  </div>
+                <?php else: ?>
+                  <p class="text-muted mb-0">Belum ada pesan yang masuk.</p>
+                <?php endif; ?>
               </div>
             </div>
           </div>

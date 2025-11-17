@@ -28,12 +28,18 @@ if (isset($_POST['tambah_stok'])) {
     $check = $conn->query("SELECT * FROM stok_tiket WHERE tanggal = '$tanggal'");
     if ($check && $check->num_rows > 0) {
         $conn->query("UPDATE stok_tiket SET sisa_stok = '$jumlah_stok' WHERE tanggal = '$tanggal'");
--        $pesan = "Stok tanggal $tanggal berhasil diupdate menjadi $jumlah_stok";
-+        $pesan = "<div class='alert alert-success'>Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) . " berhasil diupdate menjadi <strong>$jumlah_stok</strong>.</div>";
+        $pesan = "<div class='alert alert-success'>
+Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) .
+            " berhasil ditambahkan sebanyak <strong>$jumlah_stok</strong>.
+</div>";
+
     } else {
         $conn->query("INSERT INTO stok_tiket (tanggal, sisa_stok) VALUES ('$tanggal', '$jumlah_stok')");
--        $pesan = "Stok tanggal $tanggal berhasil ditambahkan sebanyak $jumlah_stok";
-+        $pesan = "<div class='alert alert-success'>Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) . " berhasil ditambahkan sebanyak <strong>$jumlah_stok</strong>.</div>";
+       $pesan = "<div class='alert alert-success'>
+Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) . 
+" berhasil ditambahkan sebanyak <strong>$jumlah_stok</strong>.
+</div>";
+
     }
 }
 
@@ -124,13 +130,13 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
             text-align: center;
         }
 
-              .main-content {
-    margin-left: var(--sidebar-width);
-    padding: 25px;
-    width: calc(100% - var(--sidebar-width));
-    transition: all 0.3s;
-    min-height: 100vh;
-}
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 25px;
+            width: calc(100% - var(--sidebar-width));
+            transition: all 0.3s;
+            min-height: 100vh;
+        }
 
         .header {
             background: white;
@@ -161,13 +167,10 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
             font-weight: 600;
         }
 
-       @media (max-width: 992px) {
-    .main-content {
-        margin-left: 70px;
-        width: calc(100% - 70px);
-    }
-}
-
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 70px;
+            }
 
             .sidebar .logo {
                 padding: 15px;
@@ -184,8 +187,10 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
                 justify-content: center;
             }
 
-     
-
+            .main-content {
+                margin-left: 70px;
+                width: calc(100% - 70px);
+            }
         }
     </style>
 </head>
@@ -210,7 +215,8 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
                 </div>
             </div>
 
-            <?php if (isset($pesan)) echo $pesan; ?>
+            <?php if (isset($pesan))
+                echo $pesan; ?>
 
             <div class="row mb-4">
                 <div class="col-md-6">
@@ -228,18 +234,14 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
                                 ?>
                                 <div class="mb-3">
                                     <label for="tanggal" class="form-label">Tanggal</label>
-                                    <input type="date"
-                                        class="form-control"
-                                        id="tanggal"
-                                        name="tanggal"
-                                        required
-                                        min="<?= $min_date ?>"
-                                        max="<?= $max_date ?>">
+                                    <input type="date" class="form-control" id="tanggal" name="tanggal" required
+                                        min="<?= $min_date ?>" max="<?= $max_date ?>">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="jumlah_stok" class="form-label">Jumlah Stok</label>
-                                    <input type="number" class="form-control" id="jumlah_stok" name="jumlah_stok" min="0" required>
+                                    <input type="number" class="form-control" id="jumlah_stok" name="jumlah_stok"
+                                        min="0" required>
                                 </div>
                                 <button type="submit" name="tambah_stok" class="btn btn-success">
                                     <i class="fas fa-save me-1"></i> Simpan Stok
@@ -354,13 +356,13 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
           </div>
         </td>
       </tr>";
-                                    $no++;
+                                        $no++;
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='4' class='text-center text-muted'>Belum ada data stok</td></tr>";
                                 }
-                            } else {
-                                echo "<tr><td colspan='4' class='text-center text-muted'>Belum ada data stok</td></tr>";
-                            }
-                            ?>
-                        </tbody>
+                                ?>
+                            </tbody>
                         </table>
                     </div>
                 </div>

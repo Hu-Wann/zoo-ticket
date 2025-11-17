@@ -36,6 +36,7 @@ foreach ($pengeluaran_per_tanggal as $data) {
     <title>Daftar Pengeluaran - Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             background-color: #f8f9fa;
@@ -105,15 +106,17 @@ foreach ($pengeluaran_per_tanggal as $data) {
             <div class="container mb-5">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <a href="laporan_pendapatan.php" class="btn btn-outline-dark"><i class="bi bi-arrow-left"></i> Kembali ke Laporan</a>
-                        <a href="pengeluaran_tambah.php" class="btn btn-success"><i class="bi bi-plus-circle"></i> Tambah Pengeluaran</a>
+                        <a href="laporan_pendapatan.php" class="btn btn-outline-dark"><i class="bi bi-arrow-left"></i>
+                            Kembali ke Laporan</a>
+                        <a href="pengeluaran_tambah.php" class="btn btn-success"><i class="bi bi-plus-circle"></i>
+                            Tambah Pengeluaran</a>
                     </div>
                 </div>
 
                 <?php if (isset($_SESSION['success'])): ?>
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="bi bi-check-circle-fill"></i> <?= $_SESSION['success'];
-                                                                unset($_SESSION['success']); ?>
+                        unset($_SESSION['success']); ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 <?php endif; ?>
@@ -148,12 +151,16 @@ foreach ($pengeluaran_per_tanggal as $data) {
                                             <td class="fw-bold"><?= date("d F Y", strtotime($data['tanggal'])) ?></td>
                                             <td><?= htmlspecialchars($data['kategori']) ?></td>
                                             <td><?= htmlspecialchars($data['deskripsi']) ?></td>
-                                            <td class="text-end fw-bold">Rp <?= number_format($data['total_jumlah'], 0, ',', '.') ?></td>
+                                            <td class="text-end fw-bold">Rp
+                                                <?= number_format($data['total_jumlah'], 0, ',', '.') ?></td>
                                             <td class="text-center">
-                                                <a href="pengeluaran_edit.php?tanggal=<?= $data['tanggal'] ?>" class="btn btn-sm btn-outline-primary btn-action" title="Edit">
+                                                <a href="pengeluaran_edit.php?tanggal=<?= $data['tanggal'] ?>"
+                                                    class="btn btn-sm btn-outline-primary btn-action" title="Edit">
                                                     <i class="bi bi-pencil-square"></i>
                                                 </a>
-                                                <a href="sys_pengeluaran.php?action=delete_by_date&tanggal=<?= $data['tanggal'] ?>" class="btn btn-sm btn-outline-danger btn-action" title="Hapus" onclick="return confirm('Yakin ingin menghapus semua data pengeluaran pada tanggal ini?');">
+                                                <a href="sys_pengeluaran.php?action=delete_by_date&tanggal=<?= $data['tanggal'] ?>"
+                                                    class="btn btn-sm btn-outline-danger btn-action" title="Hapus"
+                                                    onclick="return confirm('Yakin ingin menghapus semua data pengeluaran pada tanggal ini?');">
                                                     <i class="bi bi-trash3"></i>
                                                 </a>
                                             </td>
