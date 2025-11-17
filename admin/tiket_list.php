@@ -112,9 +112,6 @@ $result = $conn->query($query);
             <button type="submit" name="aksi" value="paid_selected" class="btn btn-primary" id="paidSelected" disabled>
                 <i class="bi bi-cash-coin me-1"></i> Tandai Dibayar Terpilih
             </button>
-            <button type="submit" name="aksi" value="delete_selected" class="btn btn-outline-danger" id="deleteSelected" disabled>
-                <i class="bi bi-trash me-1"></i> Hapus Terpilih
-            </button>
             <div class="selected-count" id="selectedCount">0 tiket dipilih</div>
         </div>
 
@@ -167,6 +164,8 @@ $result = $conn->query($query);
                                                 echo "<span class='badge bg-danger'>Ditolak</span>";
                                             } elseif ($status === 'kadaluwarsa') {
                                                 echo "<span class='badge bg-secondary'>Kadaluwarsa</span>";
+                                            } elseif ($status === 'dibatalkan') {
+                                                echo "<span class='badge bg-danger'>Dibatalkan</span>";
                                             }
                                         ?>
                                     </td>
@@ -185,15 +184,9 @@ $result = $conn->query($query);
                                             <a href="print_tiket.php?id=<?= $row['id']; ?>" target="_blank" class="btn btn-primary btn-sm btn-action" title="Cetak">
                                                 <i class="bi bi-printer"></i>
                                             </a>
-                                            <a href="javascript:void(0)" onclick="confirmDelete(<?= $row['id']; ?>)" class="btn btn-outline-danger btn-sm btn-action" title="Hapus">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
                                         <?php else: ?>
                                             <a href="print_tiket.php?id=<?= $row['id']; ?>" target="_blank" class="btn btn-primary btn-sm btn-action" title="Cetak">
                                                 <i class="bi bi-printer"></i>
-                                            </a>
-                                            <a href="javascript:void(0)" onclick="confirmDelete(<?= $row['id']; ?>)" class="btn btn-outline-danger btn-sm btn-action" title="Hapus">
-                                                <i class="bi bi-trash"></i>
                                             </a>
                                         <?php endif; ?>
                                     </td>
@@ -213,12 +206,6 @@ $result = $conn->query($query);
         </div>
     </form>
 </div>
-
-<!-- Form untuk hapus tiket -->
-<form id="deleteForm" method="POST" action="proses_tiket.php" style="display: none;">
-    <input type="hidden" name="id" id="deleteId">
-    <input type="hidden" name="aksi" value="delete">
-</form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -240,7 +227,7 @@ $result = $conn->query($query);
             document.getElementById('approveSelected'),
             document.getElementById('rejectSelected'),
             document.getElementById('paidSelected'),
-            document.getElementById('deleteSelected')
+  
         ];
         
         actionButtons.forEach(button => {
@@ -252,15 +239,6 @@ $result = $conn->query($query);
     document.querySelectorAll('.ticket-checkbox').forEach(checkbox => {
         checkbox.addEventListener('change', updateSelectedCount);
     });
-
-    // Konfirmasi hapus tiket
-    function confirmDelete(id) {
-        if (confirm('Yakin ingin menghapus tiket ini?')) {
-            document.getElementById('deleteId').value = id;
-            document.getElementById('deleteForm').submit();
-        }
-    }
-
     // Konfirmasi sebelum submit form
     document.getElementById('ticketForm').addEventListener('submit', function(e) {
         const action = e.submitter.value;
@@ -277,11 +255,7 @@ $result = $conn->query($query);
             if (!confirm('Tandai dibayar untuk semua tiket yang dipilih?')) {
                 e.preventDefault();
             }
-        } else if (action === 'delete_selected') {
-            if (!confirm('Hapus semua tiket yang dipilih?')) {
-                e.preventDefault();
-            }
-        }
+        } 
     });
 
     // Inisialisasi counter

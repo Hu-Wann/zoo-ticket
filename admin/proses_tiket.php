@@ -164,17 +164,16 @@ try {
                     go("$count tiket berhasil ditandai sebagai dibayar.");
                     
                 } else if ($aksi === 'delete_selected') {
-                    // Hapus tiket yang dipilih
+                    // Hapus tiket yang dipilih (tanpa mengembalikan stok)
                     $stmt = $conn->prepare("DELETE FROM booking WHERE id = ?");
                     
                     foreach ($selected_ids as $id) {
-                        restore_stok_if_needed($conn, $id);
                         $stmt->bind_param("i", $id);
                         $stmt->execute();
                     }
                     
                     $conn->commit();
-                    go("$count tiket berhasil dihapus dan stok dikembalikan.");
+                    go("$count tiket berhasil dihapus.");
                 }
                 
             } catch (Exception $e) {
@@ -187,46 +186,21 @@ try {
         if ($aksi === 'delete' && isset($_POST['id'])) {
             $id = intval($_POST['id']);
 
-            // Ambil dulu status & jumlah tiket untuk mengembalikan stok jika sebelumnya stok sudah dikurangkan
+            // Ambil dulu status & jumlah tiket (informasi, tetapi tidak akan restore stok saat delete)
             $stmt = $conn->prepare("SELECT status, jumlah_dewasa, jumlah_remaja, jumlah_anak, tanggal_kunjungan FROM booking WHERE id = ?");
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $res = $stmt->get_result();
             if ($res->num_rows === 0) go("Booking tidak ditemukan", 'err');
-            $row = $res->fetch_assoc();
-
-            $total = intval($row['jumlah_dewasa']) + intval($row['jumlah_remaja']) + intval($row['jumlah_anak']);
-            $tanggal = $row['tanggal_kunjungan'];
-            $status = $row['status'];
 
             $conn->begin_transaction();
             try {
-                // jika status bukan 'dibooking' ? tetap restore kalau stok sebelumnya sudah dikurangi
-                // (kebijakan: jika booking sudah pernah mengurangi stok maka kita restore saat dihapus)
-                if ($total > 0) {
-                    // cek apakah ada baris stok_tiket
-                    $cek = $conn->prepare("SELECT sisa_stok FROM stok_tiket WHERE tanggal = ?");
-                    $cek->bind_param("s", $tanggal);
-                    $cek->execute();
-                    $cek_res = $cek->get_result();
-                    if ($cek_res->num_rows > 0) {
-                        $upd = $conn->prepare("UPDATE stok_tiket SET sisa_stok = sisa_stok + ? WHERE tanggal = ?");
-                        $upd->bind_param("is", $total, $tanggal);
-                        $upd->execute();
-                    } else {
-                        // jika tidak ada baris stok, buat baris baru (opsional) — biasanya tidak diinginkan
-                        $ins = $conn->prepare("INSERT INTO stok_tiket (tanggal, sisa_stok) VALUES (?, ?)");
-                        $ins->bind_param("si", $tanggal, $total);
-                        $ins->execute();
-                    }
-                }
-
-                // hapus booking
+                // Hapus booking tanpa mengembalikan stok
                 $del = $conn->prepare("DELETE FROM booking WHERE id = ?");
                 $del->bind_param("i", $id);
                 $del->execute();
                 $conn->commit();
-                go("Booking #$id berhasil dihapus dan stok dikembalikan.");
+                go("Booking #$id berhasil dihapus.");
             } catch (Exception $e) {
                 $conn->rollback();
                 go("Gagal menghapus booking: " . $e->getMessage(), 'err');

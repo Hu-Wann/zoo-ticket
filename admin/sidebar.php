@@ -87,6 +87,12 @@
       </a>
     </li>
     <li class="nav-item">
+      <a class="nav-link" href="stok.php">
+        <i class="fas fa-cog me-1"></i> 
+        <span>Kelola stok</span>
+      </a>
+    </li>
+    <li class="nav-item">
       <a class="nav-link" href="laporan_pendapatan.php">
         <i class="fas fa-chart-line"></i>
         <span>Laporan Keuangan</span>

@@ -33,8 +33,12 @@ switch ($status) {
     case 'dec':
     case 'declined':
     case 'ditolak':
-    case 'dibatalkan':
         $statusText = 'Ditolak';
+        $statusClass = 'bg-danger text-white';
+        $statusIcon = 'bi-x-circle-fill';
+        break;
+    case 'dibatalkan':
+        $statusText = 'Dibatalkan';
         $statusClass = 'bg-danger text-white';
         $statusIcon = 'bi-x-circle-fill';
         break;

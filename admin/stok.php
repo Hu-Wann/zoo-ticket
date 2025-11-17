@@ -23,19 +23,36 @@ if (isset($_POST['hapus_tanggal'])) {
 // Tambah stok 
 if (isset($_POST['tambah_stok'])) {
     $tanggal = $_POST['tanggal'];
-    $jumlah_stok = $_POST['jumlah_stok'];
-
+    $jumlah_stok = intval($_POST['jumlah_stok']);
     // Cek apakah tanggal sudah ada
     $check = $conn->query("SELECT * FROM stok_tiket WHERE tanggal = '$tanggal'");
-
-    if ($check->num_rows > 0) {
-        // Update stok jika tanggal sudah ada
+    if ($check && $check->num_rows > 0) {
         $conn->query("UPDATE stok_tiket SET sisa_stok = '$jumlah_stok' WHERE tanggal = '$tanggal'");
-        $pesan = "<div class='alert alert-success'>Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) . " berhasil diupdate!</div>";
+-        $pesan = "Stok tanggal $tanggal berhasil diupdate menjadi $jumlah_stok";
++        $pesan = "<div class='alert alert-success'>Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) . " berhasil diupdate menjadi <strong>$jumlah_stok</strong>.</div>";
     } else {
-        // Tambah stok baru jika tanggal belum ada
         $conn->query("INSERT INTO stok_tiket (tanggal, sisa_stok) VALUES ('$tanggal', '$jumlah_stok')");
-        $pesan = "<div class='alert alert-success'>Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) . " berhasil ditambahkan!</div>";
+-        $pesan = "Stok tanggal $tanggal berhasil ditambahkan sebanyak $jumlah_stok";
++        $pesan = "<div class='alert alert-success'>Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) . " berhasil ditambahkan sebanyak <strong>$jumlah_stok</strong>.</div>";
+    }
+}
+
+// Edit stok via modal per baris
+if (isset($_POST['edit_stok'])) {
+    $tanggal = $_POST['edit_tanggal'];
+    $jumlah_stok = intval($_POST['jumlah_stok']);
+
+    if (strtotime($tanggal) < strtotime(date('Y-m-d'))) {
+        $pesan = "<div class='alert alert-danger'>Tidak dapat mengedit stok untuk tanggal yang sudah lewat.</div>";
+    } else {
+        $check = $conn->query("SELECT * FROM stok_tiket WHERE tanggal = '$tanggal'");
+        if ($check && $check->num_rows > 0) {
+            $conn->query("UPDATE stok_tiket SET sisa_stok = '$jumlah_stok' WHERE tanggal = '$tanggal'");
+            $pesan = "<div class='alert alert-success'>Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) . " berhasil diupdate menjadi <strong>$jumlah_stok</strong>.</div>";
+        } else {
+            $conn->query("INSERT INTO stok_tiket (tanggal, sisa_stok) VALUES ('$tanggal', '$jumlah_stok')");
+            $pesan = "<div class='alert alert-success'>Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) . " belum ada, dibuat baru sebanyak <strong>$jumlah_stok</strong>.</div>";
+        }
     }
 }
 
@@ -107,11 +124,13 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
             text-align: center;
         }
 
-        .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 20px;
-            transition: all 0.3s;
-        }
+              .main-content {
+    margin-left: var(--sidebar-width);
+    padding: 25px;
+    width: calc(100% - var(--sidebar-width));
+    transition: all 0.3s;
+    min-height: 100vh;
+}
 
         .header {
             background: white;
@@ -142,10 +161,13 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
             font-weight: 600;
         }
 
-        @media (max-width: 992px) {
-            .sidebar {
-                width: 70px;
-            }
+       @media (max-width: 992px) {
+    .main-content {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+    }
+}
+
 
             .sidebar .logo {
                 padding: 15px;
@@ -162,9 +184,8 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
                 justify-content: center;
             }
 
-            .main-content {
-                margin-left: 70px;
-            }
+     
+
         }
     </style>
 </head>
@@ -285,26 +306,61 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
                                             $status = '<span class="badge bg-danger">Habis</span>';
                                         }
 
+                                        $modalId = 'editModal_' . $no;
+                                        $tglDisplay = date('d-m-Y', strtotime($row['tanggal']));
+
                                         echo "<tr>
         <td>{$no}</td>
-        <td>" . date('d-m-Y', strtotime($row['tanggal'])) . "</td>
+        <td>{$tglDisplay}</td>
         <td>{$row['sisa_stok']}</td>
         <td>{$status}</td>
         <td>
+          <button type='button' class='btn btn-sm btn-warning me-1' data-bs-toggle='modal' data-bs-target='#{$modalId}'>
+            <i class='fas fa-edit'></i>
+          </button>
           <form method='post' action='' style='display:inline;'>
             <input type='hidden' name='hapus_tanggal' value='{$row['tanggal']}'>
             <button type='submit' class='btn btn-sm btn-danger' onclick=\"return confirm('Yakin ingin menghapus stok tanggal ini?')\">
               <i class='fas fa-trash'></i>
             </button>
           </form>
+
+          <div class='modal fade' id='{$modalId}' tabindex='-1' aria-labelledby='{$modalId}Label' aria-hidden='true'>
+            <div class='modal-dialog'>
+              <div class='modal-content'>
+                <div class='modal-header'>
+                  <h5 class='modal-title' id='{$modalId}Label'>Edit Stok Tanggal {$tglDisplay}</h5>
+                  <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                </div>
+                <form method='post' action=''>
+                  <div class='modal-body'>
+                    <input type='hidden' name='edit_tanggal' value='{$row['tanggal']}'>
+                    <div class='mb-3'>
+                      <label class='form-label'>Tanggal</label>
+                      <input type='text' class='form-control' value='{$tglDisplay}' readonly>
+                    </div>
+                    <div class='mb-3'>
+                      <label for='jumlah_stok_{$no}' class='form-label'>Jumlah Stok</label>
+                      <input type='number' class='form-control' id='jumlah_stok_{$no}' name='jumlah_stok' min='0' value='{$row['sisa_stok']}' required>
+                    </div>
+                  </div>
+                  <div class='modal-footer'>
+                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Batal</button>
+                    <button type='submit' name='edit_stok' class='btn btn-primary'>Simpan</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </td>
       </tr>";
-                                    }
-                                } else {
-                                    echo "<tr><td colspan='4' class='text-center text-muted'>Belum ada data stok</td></tr>";
+                                    $no++;
                                 }
-                                ?>
-                            </tbody>
+                            } else {
+                                echo "<tr><td colspan='4' class='text-center text-muted'>Belum ada data stok</td></tr>";
+                            }
+                            ?>
+                        </tbody>
                         </table>
                     </div>
                 </div>

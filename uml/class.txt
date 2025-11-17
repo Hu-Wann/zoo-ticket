@@ -1,0 +1,51 @@
+<mxfile host="app.diagrams.net" modified="2025-11-12T00:00:00.000Z" agent="5.0" version="24.7.12" editor="draw.io" type="device">
+  <diagram name="Class Diagram Zoo Beautiket">
+    <mxGraphModel dx="1500" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- USER CLASS -->
+        <mxCell id="userClass" value="User&#xa;---------------------&#xa;+ id: int&#xa;+ nama: string&#xa;+ email: string&#xa;+ password: string&#xa;+ role: string&#xa;---------------------&#xa;+ login()&#xa;+ register()&#xa;+ updateProfile()" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;strokeColor=#000;fontSize=12;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="50" y="80" width="260" height="260" as="geometry"/>
+        </mxCell>
+
+        <!-- BOOKING CLASS -->
+        <mxCell id="bookingClass" value="Booking&#xa;---------------------&#xa;+ id: int&#xa;+ nama_pengunjung: string&#xa;+ email: string (FK)&#xa;+ tanggal_kunjungan: date&#xa;+ jumlah_dewasa: int&#xa;+ jumlah_anak: int&#xa;+ jumlah_remaja: int&#xa;+ total_harga: int&#xa;+ catatan: text&#xa;+ tanggal_booking: timestamp&#xa;+ status: string&#xa;+ kode_redeem: string&#xa;---------------------&#xa;+ createBooking()&#xa;+ calculatePrice()&#xa;+ approveBooking()&#xa;+ cancelBooking()" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;strokeColor=#000;fontSize=12;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="400" y="80" width="330" height="400" as="geometry"/>
+        </mxCell>
+
+        <!-- ANIMAL CLASS -->
+        <mxCell id="animalClass" value="Animal&#xa;---------------------&#xa;+ id: int&#xa;+ nama: string&#xa;+ habitat: string&#xa;+ makanan: string&#xa;+ deskripsi: text&#xa;+ status_konservasi: string&#xa;+ gambar: string&#xa;---------------------&#xa;+ addAnimal()&#xa;+ updateAnimal()&#xa;+ deleteAnimal()&#xa;+ searchAnimal()" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;strokeColor=#000;fontSize=12;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="900" y="80" width="300" height="350" as="geometry"/>
+        </mxCell>
+
+        <!-- STOK TIKET CLASS -->
+        <mxCell id="stokClass" value="StokTiket&#xa;---------------------&#xa;+ id: int&#xa;+ tanggal: date&#xa;+ sisa_stok: int&#xa;---------------------&#xa;+ getStokByDate()&#xa;+ updateStok()&#xa;+ reduceStok()" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;strokeColor=#000;fontSize=12;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="900" y="500" width="260" height="240" as="geometry"/>
+        </mxCell>
+
+        <!-- PENGELUARAN CLASS -->
+        <mxCell id="pengeluaranClass" value="Pengeluaran&#xa;---------------------&#xa;+ id: int&#xa;+ id_admin: int (FK)&#xa;+ tanggal: date&#xa;+ kategori: string&#xa;+ deskripsi: text&#xa;+ jumlah: int&#xa;+ created_at: timestamp&#xa;---------------------&#xa;+ addPengeluaran()&#xa;+ updatePengeluaran()&#xa;+ deletePengeluaran()" style="shape=rectangle;rounded=0;whiteSpace=wrap;html=1;strokeColor=#000;fontSize=12;fillColor=#f5f5f5;" vertex="1" parent="1">
+          <mxGeometry x="50" y="450" width="300" height="330" as="geometry"/>
+        </mxCell>
+
+        <!-- RELATION: USER 1..* BOOKING -->
+        <mxCell id="rel1" value="1 .. *" edge="1" parent="1" source="userClass" target="bookingClass" style="endArrow=none;startArrow=none;strokeColor=#000;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- RELATION: USER 1..* PENGELUARAN -->
+        <mxCell id="rel2" value="1 .. *" edge="1" parent="1" source="userClass" target="pengeluaranClass" style="endArrow=none;startArrow=none;strokeColor=#000;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- RELATION: STOKTIKET 1..* BOOKING -->
+        <mxCell id="rel3" value="1 .. *" edge="1" parent="1" source="stokClass" target="bookingClass" style="endArrow=none;startArrow=none;strokeColor=#000;">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

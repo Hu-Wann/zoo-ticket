@@ -223,7 +223,7 @@ $conn->query("
                     case 'declined':
                     case 'ditolak':
                     case 'dibatalkan':
-                        $statusText = 'Ditolak';
+                        $statusText = 'Dibatalkan';
                         $statusClass = 'bg-danger text-white';
                         $statusIcon = 'bi-x-circle-fill';
                         break;
@@ -247,6 +247,16 @@ $conn->query("
                         $statusClass = 'bg-warning text-dark';
                         $statusIcon = 'bi-clock-history';
                         break;
+                }
+                
+                // Tentukan apakah tiket bisa dibatalkan oleh user
+                $canCancel = true;
+                $blockedStatuses = ['dibayar', 'kadaluwarsa', 'dec', 'declined', 'ditolak', 'dibatalkan'];
+                if (in_array($status, $blockedStatuses, true)) {
+                    $canCancel = false;
+                }
+                if (strtotime($row['tanggal_kunjungan']) < strtotime(date('Y-m-d'))) {
+                    $canCancel = false; // tidak bisa batal jika tanggal sudah lewat
                 }
 
                 echo '
@@ -278,6 +288,15 @@ $conn->query("
                         <div class="ticket-code">' . $kode_redeem . '</div>
                         <p class="text-muted mt-2 small">Tunjukkan bukti ini pada karcis di kebun binatang</p>';
                 if ($status !== 'kadaluwarsa') {
+                    // Tampilkan tombol Batalkan jika memenuhi syarat (tanpa karakter \n)
+                    if ($canCancel) {
+                        echo '<form method="POST" action="cancel_tiket.php" class="mt-2" onsubmit="return confirm(\'Yakin ingin membatalkan tiket ini?\')">';
+                        echo '<input type="hidden" name="booking_id" value="' . intval($row['id']) . '">';
+                        echo '<button type="submit" class="btn btn-outline-danger btn-sm">';
+                        echo '<i class="bi bi-x-circle"></i> Batalkan';
+                        echo '</button>';
+                        echo '</form>';
+                    }
                 } else {
                     echo '<button class="btn btn-outline-secondary btn-sm mt-3" disabled>
                         <i class="bi bi-x-circle"></i> Tidak Dapat Dicetak
@@ -306,10 +325,6 @@ $conn->query("
         </div>
       </div>
     </div>
-
-    <script>
-        // Tidak diperlukan fungsi print custom; tombol membuka halaman cetak khusus
-    </script>
 </body>
 
 </html>
