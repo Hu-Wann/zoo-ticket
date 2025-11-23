@@ -34,9 +34,8 @@ foreach ($pengeluaran_per_tanggal as $data) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Daftar Pengeluaran - Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <?php include '../bootstrap.php'; ?>
+
     <style>
         body {
             background-color: #f8f9fa;
@@ -152,7 +151,8 @@ foreach ($pengeluaran_per_tanggal as $data) {
                                             <td><?= htmlspecialchars($data['kategori']) ?></td>
                                             <td><?= htmlspecialchars($data['deskripsi']) ?></td>
                                             <td class="text-end fw-bold">Rp
-                                                <?= number_format($data['total_jumlah'], 0, ',', '.') ?></td>
+                                                <?= number_format($data['total_jumlah'], 0, ',', '.') ?>
+                                            </td>
                                             <td class="text-center">
                                                 <a href="pengeluaran_edit.php?tanggal=<?= $data['tanggal'] ?>"
                                                     class="btn btn-sm btn-outline-primary btn-action" title="Edit">
@@ -173,7 +173,6 @@ foreach ($pengeluaran_per_tanggal as $data) {
                 </div>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

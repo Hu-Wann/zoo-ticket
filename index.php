@@ -18,8 +18,7 @@ if (isset($_GET['logout'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kebun Binatang Indah</title>
   <link rel="icon" href="picture/maskot.png" type="image/png">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <?php include 'bootstrap.php'; ?>
   <style>
     body {
       background-color: #f8fff8;
@@ -76,7 +75,8 @@ if (isset($_GET['logout'])) {
 
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light sticky-top" style="background-color: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top"
+    style="background-color: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
     <div class="container">
       <a class="navbar-brand" href="index.php" style="font-weight: bold; color: #198754;">
         <i class="bi bi-tree-fill me-2"></i>Zoo Ticket
@@ -120,7 +120,8 @@ if (isset($_GET['logout'])) {
   </nav>
 
   <!-- Header -->
-  <div class="ticket-header" style="background-color: #198754; color: white; padding: 2rem 0; margin-bottom: 2rem; border-radius: 0 0 1rem 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+  <div class="ticket-header"
+    style="background-color: #198754; color: white; padding: 2rem 0; margin-bottom: 2rem; border-radius: 0 0 1rem 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
     <div class="container text-center">
       <h1><i class="bi bi-house-fill me-2"></i>Beranda</h1>
       <p class="lead">Selamat datang di Kebun Binatang Indah</p>
@@ -138,12 +139,14 @@ if (isset($_GET['logout'])) {
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="./pages/animal.php">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link"
+              href="./pages/animal.php">
               <i class="bi bi-paw me-2"></i> Animal
             </a>
           </li>
           <li class="nav-item mb-2">
-            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link" href="./pages/booking.php">
+            <a class="nav-link text-success fw-bold fs-4 d-flex align-items-center sidebar-link"
+              href="./pages/booking.php">
               <i class="bi bi-ticket-perforated me-2"></i> Booking Tiket
             </a>
           </li>
@@ -160,9 +163,8 @@ if (isset($_GET['logout'])) {
             <a href="./pages/booking.php" class="btn btn-success btn-lg fw-bold shadow-sm"><i
                 class="bi bi-ticket-perforated me-2"></i>Pesan Tiket Sekarang</a>
           </div>
-          <img
-            src="./picture/maskot.png"
-            class="rounded shadow ms-md-4 mt-4 mt-md-0" alt="Zoo Hero" style="max-width: 350px;">
+          <img src="./picture/maskot.png" class="rounded shadow ms-md-4 mt-4 mt-md-0" alt="Zoo Hero"
+            style="max-width: 350px;">
         </div>
 
         <!-- Info Jam Buka, Lokasi, Kontak -->
@@ -191,7 +193,8 @@ if (isset($_GET['logout'])) {
         </div>
 
         <!-- Carousel -->
-        <div class="p-4 mb-4" style="background: linear-gradient(135deg, #e8fbe8 70%, #b2f7b2 100%); border-radius: 1rem;">
+        <div class="p-4 mb-4"
+          style="background: linear-gradient(135deg, #e8fbe8 70%, #b2f7b2 100%); border-radius: 1rem;">
           <div id="carouselZoo" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner rounded shadow-sm">
               <div class="carousel-item active">
@@ -218,7 +221,8 @@ if (isset($_GET['logout'])) {
         <div class="row g-4 mb-4">
           <div class="col-md-3">
             <div class="card shadow-sm h-100 text-center">
-              <img src="https://tempatwisataseru.com/wp-content/uploads/2019/08/Taman-Satwa-Ragunan-via-Medcom.jpg" class="card-img-top" alt="Area Bermain Anak">
+              <img src="https://tempatwisataseru.com/wp-content/uploads/2019/08/Taman-Satwa-Ragunan-via-Medcom.jpg"
+                class="card-img-top" alt="Area Bermain Anak">
               <div class="card-body">
                 <h5 class="card-title text-success">Area Bermain Anak</h5>
                 <p class="card-text">Tempat bermain aman & menyenangkan bagi anak-anak dengan wahana edukatif.</p>
@@ -228,7 +232,9 @@ if (isset($_GET['logout'])) {
           </div>
           <div class="col-md-3">
             <div class="card shadow-sm h-100 text-center">
-              <img src="https://awsimages.detik.net.id/community/media/visual/2023/03/21/you-coffee-and-resto-kafe-dekat-ragunan-5_169.jpeg?w=1200" class="card-img-top rounded-top" alt="Restoran & Kafe">
+              <img
+                src="https://awsimages.detik.net.id/community/media/visual/2023/03/21/you-coffee-and-resto-kafe-dekat-ragunan-5_169.jpeg?w=1200"
+                class="card-img-top rounded-top" alt="Restoran & Kafe">
               <div class="card-body">
                 <h5 class="card-title text-success fs-4">Restoran & Kafe</h5>
                 <p class="card-text fs-5">Nikmati hidangan lezat dengan suasana alam terbuka.</p>
@@ -238,7 +244,8 @@ if (isset($_GET['logout'])) {
           </div>
           <div class="col-md-3">
             <div class="card shadow-sm h-100 text-center">
-              <img src="https://gembiralokazoo.com/storage/facility/6iCvP3hJgMz2ijztLzDqHZRK3nVPzG5aglTC6tLM.jpg" class="card-img-top rounded-top" alt="Toko Souvenir">
+              <img src="https://gembiralokazoo.com/storage/facility/6iCvP3hJgMz2ijztLzDqHZRK3nVPzG5aglTC6tLM.jpg"
+                class="card-img-top rounded-top" alt="Toko Souvenir">
               <div class="card-body">
                 <h5 class="card-title text-success fs-4">Toko Souvenir</h5>
                 <p class="card-text fs-5">Dapatkan oleh-oleh dan cinderamata khas Kebun Binatang Indah.</p>
@@ -248,7 +255,9 @@ if (isset($_GET['logout'])) {
           </div>
           <div class="col-md-3">
             <div class="card shadow-sm h-100 text-center">
-              <img src="https://cloud.jpnn.com/photo/jatim/news/normal/2023/04/24/salah-satu-area-piknik-untuk-menggelar-tikar-di-kebun-binata-c9z0.jpg" class="card-img-top rounded-top" alt="Area Piknik">
+              <img
+                src="https://cloud.jpnn.com/photo/jatim/news/normal/2023/04/24/salah-satu-area-piknik-untuk-menggelar-tikar-di-kebun-binata-c9z0.jpg"
+                class="card-img-top rounded-top" alt="Area Piknik">
               <div class="card-body">
                 <h5 class="card-title text-success fs-4">Area Piknik</h5>
                 <p class="card-text fs-5">Ruang terbuka hijau untuk bersantai bersama keluarga.</p>
@@ -263,7 +272,9 @@ if (isset($_GET['logout'])) {
         <div class="row g-4 mb-4">
           <div class="col-md-2 col-6">
             <div class="card shadow-sm h-100 text-center overflow-hidden d-flex flex-column justify-content-between">
-              <img src="https://offloadmedia.feverup.com/secretchicago.com/wp-content/uploads/2022/05/13053044/Linvoln-Park-Zoo-scaled.jpg" class="animal-img" alt="Singa">
+              <img
+                src="https://offloadmedia.feverup.com/secretchicago.com/wp-content/uploads/2022/05/13053044/Linvoln-Park-Zoo-scaled.jpg"
+                class="animal-img" alt="Singa">
               <div class="card-body py-2">
                 <h6 class="card-title text-success mb-0 fs-5">Singa</h6>
               </div>
@@ -271,7 +282,8 @@ if (isset($_GET['logout'])) {
           </div>
           <div class="col-md-2 col-6">
             <div class="card shadow-sm h-100 text-center overflow-hidden d-flex flex-column justify-content-between">
-              <img src="https://cdn.pixabay.com/video/2022/07/03/123027-726548100_tiny.jpg" class="animal-img" alt="Gajah">
+              <img src="https://cdn.pixabay.com/video/2022/07/03/123027-726548100_tiny.jpg" class="animal-img"
+                alt="Gajah">
               <div class="card-body py-2">
                 <h6 class="card-title text-success mb-0 fs-5">Gajah</h6>
               </div>
@@ -279,7 +291,8 @@ if (isset($_GET['logout'])) {
           </div>
           <div class="col-md-2 col-6">
             <div class="card shadow-sm h-100 text-center overflow-hidden d-flex flex-column justify-content-between">
-              <img src="https://www.shutterstock.com/shutterstock/videos/3647070567/thumb/1.jpg?ip=x480" class="animal-img" alt="Harimau">
+              <img src="https://www.shutterstock.com/shutterstock/videos/3647070567/thumb/1.jpg?ip=x480"
+                class="animal-img" alt="Harimau">
               <div class="card-body py-2">
                 <h6 class="card-title text-success mb-0 fs-5">Harimau</h6>
               </div>
@@ -287,7 +300,8 @@ if (isset($_GET['logout'])) {
           </div>
           <div class="col-md-2 col-6">
             <div class="card shadow-sm h-100 text-center overflow-hidden d-flex flex-column justify-content-between">
-              <img src="https://giraffeworlds.com/wp-content/uploads/habitat_giraffe.jpg" class="animal-img" alt="Jerapah">
+              <img src="https://giraffeworlds.com/wp-content/uploads/habitat_giraffe.jpg" class="animal-img"
+                alt="Jerapah">
               <div class="card-body py-2">
                 <h6 class="card-title text-success mb-0 fs-5">Jerapah</h6>
               </div>
@@ -341,7 +355,9 @@ if (isset($_GET['logout'])) {
         <div class="row g-3">
           <div class="col-md-3 col-6">
             <div class="card shadow-sm h-100">
-              <img src="https://wendytour.co.id/wp-content/uploads/2019/10/N454J_1decbeed-5a7d-472e-af89-c1e6d888cf8c.jpg" class="card-img-top rounded-top" alt="Gerbang Kebun Binatang">
+              <img
+                src="https://wendytour.co.id/wp-content/uploads/2019/10/N454J_1decbeed-5a7d-472e-af89-c1e6d888cf8c.jpg"
+                class="card-img-top rounded-top" alt="Gerbang Kebun Binatang">
               <div class="card-body p-2">
                 <p class="card-text text-success fw-bold mb-0">beruang</p>
                 <small class="text-muted">salah satu beruang yang ada dalam pengawasan kami</small>
@@ -350,7 +366,9 @@ if (isset($_GET['logout'])) {
           </div>
           <div class="col-md-3 col-6">
             <div class="card shadow-sm h-100">
-              <img src="https://media.istockphoto.com/id/1289372008/id/foto/anak-anak-memberi-makan-badak-di-kebun-binatang-keluarga-di-taman-hewan.jpg?b=1&s=612x612&w=0&k=20&c=zCFWXCkd8lrCbh3A9I2lPYIWLP9wJbfU9TqHuMDoop0=" class="card-img-top rounded-top" alt="Memberi Makan Badak">
+              <img
+                src="https://media.istockphoto.com/id/1289372008/id/foto/anak-anak-memberi-makan-badak-di-kebun-binatang-keluarga-di-taman-hewan.jpg?b=1&s=612x612&w=0&k=20&c=zCFWXCkd8lrCbh3A9I2lPYIWLP9wJbfU9TqHuMDoop0="
+                class="card-img-top rounded-top" alt="Memberi Makan Badak">
               <div class="card-body p-2">
                 <p class="card-text text-success fw-bold mb-0">Memberi Makan Badak</p>
                 <small class="text-muted">Interaksi pengunjung dengan satwa</small>
@@ -359,7 +377,9 @@ if (isset($_GET['logout'])) {
           </div>
           <div class="col-md-3 col-6">
             <div class="card shadow-sm h-100">
-              <img src="https://p4.wallpaperbetter.com/wallpaper/332/374/563/panda-china-giant-panda-zoo-cute-animals-wallpaper-preview.jpg" class="card-img-top rounded-top" alt="Panda">
+              <img
+                src="https://p4.wallpaperbetter.com/wallpaper/332/374/563/panda-china-giant-panda-zoo-cute-animals-wallpaper-preview.jpg"
+                class="card-img-top rounded-top" alt="Panda">
               <div class="card-body p-2">
                 <p class="card-text text-success fw-bold mb-0">Panda Lucu</p>
                 <small class="text-muted">Satwa favorit anak-anak</small>
@@ -368,7 +388,9 @@ if (isset($_GET['logout'])) {
           </div>
           <div class="col-md-3 col-6">
             <div class="card shadow-sm h-100">
-              <img src="https://media.istockphoto.com/id/1248960383/id/video/seorang-wanita-muda-dan-putra-kecilnya-memberi-makan-jerapah-di-taman-safari.jpg?s=640x640&k=20&c=eowyDFndfphzbaXukc2hXGxCknP0T7vk7TAsCwPg42I=" class="card-img-top rounded-top" alt="Memberi Makan Jerapah">
+              <img
+                src="https://media.istockphoto.com/id/1248960383/id/video/seorang-wanita-muda-dan-putra-kecilnya-memberi-makan-jerapah-di-taman-safari.jpg?s=640x640&k=20&c=eowyDFndfphzbaXukc2hXGxCknP0T7vk7TAsCwPg42I="
+                class="card-img-top rounded-top" alt="Memberi Makan Jerapah">
               <div class="card-body p-2">
                 <p class="card-text text-success fw-bold mb-0">Memberi Makan Jerapah</p>
                 <small class="text-muted">Pengalaman seru bersama keluarga</small>

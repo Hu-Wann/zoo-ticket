@@ -3,10 +3,10 @@ include "../database/conn.php";
 session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $nama     = mysqli_real_escape_string($conn, $_POST['nama']);
-  $email    = mysqli_real_escape_string($conn, $_POST['email']);
+  $nama = mysqli_real_escape_string($conn, $_POST['nama']);
+  $email = mysqli_real_escape_string($conn, $_POST['email']);
   $password = $_POST['password'];
-  $confirm  = $_POST['confirm'];
+  $confirm = $_POST['confirm'];
 
   $role = 'user';
 
@@ -34,8 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Daftar - Kebun Binatang Indah</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <?php include '../bootstrap.php'; ?>
   <style>
     body {
       min-height: 100vh;
@@ -52,10 +51,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       animation: fadeIn 1s;
     }
 
- @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px);}
-      to { opacity: 1; transform: translateY(0);}
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
+
     .register-header {
       background: linear-gradient(90deg, #198754 60%, #43e97b 100%);
       color: white;
@@ -95,7 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <h4 class="mb-0 mt-2">Daftar Akun Baru</h4>
     </div>
     <div class="card-body p-4">
-      <?php if (!empty($pesan)) echo $pesan; ?>
+      <?php if (!empty($pesan))
+        echo $pesan; ?>
 
       <form action="" method="POST">
         <div class="mb-3">
@@ -131,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
 
-     <button type="submit" class="btn btn-register w-100">Daftar</button>
+        <button type="submit" class="btn btn-register w-100">Daftar</button>
 
       </form>
 
@@ -140,8 +148,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

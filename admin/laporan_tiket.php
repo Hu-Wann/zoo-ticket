@@ -32,9 +32,8 @@ $detailResult = mysqli_query($conn, $queryDetail);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Laporan Penjualan Tiket - Admin</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <?php include '../bootstrap.php'; ?>
+
   <style>
     body {
       background-color: #f8fff8;
@@ -73,9 +72,9 @@ $detailResult = mysqli_query($conn, $queryDetail);
     }
 
     @media print {
-      .no-print {
-        display: none;
-      }
+      .no-print { display: none; }
+      .sidebar { display: none !important; }
+      .main-content { margin-left: 0 !important; padding: 0 !important; }
     }
   </style>
 </head>
@@ -119,6 +118,7 @@ $detailResult = mysqli_query($conn, $queryDetail);
                 <div class="stat-number text-white"><?= $total_semua ?></div>
               </div>
             </div>
+            <div class="div"> <a href="tiket_list.php" class="btn btn-success ms-2"><i class="bi bi-ticket-perforated"></i> Kelola Tiket</a></div>
           </div>
 
           <!-- Detail Tiket -->
@@ -128,6 +128,7 @@ $detailResult = mysqli_query($conn, $queryDetail);
               <button class="btn btn-outline-success no-print" onclick="window.print()">
                 <i class="bi bi-printer"></i> Print
               </button>
+              
             </div>
             <div class="table-responsive">
               <table class="table table-bordered table-striped align-middle">
@@ -150,18 +151,24 @@ $detailResult = mysqli_query($conn, $queryDetail);
                   if (mysqli_num_rows($detailResult) > 0) {
                     $no = 1;
                     while ($row = mysqli_fetch_assoc($detailResult)) {
+
                       echo "<tr>
-                        <td>{$no}</td>
-                        <td>" . htmlspecialchars($row['nama_pengunjung']) . "</td>
-                        <td>" . htmlspecialchars($row['email']) . "</td>
-                        <td>" . date('d-m-Y', strtotime($row['tanggal_kunjungan'])) . "</td>
-                        <td>{$row['jumlah_dewasa']}</td>
-                        <td>{$row['jumlah_remaja']}</td>
-                        <td>{$row['jumlah_anak']}</td>
-                        <td>" . htmlspecialchars($row['kode_redeem']) . "</td>
-                        <td>Rp " . number_format($row['total_harga'], 0, ',', '.') . "</td>
-                        <td>" . date('d-m-Y H:i', strtotime($row['tanggal_booking'])) . "</td>
-                      </tr>";
+      <td>{$no}</td>
+      <td>" . htmlspecialchars($row['nama_pengunjung'] ?? '') . "</td>
+      <td>" . htmlspecialchars($row['email'] ?? '') . "</td>
+      <td>" . (!empty($row['tanggal_kunjungan']) ? date('d-m-Y', strtotime($row['tanggal_kunjungan'])) : '-') . "</td>
+
+      <td>" . ($row['jumlah_dewasa'] ?? 0) . "</td>
+      <td>" . ($row['jumlah_remaja'] ?? 0) . "</td>
+      <td>" . ($row['jumlah_anak'] ?? 0) . "</td>
+
+      <td>" . htmlspecialchars($row['kode_redeem'] ?? '') . "</td>
+
+      <td>Rp " . number_format($row['total_harga'] ?? 0, 0, ',', '.') . "</td>
+
+      <td>" . (!empty($row['tanggal_booking']) ? date('d-m-Y H:i', strtotime($row['tanggal_booking'])) : '-') . "</td>
+    </tr>";
+
                       $no++;
                     }
                   } else {
@@ -172,17 +179,10 @@ $detailResult = mysqli_query($conn, $queryDetail);
               </table>
             </div>
           </div>
-
-          <div class="mt-4 text-center no-print">
-            <a href="dashboard.php" class="btn btn-outline-success"><i class="bi bi-arrow-left"></i> Kembali ke
-              Dashboard</a>
-            <a href="tiket_list.php" class="btn btn-success ms-2">kelola booking</a>
-            <a href="laporan_pendapatan.php" class="btn btn-success ms-2"><i class="bi bi-calendar-month"></i> Laporan
-              Bulanan</a>
-          </div>
-
         </div>
       </div>
+    </main>
+  </div>
 </body>
 
 </html>

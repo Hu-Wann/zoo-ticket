@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "../database/conn.php";
+include "../bootstrap.php";
 
 if (!isset($_SESSION['email'])) {
     $_SESSION['error'] = "Silakan login untuk membatalkan tiket.";
@@ -36,7 +37,7 @@ $status = strtolower(trim($row['status']));
 $total_tiket = intval($row['jumlah_dewasa']) + intval($row['jumlah_remaja']) + intval($row['jumlah_anak']);
 
 // Validasi status: hanya dapat batal jika belum dibayar/dibatalkan/kadaluwarsa/ditolak
-$tidak_bisa_batal = [ 'dibayar', 'kadaluwarsa', 'dec', 'declined', 'ditolak', 'dibatalkan' ];
+$tidak_bisa_batal = ['dibayar', 'kadaluwarsa', 'dec', 'declined', 'ditolak', 'dibatalkan'];
 if (in_array($status, $tidak_bisa_batal, true)) {
     $_SESSION['error'] = "Tiket dengan status tersebut tidak dapat dibatalkan.";
     header("Location: tiket.php");

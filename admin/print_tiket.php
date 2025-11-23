@@ -66,18 +66,20 @@ switch ($status) {
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Print Tiket - Zoo Ticket</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <?php include '../bootstrap.php'; ?>
+
     <style>
         body {
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 30px 0;
         }
+
         .ticket-card {
             border-radius: 1rem;
             overflow: hidden;
@@ -85,18 +87,21 @@ switch ($status) {
             margin-bottom: 1.5rem;
             border: none;
         }
+
         .card-header {
             background-color: #198754;
             color: white;
             font-weight: bold;
             padding: 1rem;
         }
+
         .status-badge {
             padding: .25rem .75rem;
             border-radius: 1rem;
             font-size: .9rem;
             font-weight: 600;
         }
+
         .ticket-code {
             font-family: monospace;
             font-size: 1.2rem;
@@ -107,66 +112,113 @@ switch ($status) {
             border-radius: .5rem;
             display: inline-block;
         }
+
         .ticket-info {
             display: flex;
             align-items: center;
             margin-bottom: .5rem;
         }
+
         .ticket-info i {
             margin-right: .5rem;
             color: #198754;
         }
+
         @media print {
-            body { padding: 0; }
-            .container { width: 700px; }
+            body {
+                padding: 0;
+            }
+
+            .container {
+                width: 700px;
+            }
         }
     </style>
 </head>
+
 <body onload="window.print()">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card ticket-card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-ticket-perforated-fill me-2"></i>Nomor: <?= htmlspecialchars($nomor) ?></span>
-                        <span class="status-badge <?= $statusClass ?>"><i class="bi <?= $statusIcon ?> me-1"></i><?= htmlspecialchars($statusText) ?></span>
+                        <span><i class=" bi bi-ticket-perforated-fill me-2"></i>Nomor:
+                            <?= htmlspecialchars($nomor) ?></span>
+                        <span class="status-badge <?= $statusClass ?>"><i class="bi <?= $statusIcon ?> me-1"></i>
+                            <?= htmlspecialchars($statusText) ?>
+                        </span>
                     </div>
                     <div class="card-body">
                         <div class="ticket-info"><i class="bi bi-person-fill"></i>
-                            <span>Nama: <strong><?= htmlspecialchars($data['nama_pengunjung']) ?></strong></span>
+                            <span>Nama: <strong>
+                                    <?= htmlspecialchars($data['nama_pengunjung']) ?>
+                                </strong></span>
                         </div>
                         <div class="ticket-info"><i class="bi bi-envelope-fill"></i>
-                            <span>Email: <strong><?= htmlspecialchars($data['email']) ?></strong></span>
+                            <span>Email: <strong>
+                                    <?= htmlspecialchars($data['email']) ?>
+                                </strong></span>
                         </div>
                         <div class="ticket-info"><i class="bi bi-calendar-event"></i>
                             <span>Tanggal Kunjungan: <strong><?= htmlspecialchars($tanggal_kunjungan) ?></strong></span>
                         </div>
                         <?php if ($data['jumlah_dewasa'] > 0): ?>
-                            <div class="ticket-info"><i class="bi bi-person-fill"></i><span>Dewasa: <strong><?= $data['jumlah_dewasa'] ?> orang</strong></span></div>
+                            <div class=" ticket-info"><i class="bi bi-person-fill"></i><span>Dewasa: <strong>
+                                        <?= $data['jumlah_dewasa'] ?> orang
+                                    </strong></span></div>
                         <?php endif; ?>
                         <?php if ($data['jumlah_remaja'] > 0): ?>
-                            <div class="ticket-info"><i class="bi bi-person"></i><span>Remaja: <strong><?= $data['jumlah_remaja'] ?> orang</strong></span></div>
+                            <div class="ticket-info"><i class="bi bi-person"></i><span>Remaja: <strong>
+                                        <?= $data['jumlah_remaja'] ?> orang
+                                    </strong></span>
+                            </div>
                         <?php endif; ?>
                         <?php if ($data['jumlah_anak'] > 0): ?>
-                            <div class="ticket-info"><i class="bi bi-person-heart"></i><span>Anak-anak: <strong><?= $data['jumlah_anak'] ?> orang</strong></span></div>
+                            <div class="ticket-info"><i class="bi bi-person-heart"></i><span>Anak-anak: <strong>
+                                        <?= $data['jumlah_anak'] ?> orang
+                                    </strong></span>
+                            </div>
                         <?php endif; ?>
 
                         <?php if ($status === 'dec'): ?>
-                            <div class="alert alert-danger mt-3 mb-0">Alasan: <?= htmlspecialchars($data['alasan'] ?? 'Tidak diketahui') ?></div>
+                            <div class="alert alert-danger mt-3 mb-0">Alasan:
+                                <?= htmlspecialchars($data['alasan'] ?? 'Tidak diketahui') ?>
+                            </div>
                         <?php endif; ?>
 
                         <div class="mt-3 text-center">
                             <p class="mb-1">Kode Redeem:</p>
-                            <div class="ticket-code"><?= $kode_redeem ?></div>
+                            <div class="ticket-code">
+                                <?= $kode_redeem ?>
+                            </div>
                             <p class="text-muted mt-2 small">Tunjukkan kode ini saat memasuki kebun binatang</p>
                         </div>
                     </div>
                     <div class="card-footer text-center bg-light">
-                        <small class="text-muted">Dipesan pada: <?= date('d F Y H:i', strtotime($data['tanggal_booking'])) ?></small>
+                        <small class=" text-muted">Dipesan pada:
+                            <?= date('d F Y H:i', strtotime($data['tanggal_booking'])) ?></small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+<script>
+    function goBack() {
+        if (window.opener && !window.opener.closed) {
+            try { window.opener.location.href = 'tiket_list.php'; } catch (e) {}
+            window.close();
+        } else {
+            window.location.href = 'tiket_list.php';
+        }
+    }
+    window.onafterprint = goBack;
+    if (window.matchMedia) {
+        const mql = window.matchMedia('print');
+        if (mql && mql.addEventListener) {
+            mql.addEventListener('change', e => { if (!e.matches) goBack(); });
+        }
+    }
+</script>
 </body>
+
 </html>

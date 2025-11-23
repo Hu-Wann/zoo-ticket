@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 // ambil jumlah data
 $totalHewan = $conn->query("SELECT COUNT(*) as jml FROM animals")->fetch_assoc()['jml'];
 $totalTiket = $conn->query("SELECT COUNT(*) as jml FROM booking")->fetch_assoc()['jml'];
-$totalUser  = $conn->query("SELECT COUNT(*) as jml FROM users")->fetch_assoc()['jml'];
+$totalUser = $conn->query("SELECT COUNT(*) as jml FROM users")->fetch_assoc()['jml'];
 
 // Ambil data stok tiket untuk hari ini
 $today = date('Y-m-d');
@@ -54,7 +54,7 @@ $conn->query("CREATE TABLE IF NOT EXISTS admin_messages (
 ) ENGINE=InnoDB");
 
 if (isset($_GET['mark_read']) && is_numeric($_GET['mark_read'])) {
-  $mid = (int)$_GET['mark_read'];
+  $mid = (int) $_GET['mark_read'];
   $conn->query("UPDATE admin_messages SET is_read=1 WHERE id=$mid");
   header("Location: dashboard.php");
   exit;
@@ -70,8 +70,7 @@ $messages = $conn->query("SELECT * FROM admin_messages ORDER BY created_at DESC 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard Admin</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <?php include '../bootstrap.php'; ?>
   <style>
     :root {
       --primary-color: #198754;
@@ -282,7 +281,8 @@ $messages = $conn->query("SELECT * FROM admin_messages ORDER BY created_at DESC 
                     <div class="card mb-3">
                       <div class="card-body">
                         <h5 class="card-title text-primary">Total Pendapatan (Dibayar)</h5>
-                        <h2 class="display-6 fw-bold">Rp <?= number_format($laporanBulanan['total_pendapatan'], 0, ',', '.') ?></h2>
+                        <h2 class="display-6 fw-bold">Rp
+                          <?= number_format($laporanBulanan['total_pendapatan'], 0, ',', '.') ?></h2>
                         <p class="text-muted">Periode: <?= date('F Y') ?></p>
                       </div>
                     </div>
@@ -306,44 +306,6 @@ $messages = $conn->query("SELECT * FROM admin_messages ORDER BY created_at DESC 
             </div>
           </div>
         </div>
-
-        <!-- Pesan untuk Admin -->
-        <div class="row mt-3">
-          <div class="col-12">
-            <div class="card">
-              <div class="card-header bg-success text-white">
-                <h5 class="mb-0"><i class="fas fa-inbox me-2"></i> Pesan Masuk</h5>
-              </div>
-              <div class="card-body">
-                <?php if ($messages && $messages->num_rows > 0): ?>
-                  <div class="list-group">
-                    <?php while($msg = $messages->fetch_assoc()): ?>
-                      <div class="list-group-item d-flex justify-content-between align-items-start">
-                        <div class="ms-2 me-auto">
-                          <div class="fw-bold">
-                            <?= htmlspecialchars($msg['sender_name'] ?? 'Pengunjung') ?>
-                            <span class="text-muted">&lt;<?= htmlspecialchars($msg['sender_email'] ?? '') ?>&gt;</span>
-                          </div>
-                          <div><?= nl2br(htmlspecialchars($msg['content'])) ?></div>
-                          <small class="text-muted"><?= date('d-m-Y H:i', strtotime($msg['created_at'])) ?></small>
-                        </div>
-                        <?php if ((int)$msg['is_read'] === 0): ?>
-                          <a href="dashboard.php?mark_read=<?= (int)$msg['id'] ?>" class="badge bg-success rounded-pill">Tandai dibaca</a>
-                        <?php else: ?>
-                          <span class="badge bg-secondary rounded-pill">Dibaca</span>
-                        <?php endif; ?>
-                      </div>
-                    <?php endwhile; ?>
-                  </div>
-                <?php else: ?>
-                  <p class="text-muted mb-0">Belum ada pesan yang masuk.</p>
-                <?php endif; ?>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-  </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

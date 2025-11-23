@@ -83,13 +83,13 @@
     <li class="nav-item">
       <a class="nav-link" href="laporan_tiket.php">
         <i class="fas fa-ticket-alt"></i>
-        <span>Kelola Tiket</span>
+        <span>Laporan Tiket</span>
       </a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="stok.php">
         <i class="fas fa-cog me-1"></i> 
-        <span>Kelola stok</span>
+        <span>Kelola Stok</span>
       </a>
     </li>
     <li class="nav-item">
@@ -107,7 +107,7 @@
     <li class="nav-item">
       <a class="nav-link" href="users.php">
         <i class="fas fa-users"></i>
-        <span>Kelola Pengguna</span>
+        <span>Kelola Akun</span>
       </a>
     </li>
     <li class="nav-item mt-4">

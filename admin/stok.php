@@ -35,9 +35,9 @@ Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) .
 
     } else {
         $conn->query("INSERT INTO stok_tiket (tanggal, sisa_stok) VALUES ('$tanggal', '$jumlah_stok')");
-       $pesan = "<div class='alert alert-success'>
-Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) . 
-" berhasil ditambahkan sebanyak <strong>$jumlah_stok</strong>.
+        $pesan = "<div class='alert alert-success'>
+Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) .
+            " berhasil ditambahkan sebanyak <strong>$jumlah_stok</strong>.
 </div>";
 
     }
@@ -72,8 +72,7 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stok Tiket - Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <?php include '../bootstrap.php'; ?>
     <style>
         :root {
             --primary-color: #198754;

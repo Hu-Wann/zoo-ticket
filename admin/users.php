@@ -25,7 +25,7 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
 // Edit user: ambil data saat GET edit=id
 $editUser = null;
 if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
-  $editId = (int)$_GET['edit'];
+  $editId = (int) $_GET['edit'];
   $res = $conn->query("SELECT id, nama, email, role FROM users WHERE id = $editId");
   if ($res && $res->num_rows === 1) {
     $editUser = $res->fetch_assoc();
@@ -34,7 +34,7 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
 
 // Update user saat POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
-  $id = (int)$_POST['id'];
+  $id = (int) $_POST['id'];
   $nama = mysqli_real_escape_string($conn, $_POST['nama']);
   $email = mysqli_real_escape_string($conn, $_POST['email']);
   $role = mysqli_real_escape_string($conn, $_POST['role']);
@@ -88,8 +88,7 @@ $result = $conn->query($query);
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kelola Pengguna - Admin</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <?php include '../bootstrap.php'; ?>
   <style>
     :root {
       --primary-color: #198754;
@@ -204,8 +203,6 @@ $result = $conn->query($query);
       justify-content: center;
       font-weight: 600;
     }
-
-   
   </style>
 </head>
 
@@ -254,7 +251,8 @@ $result = $conn->query($query);
             </h5>
             <div class="d-flex align-items-center gap-2">
               <form method="GET" action="users.php" class="d-flex gap-2">
-                <input type="text" name="q" class="form-control" placeholder="Cari akun" value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
+                <input type="text" name="q" class="form-control" placeholder="Cari akun"
+                  value="<?= htmlspecialchars($_GET['q'] ?? '') ?>">
                 <button type="submit" class="btn btn-success btn-action"><i class="fas fa-search"></i> Cari</button>
                 <a href="users.php" class="btn btn-outline-secondary btn-action">Reset</a>
               </form>
@@ -274,43 +272,48 @@ $result = $conn->query($query);
             </h5>
             <form method="POST" action="users.php">
               <?php if ($editUser): ?>
-                <input type="hidden" name="id" value="<?= (int)$editUser['id'] ?>">
+                <input type="hidden" name="id" value="<?= (int) $editUser['id'] ?>">
               <?php endif; ?>
               <div class="row g-3 align-items-center">
                 <div class="col-md-3">
                   <div class="input-group">
                     <span class="input-group-text bg-light border-0"><i class="fas fa-user text-primary"></i></span>
-                    <input type="text" name="nama" class="form-control border-0 bg-light" placeholder="Nama Lengkap" value="<?= $editUser ? htmlspecialchars($editUser['nama']) : '' ?>" required>
+                    <input type="text" name="nama" class="form-control border-0 bg-light" placeholder="Nama Lengkap"
+                      value="<?= $editUser ? htmlspecialchars($editUser['nama']) : '' ?>" required>
                   </div>
                 </div>
                 <div class="col-md-3">
                   <div class="input-group">
                     <span class="input-group-text bg-light border-0"><i class="fas fa-envelope text-primary"></i></span>
-                    <input type="email" name="email" class="form-control border-0 bg-light" placeholder="Email" value="<?= $editUser ? htmlspecialchars($editUser['email']) : '' ?>" required>
+                    <input type="email" name="email" class="form-control border-0 bg-light" placeholder="Email"
+                      value="<?= $editUser ? htmlspecialchars($editUser['email']) : '' ?>" required>
                   </div>
                 </div>
                 <div class="col-md-2">
                   <div class="input-group">
                     <span class="input-group-text bg-light border-0"><i class="fas fa-user-tag text-primary"></i></span>
                     <select name="role" class="form-select border-0 bg-light">
-                      <option value="user" <?= $editUser && $editUser['role']=='user'?'selected':''; ?>>User</option>
-                      <option value="admin" <?= $editUser && $editUser['role']=='admin'?'selected':''; ?>>Admin</option>
+                      <option value="user" <?= $editUser && $editUser['role'] == 'user' ? 'selected' : ''; ?>>User</option>
+                      <option value="admin" <?= $editUser && $editUser['role'] == 'admin' ? 'selected' : ''; ?>>Admin</option>
                     </select>
                   </div>
                 </div>
                 <div class="col-md-3">
                   <div class="input-group">
                     <span class="input-group-text bg-light border-0"><i class="fas fa-lock text-primary"></i></span>
-                    <input type="password" name="password" class="form-control border-0 bg-light" placeholder="<?= $editUser ? 'Kata sandi baru (opsional)' : 'Password' ?>" <?= $editUser ? '' : 'required' ?> minlength="6">
+                    <input type="password" name="password" class="form-control border-0 bg-light"
+                      placeholder="<?= $editUser ? 'Kata sandi baru (opsional)' : 'Password' ?>" <?= $editUser ? '' : 'required' ?> minlength="6">
                   </div>
                 </div>
                 <div class="col-md-1">
                   <?php if ($editUser): ?>
-                    <button type="submit" name="update_user" class="btn btn-primary w-100 btn-action shadow-sm" style="height: 100%; border-radius: 8px;">
+                    <button type="submit" name="update_user" class="btn btn-primary w-100 btn-action shadow-sm"
+                      style="height: 100%; border-radius: 8px;">
                       <i class="fas fa-save me-1"></i>
                     </button>
                   <?php else: ?>
-                    <button type="submit" name="create_user" class="btn btn-success w-100 btn-action shadow-sm" style="height: 100%; border-radius: 8px;">
+                    <button type="submit" name="create_user" class="btn btn-success w-100 btn-action shadow-sm"
+                      style="height: 100%; border-radius: 8px;">
                       <i class="fas fa-plus me-1"></i>
                     </button>
                   <?php endif; ?>
@@ -319,7 +322,7 @@ $result = $conn->query($query);
             </form>
           </div>
 
-          
+
 
 
           <div class="table-container">
@@ -338,18 +341,18 @@ $result = $conn->query($query);
                 if ($result->num_rows > 0):
                   $no = 1; // ✅ Nomor urut mulai dari 1
                   while ($user = $result->fetch_assoc()):
-                ?>
+                    ?>
                     <tr>
-                      <td><?= $no++ ?></td> 
+                      <td><?= $no++ ?></td>
                       <td>
                         <div class="d-flex align-items-center">
                           <div class="avatar me-2" style="width: 30px; height: 30px; font-size: 12px;">
                             <?= substr($user['nama'], 0, 1) ?>
                           </div>
-                          <?= htmlspecialchars($user['nama']) ?>
+                          <?= htmlspecialchars($user['nama'] ?? '') ?>
                         </div>
                       </td>
-                      <td><?= htmlspecialchars($user['email']) ?></td>
+                      <td><?= htmlspecialchars($user['email'] ?? '') ?></td>
                       <td>
                         <span class="badge <?= $user['role'] == 'admin' ? 'bg-danger' : 'bg-primary' ?>">
                           <i class="fas <?= $user['role'] == 'admin' ? 'fa-user-shield' : 'fa-user' ?> me-1"></i>

@@ -94,8 +94,8 @@ $hewan = $conn->query("SELECT * FROM animals");
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kelola Hewan - Admin</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <?php include '../bootstrap.php'; ?>
+
   <style>
     :root {
       --primary-color: #198754;
@@ -149,7 +149,6 @@ $hewan = $conn->query("SELECT * FROM animals");
       justify-content: center;
       font-weight: 600;
     }
-    
   </style>
 </head>
 
@@ -205,16 +204,18 @@ $hewan = $conn->query("SELECT * FROM animals");
                       <td><?= htmlspecialchars($row['status_konservasi']) ?></td>
                       <td>
                         <?php if ($row['gambar']): ?>
-                          <img src="<?= $row['gambar'] ?>" width="70" class="img-thumbnail">
+                          <img src="<?= (strpos($row['gambar'],'/')!==false || strpos($row['gambar'],'\\')!==false) ? $row['gambar'] : ('../picture/' . $row['gambar']) ?>" width="70" class="img-thumbnail">
                         <?php else: ?>
                           <span class="text-muted">Tidak ada gambar</span>
-                        <?php endif; ?>
+                         <?php endif; ?>
                       </td>
                       <td>
-                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEdit<?= $row['id'] ?>">
+                        <button class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                          data-bs-target="#modalEdit<?= $row['id'] ?>">
                           <i class="fas fa-edit"></i> Edit
                         </button>
-                        <a href="?hapus=<?= $row['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Hapus hewan ini?')">
+                        <a href="?hapus=<?= $row['id'] ?>" class="btn btn-danger btn-sm"
+                          onclick="return confirm('Hapus hewan ini?')">
                           <i class="fas fa-trash"></i> Hapus
                         </a>
                       </td>
@@ -233,23 +234,28 @@ $hewan = $conn->query("SELECT * FROM animals");
                               <input type="hidden" name="id" value="<?= $row['id'] ?>">
                               <div class="mb-3">
                                 <label class="form-label">Nama</label>
-                                <input type="text" name="nama" class="form-control" value="<?= htmlspecialchars($row['nama']) ?>" required>
+                                <input type="text" name="nama" class="form-control"
+                                  value="<?= htmlspecialchars($row['nama']) ?>" required>
                               </div>
                               <div class="mb-3">
                                 <label class="form-label">Habitat</label>
-                                <input type="text" name="habitat" class="form-control" value="<?= htmlspecialchars($row['habitat']) ?>" required>
+                                <input type="text" name="habitat" class="form-control"
+                                  value="<?= htmlspecialchars($row['habitat']) ?>" required>
                               </div>
                               <div class="mb-3">
                                 <label class="form-label">Makanan</label>
-                                <input type="text" name="makanan" class="form-control" value="<?= htmlspecialchars($row['makanan']) ?>" required>
+                                <input type="text" name="makanan" class="form-control"
+                                  value="<?= htmlspecialchars($row['makanan']) ?>" required>
                               </div>
                               <div class="mb-3">
                                 <label class="form-label">Deskripsi</label>
-                                <textarea name="deskripsi" class="form-control" required><?= htmlspecialchars($row['deskripsi']) ?></textarea>
+                                <textarea name="deskripsi" class="form-control"
+                                  required><?= htmlspecialchars($row['deskripsi']) ?></textarea>
                               </div>
                               <div class="mb-3">
                                 <label class="form-label">Status Konservasi</label>
-                                <input type="text" name="status_konservasi" class="form-control" value="<?= htmlspecialchars($row['status_konservasi']) ?>" required>
+                                <input type="text" name="status_konservasi" class="form-control"
+                                  value="<?= htmlspecialchars($row['status_konservasi']) ?>" required>
                               </div>
                               <div class="mb-3">
                                 <label class="form-label">Gambar (jika ingin ganti)</label>
@@ -257,7 +263,7 @@ $hewan = $conn->query("SELECT * FROM animals");
                                 <?php if ($row['gambar']): ?>
                                   <div class="mt-2">
                                     <small class="text-muted">Gambar saat ini:</small><br>
-                                    <img src="<?= $row['gambar'] ?>" width="100" class="img-thumbnail">
+                                    <img src="<?= (strpos($row['gambar'],'/')!==false || strpos($row['gambar'],'\\')!==false) ? $row['gambar'] : ('../picture/' . $row['gambar']) ?>" width="100" class="img-thumbnail">
                                   </div>
                                 <?php endif; ?>
                               </div>

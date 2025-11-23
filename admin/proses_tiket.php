@@ -127,16 +127,22 @@ try {
             
             try {
                 if ($aksi === 'acc_selected') {
-                    // Setujui tiket yang dipilih
-                    $stmt = $conn->prepare("UPDATE booking SET status = 'acc' WHERE id = ?");
-                    
+                    $select_status = $conn->prepare("SELECT status FROM booking WHERE id = ?");
+                    $update_acc = $conn->prepare("UPDATE booking SET status = 'acc' WHERE id = ?");
+                    $updated = 0;
                     foreach ($selected_ids as $id) {
-                        $stmt->bind_param("i", $id);
-                        $stmt->execute();
+                        $select_status->bind_param("i", $id);
+                        $select_status->execute();
+                        $res = $select_status->get_result();
+                        $row = $res->fetch_assoc();
+                        $st = strtolower(trim($row['status'] ?? ''));
+                        if (in_array($st, ['kadaluwarsa','dibatalkan'])) { continue; }
+                        $update_acc->bind_param("i", $id);
+                        $update_acc->execute();
+                        $updated++;
                     }
-                    
                     $conn->commit();
-                    go("$count tiket berhasil disetujui.");
+                    go(($updated) . " tiket berhasil disetujui.");
                     
                 } else if ($aksi === 'dec_selected') {
                     // Tolak tiket yang dipilih
@@ -152,16 +158,22 @@ try {
                     go("$count tiket berhasil ditolak dan stok dikembalikan.");
 
                 } else if ($aksi === 'paid_selected') {
-                    // Tandai dibayar untuk tiket terpilih
-                    $stmt = $conn->prepare("UPDATE booking SET status = 'dibayar' WHERE id = ?");
-                    
+                    $select_status = $conn->prepare("SELECT status FROM booking WHERE id = ?");
+                    $update_paid = $conn->prepare("UPDATE booking SET status = 'dibayar' WHERE id = ?");
+                    $updated = 0;
                     foreach ($selected_ids as $id) {
-                        $stmt->bind_param("i", $id);
-                        $stmt->execute();
+                        $select_status->bind_param("i", $id);
+                        $select_status->execute();
+                        $res = $select_status->get_result();
+                        $row = $res->fetch_assoc();
+                        $st = strtolower(trim($row['status'] ?? ''));
+                        if (in_array($st, ['kadaluwarsa','dibatalkan'])) { continue; }
+                        $update_paid->bind_param("i", $id);
+                        $update_paid->execute();
+                        $updated++;
                     }
-                    
                     $conn->commit();
-                    go("$count tiket berhasil ditandai sebagai dibayar.");
+                    go(($updated) . " tiket berhasil ditandai sebagai dibayar.");
                     
                 } else if ($aksi === 'delete_selected') {
                     // Hapus tiket yang dipilih (tanpa mengembalikan stok)

@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tambah Hewan - Admin Panel</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <?php include '../bootstrap.php'; ?>
+
     <style>
         body {
             background-color: #f8fff8;
@@ -158,11 +158,11 @@
 
                         // Proses form saat disubmit
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                            $nama      = $_POST['nama'];
-                            $habitat   = $_POST['habitat'];
-                            $makanan   = $_POST['makanan'];
+                            $nama = $_POST['nama'];
+                            $habitat = $_POST['habitat'];
+                            $makanan = $_POST['makanan'];
                             $deskripsi = $_POST['deskripsi'];
-                            $status    = $_POST['status'];
+                            $status = $_POST['status'];
 
                             if (isset($_FILES["file_gambar"]) && $_FILES["file_gambar"]["error"] == 0) {
                                 $upload_result = uploadGambar($_FILES["file_gambar"]);
@@ -192,12 +192,14 @@
                         <form method="POST" enctype="multipart/form-data">
                             <div class="mb-3">
                                 <label for="nama" class="form-label"><i class="bi bi-tag"></i> Nama Hewan</label>
-                                <input type="text" id="nama" name="nama" placeholder="Masukkan nama hewan" required class="form-control">
+                                <input type="text" id="nama" name="nama" placeholder="Masukkan nama hewan" required
+                                    class="form-control">
                             </div>
 
                             <div class="mb-3">
                                 <label for="habitat" class="form-label"><i class="bi bi-geo-alt"></i> Habitat</label>
-                                <input type="text" id="habitat" name="habitat" placeholder="Masukkan habitat hewan" required class="form-control">
+                                <input type="text" id="habitat" name="habitat" placeholder="Masukkan habitat hewan"
+                                    required class="form-control">
                             </div>
 
                             <div class="mb-3">
@@ -210,24 +212,33 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="deskripsi" class="form-label"><i class="bi bi-card-text"></i> Deskripsi</label>
-                                <textarea id="deskripsi" name="deskripsi" placeholder="Masukkan deskripsi hewan" required class="form-control" rows="4"></textarea>
+                                <label for="deskripsi" class="form-label"><i class="bi bi-card-text"></i>
+                                    Deskripsi</label>
+                                <textarea id="deskripsi" name="deskripsi" placeholder="Masukkan deskripsi hewan"
+                                    required class="form-control" rows="4"></textarea>
                             </div>
 
                             <div class="mb-3">
-                                <label for="status" class="form-label"><i class="bi bi-shield"></i> Status Konservasi</label>
-                                <input type="text" id="status" name="status" placeholder="Contoh: Terancam Punah, Dilindungi, dll" required class="form-control">
+                                <label for="status" class="form-label"><i class="bi bi-shield"></i> Status
+                                    Konservasi</label>
+                                <input type="text" id="status" name="status"
+                                    placeholder="Contoh: Terancam Punah, Dilindungi, dll" required class="form-control">
                             </div>
 
                             <div class="mb-3">
-                                <label for="file_gambar" class="form-label"><i class="bi bi-image"></i> Upload Gambar</label>
-                                <input type="file" id="file_gambar" name="file_gambar" accept="image/*" required class="form-control">
-                                <div class="form-text text-muted">Format yang diizinkan: JPG, JPEG, PNG, GIF. Ukuran maksimal: 5MB</div>
+                                <label for="file_gambar" class="form-label"><i class="bi bi-image"></i> Upload
+                                    Gambar</label>
+                                <input type="file" id="file_gambar" name="file_gambar" accept="image/*" required
+                                    class="form-control">
+                                <div class="form-text text-muted">Format yang diizinkan: JPG, JPEG, PNG, GIF. Ukuran
+                                    maksimal: 5MB</div>
                             </div>
 
                             <div class="d-flex justify-content-between mt-4">
-                                <a href="hewan.php" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Kembali</a>
-                                <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Tambah Hewan</button>
+                                <a href="hewan.php" class="btn btn-secondary"><i class="bi bi-arrow-left"></i>
+                                    Kembali</a>
+                                <button type="submit" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Tambah
+                                    Hewan</button>
                             </div>
                         </form>
                     </div>

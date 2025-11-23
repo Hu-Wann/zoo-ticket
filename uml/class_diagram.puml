@@ -1,0 +1,78 @@
+@startuml Class Diagram Zoo Ticket System
+
+class User {
+    + id: int
+    + nama: string
+    + email: string
+    + password: string
+    + role: string
+    --
+    + login()
+    + register()
+    + updateProfile()
+}
+
+class Booking {
+    + id: int
+    + nama_pengunjung: string
+    + email: string (FK)
+    + tanggal_kunjungan: date
+    + jumlah_dewasa: int
+    + jumlah_anak: int
+    + jumlah_remaja: int
+    + total_harga: int
+    + catatan: text
+    + tanggal_booking: timestamp
+    + status: string
+    + kode_redeem: string
+    + laporan_hidden: boolean
+    --
+    + createBooking()
+    + calculatePrice()
+    + approveBooking()
+    + cancelBooking()
+}
+
+class Animal {
+    + id: int
+    + nama: string
+    + habitat: string
+    + makanan: string
+    + deskripsi: text
+    + status_konservasi: string
+    + gambar: string
+    --
+    + addAnimal()
+    + updateAnimal()
+    + deleteAnimal()
+    + searchAnimal()
+}
+
+class StokTiket {
+    + id: int
+    + tanggal: date
+    + sisa_stok: int
+    --
+    + getStokByDate()
+    + updateStok()
+    + reduceStok()
+}
+
+class Pengeluaran {
+    + id: int
+    + tanggal: date
+    + kategori: string
+    + deskripsi: text
+    + jumlah: int
+    + created_at: timestamp
+    --
+    + addPengeluaran()
+    + updatePengeluaran()
+    + deletePengeluaran()
+}
+
+User ||--o{ Booking : "1 .. *"
+StokTiket ||--o{ Booking : "1 .. *"
+User ||--o{ Pengeluaran : "1 .. *"
+
+@enduml
