@@ -2,6 +2,16 @@
 include "../database/conn.php";
 session_start();
 
+if (isset($_SESSION['role'])) {
+    if ($_SESSION['role'] === 'admin') {
+        header("Location: ../admin/dashboard.php");
+        exit;
+    } else {
+        header("Location: ../index.php");
+        exit;
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $nama = mysqli_real_escape_string($conn, $_POST['nama']);
   $email = mysqli_real_escape_string($conn, $_POST['email']);
