@@ -91,8 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="mb-4">
                             <label class="form-label fs-5"><i class="bi bi-calendar-date"></i> Tanggal
                                 Pengeluaran</label>
-                            <input type="date" name="tanggal" class="form-control form-control-lg" required
-                                value="<?= date('Y-m-d') ?>">
+<input type="date" name="tanggal" class="form-control form-control-lg" required
+                                value="<?= date('Y-m-d') ?>" min="<?= date('Y-m-d', strtotime('-1 day')) ?>" max="<?= date('Y-m-d') ?>">
                         </div>
 
                         <hr class="my-4">
