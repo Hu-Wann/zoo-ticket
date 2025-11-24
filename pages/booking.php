@@ -356,24 +356,7 @@ if (isset($_GET['logout'])) {
     window.addEventListener('DOMContentLoaded', hitungTotal);
 
     // 
-    document.getElementById('tanggal_kunjungan').addEventListener('change', function() {
-      const tanggal = this.value;
-      if (!tanggal) return;
-
-      fetch(`../admin/cek_stok.php?tanggal=${tanggal}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === 'ok') {
-            if (data.stok <= 0) {
-              alert('❌ Maaf, stok tiket pada tanggal ini sudah habis.');
-              document.getElementById('formBooking').querySelector('button[type="submit"]').disabled = true;
-            } else {
-              document.getElementById('formBooking').querySelector('button[type="submit"]').disabled = false;
-            }
-          }
-        })
-        .catch(err => console.error(err));
-    });
+    // Removed fetch call for cek_stok.php per request. Stock is validated only on backend submission.
   </script>
 </body>
 

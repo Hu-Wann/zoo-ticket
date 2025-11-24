@@ -13,30 +13,32 @@ if (isset($_SESSION['role'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $nama = mysqli_real_escape_string($conn, $_POST['nama']);
-  $email = mysqli_real_escape_string($conn, $_POST['email']);
-  $password = $_POST['password'];
-  $confirm = $_POST['confirm'];
+    $nama = mysqli_real_escape_string($conn, $_POST['nama']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $password = $_POST['password'];
+    $confirm = $_POST['confirm'];
 
-  $role = 'user';
+    $role = 'user';
 
-  if ($password !== $confirm) {
-    $pesan = "<div class='alert alert-danger text-center'>❌ Password tidak cocok!</div>";
-  } else {
-    $hash = password_hash($password, PASSWORD_DEFAULT);
-
-    $sql = "INSERT INTO users (nama, email, password, role) 
-            VALUES ('$nama', '$email', '$hash', '$role')";
-
-    if ($conn->query($sql) === TRUE) {
-      header("Location: ../acount/login.php");
-      exit;
+    if ($password !== $confirm) {
+        $pesan = "<div class='alert alert-danger text-center'>❌ Password tidak cocok!</div>";
     } else {
-      $pesan = "<div class='alert alert-danger text-center'>❌ Error: " . $conn->error . "</div>";
+
+        $hashed = md5($password);
+
+        $sql = "INSERT INTO users (nama, email, password, role) 
+                VALUES ('$nama', '$email', '$hashed', '$role')";
+
+        if ($conn->query($sql) === TRUE) {
+            header("Location: ../acount/login.php");
+            exit;
+        } else {
+            $pesan = "<div class='alert alert-danger text-center'>❌ Error: " . $conn->error . "</div>";
+        }
     }
-  }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 

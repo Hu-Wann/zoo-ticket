@@ -49,12 +49,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $total_harga = ($dewasa * $harga_dewasa) + ($remaja * $harga_remaja) + ($anak * $harga_anak);
 
-    // Pastikan stok tersedia - buat stok default jika belum ada
+    // Pastikan stok tersedia - reject booking if stok doesn't exist for date
     $stok = $conn->query("SELECT sisa_stok FROM stok_tiket WHERE tanggal = '$tanggal_kunjungan'");
     if ($stok->num_rows === 0) {
-        // Buat stok default untuk tanggal yang dipilih
-        $conn->query("INSERT INTO stok_tiket (tanggal, sisa_stok) VALUES ('$tanggal_kunjungan', 500)");
-        $sisa_stok = 500;
+        $_SESSION['error'] = "Stok tiket tidak tersedia untuk tanggal " . date('d-m-Y', strtotime($tanggal_kunjungan)) . ".";
+        header("Location: ../pages/booking.php");
+        exit;
     } else {
         $stok_data = $stok->fetch_assoc();
         $sisa_stok = (int)$stok_data['sisa_stok'];

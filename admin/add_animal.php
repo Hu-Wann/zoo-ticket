@@ -113,7 +113,7 @@
                         {
                             $target_dir = "../picture/";
 
-                            // Pastikan folder ada
+                          
                             if (!file_exists($target_dir)) {
                                 mkdir($target_dir, 0777, true);
                             }
@@ -122,23 +122,22 @@
                             $target_file = $target_dir . $file_name;
                             $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-                            // Cek file valid gambar
+                          
                             if (!getimagesize($file["tmp_name"])) {
                                 return ["status" => false, "message" => "File bukan gambar."];
                             }
 
-                            // Batas ukuran 5MB
+                           
                             if ($file["size"] > 5000000) {
                                 return ["status" => false, "message" => "Ukuran file terlalu besar (max 5MB)."];
                             }
 
-                            // Format diizinkan
+                            
                             $allowed = ["jpg", "jpeg", "png", "gif"];
                             if (!in_array($imageFileType, $allowed)) {
                                 return ["status" => false, "message" => "Hanya file JPG, JPEG, PNG & GIF yang diizinkan."];
                             }
 
-                            // Jika file dengan nama sama sudah ada → hapus file lama supaya tidak dobel
                             if (file_exists($target_file)) {
 
                                 $target_file = '../picture/' . $file_name;
@@ -147,7 +146,7 @@
                                 }
                             }
 
-                            // Upload file baru
+                         
                             if (move_uploaded_file($file["tmp_name"], $target_file)) {
                                 return ["status" => true, "file_name" => $file_name];
                             } else {
@@ -156,7 +155,7 @@
                         }
 
 
-                        // Proses form saat disubmit
+                      
                         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $nama = $_POST['nama'];
                             $habitat = $_POST['habitat'];
