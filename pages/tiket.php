@@ -10,7 +10,6 @@ if (!isset($_SESSION['email'])) {
 $email = $_SESSION['email'];
 $today = date('Y-m-d');
 
-// ✅ Update otomatis semua tiket kadaluwarsa (AMAN)
 $conn->query("
     UPDATE booking
     SET status = 'kadaluwarsa'
@@ -289,7 +288,7 @@ $conn->query("
                             $canCancel = false;
                         }
                         if (strtotime($row['tanggal_kunjungan']) < strtotime(date('Y-m-d'))) {
-                            $canCancel = false; // tidak bisa batal jika tanggal sudah lewat
+                            $canCancel = false; 
                         }
 
                 echo '

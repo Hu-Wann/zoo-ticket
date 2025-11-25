@@ -21,7 +21,7 @@ $total_remaja = $totalData['total_remaja'] ?? 0;
 $total_anak = $totalData['total_anak'] ?? 0;
 $total_semua = $total_dewasa + $total_remaja + $total_anak;
 
-// --- Ambil semua detail booking ---
+
 $queryDetail = "SELECT * FROM booking ORDER BY tanggal_booking DESC";
 $detailResult = mysqli_query($conn, $queryDetail);
 ?>
@@ -52,8 +52,6 @@ $detailResult = mysqli_query($conn, $queryDetail);
       display: flex;
       flex-direction: column;
     }
-
-
 
     table th {
       background-color: #198754;
@@ -92,7 +90,6 @@ $detailResult = mysqli_query($conn, $queryDetail);
 
         <div class="container mb-5">
 
-          <!-- Statistik Total -->
           <div class="row g-4 mb-4">
             <div class="col-md-3">
               <div class="card text-center p-4">
@@ -121,7 +118,6 @@ $detailResult = mysqli_query($conn, $queryDetail);
             <div class="div"> <a href="tiket_list.php" class="btn btn-success ms-2"><i class="bi bi-ticket-perforated"></i> Kelola Tiket</a></div>
           </div>
 
-          <!-- Detail Tiket -->
           <div class="card p-4">
             <div class="d-flex justify-content-between mb-3">
               <h3 class="text-success"><i class="bi bi-list-ul"></i> Detail Tiket Terjual</h3>

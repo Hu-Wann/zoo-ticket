@@ -95,7 +95,6 @@ $result = $conn->query($query);
       width: 100%;
     }
 
-    /* Sidebar (match index.php) */
     .sidebar {
       min-height: 100vh;
       background-color: #d4f8d4;
@@ -119,7 +118,6 @@ $result = $conn->query($query);
 </head>
 
 <body>
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light sticky-top">
     <div class="container">
       <a class="navbar-brand" href="../index.php">
@@ -149,7 +147,6 @@ $result = $conn->query($query);
     </div>
   </nav>
 
-  <!-- Header -->
   <div class="ticket-header">
     <div class="container text-center">
       <h1><i class="bi bi-paw me-2"></i>Koleksi Hewan</h1>
@@ -157,10 +154,8 @@ $result = $conn->query($query);
     </div>
   </div>
 
-  <!-- Sidebar + Konten -->
   <div class="container-fluid">
     <div class="row">
-      <!-- Sidebar -->
       <div class="col-md-2 sidebar position-sticky" style="top: 80px; height: calc(100vh - 80px); z-index: 2;">
         <?php $page = basename($_SERVER['SCRIPT_NAME']); ?>
         <ul class="nav flex-column">
@@ -184,8 +179,8 @@ $result = $conn->query($query);
           </li>
         </ul>
       </div>
+
       <div class="col-md-10 p-4">
-        <!-- Form Pencarian -->
         <div class="row mb-4">
           <div class="col-md-6 mx-auto">
             <form class="d-flex shadow-sm rounded overflow-hidden" method="GET" action="">
@@ -201,7 +196,6 @@ $result = $conn->query($query);
           </div>
         </div>
 
-        <!-- Daftar Hewan -->
         <div class="row">
           <div class="col-12">
             <h2 class="text-success mb-4 fs-2">Daftar Hewan</h2>
@@ -236,7 +230,6 @@ $result = $conn->query($query);
     </div>
   </div>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="row">

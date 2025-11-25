@@ -2,13 +2,11 @@
 session_start();
 include "../database/conn.php";
 
-// Cek login & role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
   header("Location: ../acount/login.php");
   exit;
 }
 
-// create
 if (isset($_POST['tambah'])) {
   $nama = $_POST['nama'];
   $habitat = $_POST['habitat'];
@@ -16,7 +14,6 @@ if (isset($_POST['tambah'])) {
   $deskripsi = $_POST['deskripsi'];
   $status = $_POST['status_konservasi'];
 
-  // Upload gambar
   $namaFile = $_FILES['gambar']['name'];
   $tmpName = $_FILES['gambar']['tmp_name'];
   $folder = "../picture/";
@@ -39,7 +36,6 @@ if (isset($_POST['tambah'])) {
   exit;
 }
 
-// update
 if (isset($_POST['edit'])) {
   $id = $_POST['id'];
   $nama = $_POST['nama'];
@@ -48,7 +44,6 @@ if (isset($_POST['edit'])) {
   $deskripsi = $_POST['deskripsi'];
   $status = $_POST['status_konservasi'];
 
-  // Upload gambar jika ada
   $namaFile = $_FILES['gambar']['name'];
   $tmpName = $_FILES['gambar']['tmp_name'];
   $folder = "../picture/";
@@ -69,10 +64,8 @@ if (isset($_POST['edit'])) {
   exit;
 }
 
-// delete
 if (isset($_GET['hapus'])) {
   $id = $_GET['hapus'];
-  // hapus juga file gambarnya
   $result = $conn->query("SELECT gambar FROM animals WHERE id=$id");
   $data = $result->fetch_assoc();
   if ($data && $data['gambar'] != '' && file_exists($data['gambar'])) {
@@ -83,7 +76,6 @@ if (isset($_GET['hapus'])) {
   exit;
 }
 
-// read
 $hewan = $conn->query("SELECT * FROM animals");
 ?>
 
@@ -157,7 +149,6 @@ $hewan = $conn->query("SELECT * FROM animals");
     <main class="flex-grow-1 p-4">
       <?php include 'sidebar.php'; ?>
 
-      <!-- Main Content -->
       <div class="main-content">
         <div class="header">
           <h4 class="mb-0">Kelola Data Hewan</h4>
@@ -221,7 +212,6 @@ $hewan = $conn->query("SELECT * FROM animals");
                       </td>
                     </tr>
 
-                    <!-- Modal Edit -->
                     <div class="modal fade" id="modalEdit<?= $row['id'] ?>" tabindex="-1">
                       <div class="modal-dialog modal-lg">
                         <div class="modal-content">
@@ -268,6 +258,7 @@ $hewan = $conn->query("SELECT * FROM animals");
                                 <?php endif; ?>
                               </div>
                             </div>
+
                             <div class="modal-footer">
                               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                               <button type="submit" name="edit" class="btn btn-warning">

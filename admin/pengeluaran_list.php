@@ -7,9 +7,8 @@ if (!isset($_SESSION['email']) || $_SESSION['role'] !== 'admin') {
     exit();
 }
 
-// Ambil semua data pengeluaran dan kelompokkan berdasarkan tanggal
 $query = "SELECT tanggal, GROUP_CONCAT(kategori SEPARATOR ', ') as kategori, 
-                 GROUP_CONCAT(deskripsi SEPARATOR '; ') as deskripsi, 
+                 GROUP_CONCAT(deskripsi SEPARATOR ' ') as deskripsi, 
                  SUM(jumlah) as total_jumlah
           FROM pengeluaran
           GROUP BY tanggal
@@ -21,7 +20,6 @@ while ($row = mysqli_fetch_assoc($result)) {
     $pengeluaran_per_tanggal[] = $row;
 }
 
-// Hitung total semua pengeluaran
 $total_semua_pengeluaran = 0;
 foreach ($pengeluaran_per_tanggal as $data) {
     $total_semua_pengeluaran += $data['total_jumlah'];
@@ -82,18 +80,13 @@ foreach ($pengeluaran_per_tanggal as $data) {
             flex-direction: column;
         }
 
-        @media (max-width: 992px) {
-            .main-content {
-                margin-left: 100px;
-            }
-        }
     </style>
 </head>
 
 <body>
     <main class="flex-grow-1 p-4">
         <?php include 'sidebar.php'; ?>
-        <!-- Header -->
+
         <div class="main-content">
             <div class="header-section text-center mb-4">
                 <div class="container">
@@ -115,12 +108,11 @@ foreach ($pengeluaran_per_tanggal as $data) {
                 <?php if (isset($_SESSION['success'])): ?>
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <i class="bi bi-check-circle-fill"></i> <?= $_SESSION['success'];
-                        unset($_SESSION['success']); ?>
+                                                                unset($_SESSION['success']); ?>
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 <?php endif; ?>
 
-                <!-- Total Pengeluaran Card -->
                 <div class="card total-card p-4 mb-4 text-center">
                     <h4 class="mb-0">Total Seluruh Pengeluaran</h4>
                     <h2 class="display-4 fw-bold">Rp <?= number_format($total_semua_pengeluaran, 0, ',', '.') ?></h2>

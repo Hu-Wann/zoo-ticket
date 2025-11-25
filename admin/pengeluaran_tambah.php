@@ -66,7 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
 
-    <!-- Header -->
     <div class="text-center py-3 bg-white shadow-sm mb-4">
         <h1 class="text-success"><i class="bi bi-plus-circle"></i> Input Pengeluaran Harian</h1>
         <p class="lead">Manajemen Pengeluaran Operasional - Kebun Binatang Indah</p>
@@ -91,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="mb-4">
                             <label class="form-label fs-5"><i class="bi bi-calendar-date"></i> Tanggal
                                 Pengeluaran</label>
-<input type="date" name="tanggal" class="form-control form-control-lg" required
+                            <input type="date" name="tanggal" class="form-control form-control-lg" required
                                 value="<?= date('Y-m-d') ?>" min="<?= date('Y-m-d', strtotime('-1 day')) ?>" max="<?= date('Y-m-d') ?>">
                         </div>
 
@@ -100,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php
                         $kategori_list = pengeluaran_kategori_list();
                         foreach ($kategori_list as $kategori => $icon) {
-                            ?>
+                        ?>
                             <div class="kategori-group">
                                 <h5 class="section-title"><i class="bi <?= $icon ?>"></i> <?= $kategori ?></h5>
                                 <div class="row">
@@ -130,10 +129,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const inputs = document.querySelectorAll('.input-rupiah');
             inputs.forEach(input => {
-                input.addEventListener('keyup', function (e) {
+                input.addEventListener('keyup', function(e) {
                     this.value = formatRupiah(this.value);
                 });
             });

@@ -2,13 +2,11 @@
 session_start();
 include "../database/conn.php";
 
-// Cek hanya admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../acount/login.php");
     exit;
 }
 
-// hapus stok jika tanggal sudah lewat
 $today = date('Y-m-d');
 $conn->query("DELETE FROM stok_tiket WHERE tanggal < '$today'");
 
@@ -20,11 +18,9 @@ if (isset($_POST['hapus_tanggal'])) {
     exit;
 }
 
-// Tambah stok 
 if (isset($_POST['tambah_stok'])) {
     $tanggal = $_POST['tanggal'];
     $jumlah_stok = intval($_POST['jumlah_stok']);
-    // Cek apakah tanggal sudah ada
     $check = $conn->query("SELECT * FROM stok_tiket WHERE tanggal = '$tanggal'");
     if ($check && $check->num_rows > 0) {
         $conn->query("UPDATE stok_tiket SET sisa_stok = '$jumlah_stok' WHERE tanggal = '$tanggal'");
@@ -43,7 +39,6 @@ Stok untuk tanggal " . date('d-m-Y', strtotime($tanggal)) .
     }
 }
 
-// Edit stok via modal per baris
 if (isset($_POST['edit_stok'])) {
     $tanggal = $_POST['edit_tanggal'];
     $jumlah_stok = intval($_POST['jumlah_stok']);
@@ -62,7 +57,6 @@ if (isset($_POST['edit_stok'])) {
     }
 }
 
-// Ambil stok dari DB
 $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
 ?>
 <!DOCTYPE html>
@@ -166,40 +160,13 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
             font-weight: 600;
         }
 
-        @media (max-width: 992px) {
-            .sidebar {
-                width: 70px;
-            }
-
-            .sidebar .logo {
-                padding: 15px;
-                font-size: 18px;
-                text-align: center;
-            }
-
-            .sidebar .nav-link span {
-                display: none;
-            }
-
-            .sidebar .nav-link {
-                padding: 12px;
-                justify-content: center;
-            }
-
-            .main-content {
-                margin-left: 70px;
-                width: calc(100% - 70px);
-            }
-        }
     </style>
 </head>
 
 <body>
     <div class="d-flex">
-        <!-- Sidebar -->
         <?php include 'sidebar.php'; ?>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="header">
                 <h4 class="mb-0">Kelola Stok Tiket</h4>
@@ -226,9 +193,8 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
                         <div class="card-body">
                             <form method="post" action="">
                                 <?php
-                                // Tanggal minimal: hari ini
                                 $min_date = date('Y-m-d');
-                                // Tanggal maksimal: 1 tahun ke depan
+
                                 $max_date = date('Y-m-d', strtotime('+1 year'));
                                 ?>
                                 <div class="mb-3">
@@ -298,7 +264,6 @@ $result = $conn->query("SELECT * FROM stok_tiket ORDER BY tanggal ASC");
                                 if ($result->num_rows > 0) {
                                     $no = 1;
                                     while ($row = $result->fetch_assoc()) {
-                                        // Tentukan status stok
                                         if ($row['sisa_stok'] > 100) {
                                             $status = '<span class="badge bg-success">Tersedia</span>';
                                         } elseif ($row['sisa_stok'] > 0) {

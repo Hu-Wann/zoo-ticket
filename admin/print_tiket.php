@@ -1,14 +1,14 @@
 <?php
 include "../database/conn.php";
 
-// Validasi ID dari URL
+
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("ID tiket tidak valid.");
 }
 
 $id = intval($_GET['id']);
 
-// Ambil data tiket
+
 $result = $conn->query("SELECT * FROM booking WHERE id = $id");
 $data = $result->fetch_assoc();
 
@@ -16,7 +16,7 @@ if (!$data) {
     die("Tiket tidak ditemukan.");
 }
 
-// Siapkan data tampilan agar sama dengan halaman tiket user
+
 $nomor = 'TKB' . date('Ymd', strtotime($data['tanggal_booking'])) . '-' . str_pad($data['id'], 3, '0', STR_PAD_LEFT);
 $tanggal_kunjungan = date('d F Y', strtotime($data['tanggal_kunjungan']));
 $kode_redeem = htmlspecialchars($data['kode_redeem'] ?? 'BELUM ADA');

@@ -2,27 +2,22 @@
 session_start();
 include "../database/conn.php";
 
-// cek login & role
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
   header("Location: ./index.php");
   exit;
 }
 
-// ambil jumlah data
 $totalHewan = $conn->query("SELECT COUNT(*) as jml FROM animals")->fetch_assoc()['jml'];
 $totalTiket = $conn->query("SELECT COUNT(*) as jml FROM booking")->fetch_assoc()['jml'];
 $totalUser = $conn->query("SELECT COUNT(*) as jml FROM users")->fetch_assoc()['jml'];
 
-// Ambil data stok tiket untuk hari ini
 $today = date('Y-m-d');
 $stokHariIni = $conn->query("SELECT sisa_stok FROM stok_tiket WHERE tanggal = '$today'")->fetch_assoc();
 $sisaStok = $stokHariIni ? $stokHariIni['sisa_stok'] : 0;
 
-// Ambil data laporan bulanan
 $bulanIni = date('Y-m');
 $laporanBulanan = [];
 
-// Query untuk mendapatkan total pendapatan per bulan
 $queryPendapatan = "SELECT 
                     DATE_FORMAT(tanggal_booking, '%Y-%m') as bulan,
                     SUM(total_harga) as total_pendapatan,
@@ -199,7 +194,6 @@ $messages = $conn->query("SELECT * FROM admin_messages ORDER BY created_at DESC 
     <main class="flex-grow-1 p-4">
       <?php include 'sidebar.php'; ?>
 
-      <!-- Main Content -->
       <div class="main-content">
         <div class="header">
           <h4 class="mb-0">Dashboard</h4>
@@ -268,7 +262,6 @@ $messages = $conn->query("SELECT * FROM admin_messages ORDER BY created_at DESC 
           </div>
         </div>
 
-        <!-- Laporan Bulanan -->
         <div class="row mt-3 flex-grow-1">
           <div class="col-12">
             <div class="card">

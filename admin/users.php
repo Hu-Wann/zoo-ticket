@@ -2,16 +2,16 @@
 session_start();
 include "../database/conn.php";
 
-// cek login & role
+
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
   header("Location: ../pages/beranda.php");
   exit;
 }
-// Hapus pengguna jika ada request
+
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
   $id = $_GET['delete'];
-  // Tidak menghapus admin yang sedang login
+ 
   if ($id != $_SESSION['user_id']) {
     $conn->query("DELETE FROM users WHERE id = $id");
     header("Location: users.php?status=deleted");
@@ -22,7 +22,7 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
   }
 }
 
-// Edit user: ambil data saat GET edit=id
+
 $editUser = null;
 if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
   $editId = (int) $_GET['edit'];
@@ -32,7 +32,6 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
   }
 }
 
-// Update user saat POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
   $id = (int) $_POST['id'];
   $nama = mysqli_real_escape_string($conn, $_POST['nama']);
@@ -41,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
   $password = $_POST['password'] ?? '';
 
   if ($password !== '') {
-    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $hash = md5($password);
     $conn->query("UPDATE users SET nama='$nama', email='$email', role='$role', password='$hash' WHERE id=$id");
   } else {
     $conn->query("UPDATE users SET nama='$nama', email='$email', role='$role' WHERE id=$id");
@@ -50,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_user'])) {
   exit;
 }
 
-// Tambah pengguna baru
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_user'])) {
   $nama = mysqli_real_escape_string($conn, $_POST['nama']);
   $email = mysqli_real_escape_string($conn, $_POST['email']);
@@ -62,14 +60,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create_user'])) {
     exit;
   }
 
-  $hash = password_hash($password, PASSWORD_DEFAULT);
+  $hash = md5($password);
   $conn->query("INSERT INTO users (nama, email, role, password) VALUES ('$nama', '$email', '$role', '$hash')");
   header("Location: users.php?status=created");
   exit;
 }
 
 
-// Ambil data pengguna
 $q = isset($_GET['q']) ? trim($_GET['q']) : '';
 $where = '';
 if ($q !== '') {
@@ -211,7 +208,6 @@ $result = $conn->query($query);
     <main class="flex-grow-1 p-4">
       <?php include 'sidebar.php'; ?>
 
-      <!-- Main Content -->
       <div class="main-content">
         <div class="header">
           <h4 class="mb-0">Kelola Pengguna</h4>
@@ -256,9 +252,6 @@ $result = $conn->query($query);
                 <button type="submit" class="btn btn-success btn-action"><i class="fas fa-search"></i> Cari</button>
                 <a href="users.php" class="btn btn-outline-secondary btn-action">Reset</a>
               </form>
-              <a href="dashboard.php" class="btn btn-outline-secondary btn-action">
-                <i class="fas fa-arrow-left me-1"></i> Kembali
-              </a>
             </div>
           </div>
 
@@ -339,7 +332,7 @@ $result = $conn->query($query);
               <tbody>
                 <?php
                 if ($result->num_rows > 0):
-                  $no = 1; // ✅ Nomor urut mulai dari 1
+                  $no = 1; 
                   while ($user = $result->fetch_assoc()):
                     ?>
                     <tr>

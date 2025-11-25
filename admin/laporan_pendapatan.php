@@ -123,6 +123,12 @@ $laba_rugi = $totalPendapatan - $totalPengeluaran;
         margin-left: 100px;
       }
     }
+
+    @media print {
+      .no-print { display: none; }
+      .sidebar { display: none !important; }
+      .main-content { margin-left: 0 !important; padding: 0 !important; }
+    }
   </style>
 </head>
 
@@ -305,7 +311,7 @@ $laba_rugi = $totalPendapatan - $totalPengeluaran;
           </div>
 
           <!-- laporan pengeluaran -->
-          <div class="card p-4 mb-5">
+          <div class="card p-4 mb-5 mt-5" >
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h3 class="section-title"><i class="bi bi-receipt"></i> Laporan Pengeluaran</h3>
             </div>

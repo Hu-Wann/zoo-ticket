@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Debug: Cek session data
+
     if (!isset($_SESSION['email'])) {
         $_SESSION['error'] = "Session email tidak ditemukan. Silakan login kembali.";
         header("Location: ../pages/booking.php");
@@ -21,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $anak            = (int)$_POST['anak'];
     $catatan         = mysqli_real_escape_string($conn, $_POST['catatan'] ?? '');
 
-    // Validasi tanggal
     $today = date('Y-m-d');
     $deadline = date('Y-m-d', strtotime('+30 days'));
     if ($tanggal_kunjungan < $today) {
@@ -35,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Hitung total tiket & harga
     $harga_dewasa = 40000;
     $harga_remaja = 35000;
     $harga_anak   = 25000;
@@ -49,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $total_harga = ($dewasa * $harga_dewasa) + ($remaja * $harga_remaja) + ($anak * $harga_anak);
 
-    // Pastikan stok tersedia - reject booking if stok doesn't exist for date
     $stok = $conn->query("SELECT sisa_stok FROM stok_tiket WHERE tanggal = '$tanggal_kunjungan'");
     if ($stok->num_rows === 0) {
         $_SESSION['error'] = "Stok tiket tidak tersedia untuk tanggal " . date('d-m-Y', strtotime($tanggal_kunjungan)) . ".";
@@ -66,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Transaksi biar aman
     $conn->begin_transaction();
 
     try {

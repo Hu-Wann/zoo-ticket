@@ -8,10 +8,9 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
   exit;
 }
 
-// Proses ACC
+
 if (isset($_GET['acc'])) {
   $id = (int) $_GET['acc'];
-  // Pastikan query dijalankan dengan benar dan tambahkan pengecekan error
   if (!$conn->query("UPDATE booking SET status = 'acc' WHERE id = $id")) {
     echo "Error updating record: " . $conn->error;
   }
@@ -19,10 +18,8 @@ if (isset($_GET['acc'])) {
   exit;
 }
 
-// Proses DEC
 if (isset($_GET['dec'])) {
   $id = (int) $_GET['dec'];
-  // Pastikan query dijalankan dengan benar dan tambahkan pengecekan error
   if (!$conn->query("UPDATE booking SET status = 'dec' WHERE id = $id")) {
     echo "Error updating record: " . $conn->error;
   }
@@ -30,7 +27,6 @@ if (isset($_GET['dec'])) {
   exit;
 }
 
-// Ambil semua data booking
 $result = $conn->query("SELECT * FROM booking ORDER BY tanggal_kunjungan DESC");
 ?>
 <!DOCTYPE html>
@@ -67,7 +63,7 @@ $result = $conn->query("SELECT * FROM booking ORDER BY tanggal_kunjungan DESC");
             if ($result->num_rows > 0):
               $no = 1;
               while ($row = $result->fetch_assoc()):
-                ?>
+            ?>
                 <tr>
                   <td><?= $no++; ?></td>
                   <td><?= htmlspecialchars($row['nama_pengunjung']); ?></td>
@@ -101,12 +97,10 @@ $result = $conn->query("SELECT * FROM booking ORDER BY tanggal_kunjungan DESC");
                         onclick="return confirm('Tolak booking ini?')">
                         <i class="bi bi-x-circle"></i>
                       </a>
-                    <?php else: ?>
-                      <em>-</em>
                     <?php endif; ?>
                   </td>
                 </tr>
-                <?php
+              <?php
               endwhile;
             else:
               ?>

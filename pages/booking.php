@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Logout jika tombol logout ditekan 
 if (isset($_GET['logout'])) {
   session_destroy();
   header("Location: ../index.php");
@@ -66,7 +65,6 @@ if (isset($_GET['logout'])) {
       margin-top: 48px;
     }
 
-    /* Sidebar (match index.php) */
     .sidebar { min-height: 100vh; background-color: #d4f8d4; padding-top: 20px; border-right: 2px solid #b2f7b2; }
     .sidebar-link { border-radius: 0.5rem; padding: 0.5rem 1rem; transition: background 0.2s, color 0.2s; }
     .sidebar-link:hover, .sidebar-link.active { background: linear-gradient(90deg, #e8fbe8 60%, #b2f7b2 100%); color: #157347 !important; text-decoration: none; }
@@ -74,7 +72,6 @@ if (isset($_GET['logout'])) {
 </head>
 
 <body>
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light sticky-top">
     <div class="container">
       <a class="navbar-brand" href="../index.php">

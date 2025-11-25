@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Logout jika tombol logout ditekan
 if (isset($_GET['logout'])) {
   session_destroy();
   header("Location: index.php");
@@ -74,7 +73,6 @@ if (isset($_GET['logout'])) {
 </head>
 
 <body>
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light sticky-top"
     style="background-color: white; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
     <div class="container">
@@ -119,7 +117,6 @@ if (isset($_GET['logout'])) {
     </div>
   </nav>
 
-  <!-- Header -->
   <div class="ticket-header"
     style="background-color: #198754; color: white; padding: 2rem 0; margin-bottom: 2rem; border-radius: 0 0 1rem 1rem; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
     <div class="container text-center">
@@ -130,7 +127,7 @@ if (isset($_GET['logout'])) {
 
   <div class="container-fluid">
     <div class="row">
-      <!-- Sidebar -->
+
       <div class="col-md-2 sidebar position-sticky" style="top: 80px; height: calc(100vh - 80px); z-index: 2;">
         <ul class="nav flex-column">
           <li class="nav-item mb-2">
@@ -153,9 +150,8 @@ if (isset($_GET['logout'])) {
         </ul>
       </div>
 
-      <!-- Konten -->
+  
       <div class="col-md-10 p-4">
-        <!-- Hero Section -->
         <div class="hero-bg p-4 mb-4 d-flex flex-column flex-md-row align-items-center justify-content-between">
           <div>
             <h2 class="text-success fw-bold mb-2">Selamat Datang di Kebun Binatang Indah</h2>
@@ -167,7 +163,6 @@ if (isset($_GET['logout'])) {
             style="max-width: 350px;">
         </div>
 
-        <!-- Info Jam Buka, Lokasi, Kontak -->
         <div class="row mb-4 text-center">
           <div class="col-md-4 mb-2">
             <div class="p-3 bg-white rounded shadow-sm h-100">
@@ -192,7 +187,6 @@ if (isset($_GET['logout'])) {
           </div>
         </div>
 
-        <!-- Carousel -->
         <div class="p-4 mb-4"
           style="background: linear-gradient(135deg, #e8fbe8 70%, #b2f7b2 100%); border-radius: 1rem;">
           <div id="carouselZoo" class="carousel slide" data-bs-ride="carousel">
@@ -216,7 +210,6 @@ if (isset($_GET['logout'])) {
           </div>
         </div>
 
-        <!-- Fasilitas -->
         <h3 class="text-success mb-3">Fasilitas Kami</h3>
         <div class="row g-4 mb-4">
           <div class="col-md-3">
@@ -267,7 +260,6 @@ if (isset($_GET['logout'])) {
           </div>
         </div>
 
-        <!-- Satwa Populer -->
         <h3 class="text-success mb-3">Satwa Populer</h3>
         <div class="row g-4 mb-4">
           <div class="col-md-2 col-6">
@@ -325,7 +317,6 @@ if (isset($_GET['logout'])) {
           </div>
         </div>
 
-        <!-- Event & Info -->
         <h3 class="text-success mt-5 mb-3">Event & Informasi Menarik</h3>
         <div class="row g-4 mb-4">
           <div class="col-md-6">
@@ -350,7 +341,6 @@ if (isset($_GET['logout'])) {
           </div>
         </div>
 
-        <!-- Galeri Foto -->
         <h3 class="text-success mb-3">Galeri Foto</h3>
         <div class="row g-3">
           <div class="col-md-3 col-6">
@@ -399,7 +389,7 @@ if (isset($_GET['logout'])) {
           </div>
         </div>
       </div>
-      <!-- Footer -->
+
       <div class="footer text-center">
         <div class="container">
           <div class="row">

@@ -115,7 +115,7 @@ $result = $conn->query($query);
         </div>
 
         <form method="POST" action="proses_tiket.php" id="ticketForm">
-            <!-- Tombol aksi massal -->
+
             <div class="mass-action-bar">
                 <button type="submit" name="aksi" value="acc_selected" class="btn btn-success" id="approveSelected"
                     disabled>
@@ -154,7 +154,7 @@ $result = $conn->query($query);
                         </thead>
                         <tbody>
                             <?php if ($result && $result->num_rows > 0): ?>
-                                <?php $no = 1; // Inisialisasi nomor urut ?>
+                                <?php $no = 1; ?>
                                 <?php while ($row = $result->fetch_assoc()): ?>
                                     <tr>
                                         <td class="text-center">
@@ -234,20 +234,17 @@ $result = $conn->query($query);
 
    
     <script>
-        // Pilih semua checkbox
         document.getElementById('checkAll').addEventListener('change', function () {
             const eligibleBoxes = document.querySelectorAll('.ticket-checkbox.eligible');
             eligibleBoxes.forEach(cb => cb.checked = this.checked);
             updateSelectedCount();
         });
 
-        // Update jumlah tiket yang dipilih
         function updateSelectedCount() {
             const selectedBoxes = document.querySelectorAll('.ticket-checkbox.eligible:checked');
             const count = selectedBoxes.length;
             document.getElementById('selectedCount').textContent = count + ' tiket dipilih';
 
-            // Enable/disable tombol aksi massal
             const actionButtons = [
                 document.getElementById('approveSelected'),
                 document.getElementById('rejectSelected'),
@@ -260,11 +257,9 @@ $result = $conn->query($query);
             });
         }
 
-        // Tambahkan event listener untuk semua checkbox tiket
         document.querySelectorAll('.ticket-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', updateSelectedCount);
         });
-        // Konfirmasi sebelum submit form
         document.getElementById('ticketForm').addEventListener('submit', function (e) {
             const action = e.submitter.value;
 
@@ -283,7 +278,6 @@ $result = $conn->query($query);
             }
         });
 
-        // Inisialisasi counter
         updateSelectedCount();
     </script>
 </body>

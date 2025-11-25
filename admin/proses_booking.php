@@ -11,10 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $jumlah_anak = (int)$_POST['jumlah_anak'];
     $catatan = $_POST['catatan'] ?? '';
 
-    // Total tiket dipesan
     $total_tiket = $jumlah_dewasa + $jumlah_remaja + $jumlah_anak;
 
-    // Cek stok tiket global
     $cek_stok = $conn->query("SELECT jumlah FROM stok_tiket WHERE id = 1");
     $stok = $cek_stok->fetch_assoc()['jumlah'] ?? 0;
 
@@ -23,12 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    // Simpan data booking
     $query = "INSERT INTO booking (nama_pengunjung, email, tanggal_kunjungan, jumlah_dewasa, jumlah_remaja, jumlah_anak, catatan, tanggal_booking, status)
               VALUES ('$nama_pengunjung', '$email', '$tanggal_kunjungan', '$jumlah_dewasa', '$jumlah_remaja', '$jumlah_anak', '$catatan', NOW(), 'dibooking')";
     
     if ($conn->query($query)) {
-        // Kurangi stok sesuai total tiket
         $conn->query("UPDATE stok_tiket SET jumlah = jumlah - $total_tiket WHERE id = 1");
         echo "<script>alert('Tiket berhasil dipesan!'); window.location='tiket.php';</script>";
     } else {

@@ -1,6 +1,7 @@
 <?php
 
-function pengeluaran_kategori_list(): array {
+function pengeluaran_kategori_list(): array
+{
     return [
         "Gaji Karyawan" => "bi-person-badge",
         "Pangan" => "bi-egg-fried",
@@ -9,12 +10,14 @@ function pengeluaran_kategori_list(): array {
     ];
 }
 
-function rupiah_to_int(?string $nilai): int {
+function rupiah_to_int(?string $nilai): int
+{
     if ($nilai === null || $nilai === '') return 0;
     return (int) preg_replace('/\D/', '', $nilai);
 }
 
-function pengeluaran_fetch_by_date(mysqli $conn, string $tanggal): array {
+function pengeluaran_fetch_by_date(mysqli $conn, string $tanggal): array
+{
     $sql = "SELECT id, kategori, deskripsi, jumlah FROM pengeluaran WHERE tanggal = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $tanggal);
@@ -32,10 +35,12 @@ function pengeluaran_fetch_by_date(mysqli $conn, string $tanggal): array {
     return $data;
 }
 
-function pengeluaran_insert_batch(mysqli $conn, string $tanggal, array $jumlah_arr, array $deskripsi_arr): array {
+function pengeluaran_insert_batch(mysqli $conn, string $tanggal, array $jumlah_arr, array $deskripsi_arr): array
+{
     $sql = "INSERT INTO pengeluaran (tanggal, kategori, deskripsi, jumlah) VALUES (?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $added = 0; $errors = [];
+    $added = 0;
+    $errors = [];
     foreach ($jumlah_arr as $kategori => $jumlah_raw) {
         $jumlah_val = rupiah_to_int($jumlah_raw);
         if ($jumlah_val > 0) {
@@ -52,7 +57,8 @@ function pengeluaran_insert_batch(mysqli $conn, string $tanggal, array $jumlah_a
     return ['added' => $added, 'errors' => $errors];
 }
 
-function pengeluaran_replace_for_date(mysqli $conn, string $tanggal, array $jumlah_arr, array $deskripsi_arr): array {
+function pengeluaran_replace_for_date(mysqli $conn, string $tanggal, array $jumlah_arr, array $deskripsi_arr): array
+{
     $del = $conn->prepare('DELETE FROM pengeluaran WHERE tanggal = ?');
     $del->bind_param('s', $tanggal);
     $del->execute();
@@ -60,7 +66,8 @@ function pengeluaran_replace_for_date(mysqli $conn, string $tanggal, array $juml
     return pengeluaran_insert_batch($conn, $tanggal, $jumlah_arr, $deskripsi_arr);
 }
 
-function pengeluaran_delete_by_date(mysqli $conn, string $tanggal): bool {
+function pengeluaran_delete_by_date(mysqli $conn, string $tanggal): bool
+{
     $stmt = $conn->prepare('DELETE FROM pengeluaran WHERE tanggal = ?');
     $stmt->bind_param('s', $tanggal);
     $ok = $stmt->execute();
@@ -68,12 +75,35 @@ function pengeluaran_delete_by_date(mysqli $conn, string $tanggal): bool {
     return $ok;
 }
 
-function pengeluaran_delete_by_id(mysqli $conn, int $id): bool {
+function pengeluaran_delete_by_id(mysqli $conn, int $id): bool
+{
     $stmt = $conn->prepare('DELETE FROM pengeluaran WHERE id = ?');
     $stmt->bind_param('i', $id);
     $ok = $stmt->execute();
     $stmt->close();
     return $ok;
+}
+
+function pengeluaran_update_by_id(mysqli $conn, int $id, string $kategori, string $deskripsi, int $jumlah): bool
+{
+    $sql = "UPDATE pengeluaran SET kategori = ?, deskripsi = ?, jumlah = ? WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ssii', $kategori, $deskripsi, $jumlah, $id);
+    $ok = $stmt->execute();
+    $stmt->close();
+    return $ok;
+}
+
+function pengeluaran_fetch_by_id(mysqli $conn, int $id): ?array
+{
+    $sql = "SELECT id, tanggal, kategori, deskripsi, jumlah FROM pengeluaran WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $data = $result->fetch_assoc();
+    $stmt->close();
+    return $data;
 }
 
 
@@ -90,7 +120,10 @@ if (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) {
     switch ($action) {
         case 'delete_by_date':
             $tanggal = $_GET['tanggal'] ?? '';
-            if (!$tanggal) { header("Location: pengeluaran_list.php"); exit; }
+            if (!$tanggal) {
+                header("Location: pengeluaran_list.php");
+                exit;
+            }
             if (pengeluaran_delete_by_date($conn, $tanggal)) {
                 $_SESSION['success'] = "Semua data pengeluaran pada tanggal $tanggal berhasil dihapus.";
             } else {
@@ -117,11 +150,31 @@ if (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) {
             exit;
         case 'replace_for_date':
             $tanggal = $_POST['tanggal'] ?? '';
-            if (!$tanggal) { header("Location: pengeluaran_list.php"); exit; }
+            if (!$tanggal) {
+                header("Location: pengeluaran_list.php");
+                exit;
+            }
             $jumlah = $_POST['jumlah'] ?? [];
             $deskripsi = $_POST['deskripsi'] ?? [];
             $res = pengeluaran_replace_for_date($conn, $tanggal, $jumlah, $deskripsi);
             $_SESSION['success'] = $res['added'] > 0 ? ("$res[added] data pengeluaran pada tanggal $tanggal berhasil diperbarui.") : ("Semua data pengeluaran pada tanggal $tanggal telah dihapus.");
+            header("Location: pengeluaran_list.php");
+            exit;
+        case 'update_by_id':
+            $id = (int)($_POST['id'] ?? 0);
+            $kategori = $_POST['kategori'] ?? '';
+            $deskripsi = $_POST['deskripsi'] ?? '';
+            $jumlah_raw = $_POST['jumlah'] ?? '';
+            $jumlah_val = rupiah_to_int($jumlah_raw);
+            if ($id && $kategori && $jumlah_val > 0) {
+                if (pengeluaran_update_by_id($conn, $id, $kategori, $deskripsi, $jumlah_val)) {
+                    $_SESSION['success'] = "Pengeluaran berhasil diperbarui.";
+                } else {
+                    $_SESSION['error'] = "Gagal memperbarui pengeluaran.";
+                }
+            } else {
+                $_SESSION['error'] = "Data tidak lengkap atau tidak valid.";
+            }
             header("Location: pengeluaran_list.php");
             exit;
         default:
@@ -129,4 +182,3 @@ if (basename(__FILE__) === basename($_SERVER['SCRIPT_FILENAME'])) {
             exit;
     }
 }
-?>
